@@ -1,0 +1,111 @@
+---
+import { stack } from '../config/stack';
+
+// Sin logotipos a propósito. Una parrilla de iconos de colores es lo primero
+// que rompe una identidad acromática, y además obliga a mantener treinta SVG
+// de marcas ajenas. Aquí el stack es tipografía: es más rápido de leer, no
+// pesa nada y encaja con la sala.
+---
+
+<div class="stack">
+  {stack.map((capa) => (
+    <section class="capa revela">
+      <div class="cabecera">
+        <h3 class="dato nombre-capa">{capa.capa}</h3>
+        <p class="nota">{capa.nota}</p>
+      </div>
+
+      <ul class="lista">
+        {capa.herramientas.map((h) => (
+          <li class:list={['pieza', { fuerte: h.principal }]}>{h.nombre}</li>
+        ))}
+      </ul>
+    </section>
+  ))}
+
+  <p class="leyenda dato">
+    <span class="muestra" aria-hidden="true">Aa</span>
+    Lo marcado en oscuro es lo que uso a diario; el resto lo he usado en algo real.
+  </p>
+</div>
+
+<style>
+  .stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .capa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: clamp(16px, 4vw, 56px);
+    padding-block: clamp(20px, 3vw, 30px);
+    border-top: 1px solid var(--linea);
+    align-items: start;
+  }
+  .capa:last-of-type { border-bottom: 1px solid var(--linea); }
+
+  @media (max-width: 720px) {
+    .capa { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  .cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .nombre-capa {
+    color: var(--tinta);
+    font-size: 11px;
+  }
+  .nota {
+    color: var(--grafito);
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 40ch;
+  }
+
+  .lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    /* Sin separadores impresos. Con un `·` entre piezas, el salto de línea
+       dejaba el punto colgando al final de la fila ("faster-whisper ·"),
+       que se lee como un error. El espacio separa igual de bien y no puede
+       quedarse huérfano. */
+    column-gap: 22px;
+    row-gap: 8px;
+  }
+  .pieza {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--grafito);
+    white-space: nowrap;
+  }
+  /* El peso hace el trabajo que haría el color, sin gastar el único acento
+     que tiene la paleta. */
+  .fuerte {
+    color: var(--tinta);
+  }
+
+  .leyenda {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .muestra {
+    font-family: var(--mono);
+    color: var(--tinta);
+    border: 1px solid var(--linea);
+    border-radius: 2px;
+    padding: 1px 6px;
+    font-size: 11px;
+  }
+</style>

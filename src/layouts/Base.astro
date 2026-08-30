@@ -1,0 +1,106 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { marca } from '../config/marca';
+
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+const { titulo, descripcion = marca.subtitulo } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <ClientRouter />
+  </head>
+
+  <body>
+    <a class="saltar" href="#principal">Saltar al contenido</a>
+
+    <header class="nav contenedor">
+      <a href="/" class="firma">{marca.firma}</a>
+      <nav aria-label="Principal">
+        {marca.anclas.map((a) => <a href={a.href} class="dato ancla">{a.texto}</a>)}
+      </nav>
+    </header>
+
+    <main id="principal">
+      <slot />
+    </main>
+
+    <footer class="pie contenedor">
+      <span class="dato">{marca.dominio}</span>
+      <span class="dato">{new Date().getFullYear()}</span>
+    </footer>
+
+    <script>
+      // Volver debe ir más rápido que entrar. Astro dice en qué dirección
+      // navega antes de preparar la transición; el CSS lee este atributo.
+      document.addEventListener('astro:before-preparation', (event) => {
+        const e = event as CustomEvent & { direction?: string };
+        document.documentElement.dataset.nav =
+          e.direction === 'back' ? 'atras' : 'adelante';
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .saltar {
+    position: absolute;
+    left: -9999px;
+    background: var(--tinta);
+    color: var(--papel);
+    padding: 10px 16px;
+    z-index: 10;
+  }
+  .saltar:focus {
+    left: var(--margen);
+    top: 12px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 26px 0;
+  }
+  .firma {
+    font-family: var(--serif);
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 22px;
+  }
+  .ancla {
+    text-decoration: none;
+    transition: color var(--t-micro) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .ancla:hover { color: var(--acento); }
+  }
+
+  .pie {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: var(--aire);
+    padding-block: 26px 40px;
+    border-top: 1px solid var(--linea);
+  }
+</style>

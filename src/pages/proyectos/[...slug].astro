@@ -1,0 +1,162 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Miniatura from '../../components/Miniatura.astro';
+
+export async function getStaticPaths() {
+  const proyectos = (await getCollection('proyectos')).sort(
+    (a, b) => a.data.orden - b.data.orden,
+  );
+  return proyectos.map((p, i) => ({
+    params: { slug: p.id },
+    props: { proyecto: p, siguiente: proyectos[(i + 1) % proyectos.length] },
+  }));
+}
+
+const { proyecto, siguiente } = Astro.props;
+const d = proyecto.data;
+const { Content } = await render(proyecto);
+
+// La barrera contra publicar trabajo del empleador: si la ficha está
+// marcada sin detalle, no se pintan imágenes ni enlaces. Lo decide el
+// dato, no que yo me acuerde al escribir el componente.
+const conDetalle = d.visibilidad === 'publico';
+---
+
+<Base titulo={d.nombre} descripcion={d.tagline}>
+  <article class="ficha contenedor">
+    <header class="cabecera">
+      <div class="rotulo">
+        <h1 class="display" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h1>
+        <p class="tagline">{d.tagline}</p>
+        {d.metrica && (
+          <p class="metrica">
+            <span class="cifra">{d.metrica.valor}</span>
+            <span class="dato">{d.metrica.que}</span>
+          </p>
+        )}
+      </div>
+
+      {conDetalle && (
+        <div class="imagen">
+          <Miniatura patron={d.patron} nombre={d.nombre} transitionName={`obra-${proyecto.id}`} />
+        </div>
+      )}
+    </header>
+
+    <dl class="datos revela">
+      <div><dt class="dato">Año</dt><dd>{d.anio}</dd></div>
+      <div><dt class="dato">Estado</dt><dd>{d.estado.replace('-', ' ')}</dd></div>
+      <div><dt class="dato">Papel</dt><dd>{d.rol}</dd></div>
+      <div class="ancho"><dt class="dato">Herramientas</dt><dd>{d.stack.join(' · ')}</dd></div>
+    </dl>
+
+    {d.borrador && (
+      <p class="aviso">
+        El caso completo de este proyecto todavía no está escrito.
+      </p>
+    )}
+
+    <div class="cuerpo revela">
+      <Content />
+    </div>
+
+    <nav class="siguiente revela">
+      <span class="dato">Siguiente</span>
+      <a href={`/proyectos/${siguiente.id}`} class="titulo-obra">{siguiente.data.nombre}</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .ficha { padding-block: clamp(40px, 8vw, 88px) 0; }
+
+  .cabecera {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+  }
+  @media (max-width: 760px) {
+    .cabecera { grid-template-columns: 1fr; align-items: start; }
+  }
+  .rotulo { display: flex; flex-direction: column; gap: 14px; }
+  .tagline { color: var(--grafito); max-width: 34ch; }
+  .metrica { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .metrica .cifra { font-size: clamp(26px, 4vw, 40px); }
+
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px 28px;
+    margin: var(--aire) 0 0;
+    padding-block: 22px;
+    border-block: 1px solid var(--linea);
+  }
+  .datos div { display: flex; flex-direction: column; gap: 5px; }
+  .datos .ancho { grid-column: 1 / -1; }
+  dt { margin: 0; }
+  dd { margin: 0; font-size: 15px; }
+
+  .aviso {
+    margin-top: 32px;
+    padding-left: 14px;
+    border-left: 2px solid var(--borde);
+    color: var(--grafito);
+  }
+
+  .cuerpo {
+    margin-top: var(--aire);
+    max-width: var(--medida);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cuerpo :global(h2) {
+    font-family: var(--serif);
+    font-size: clamp(23px, 3vw, 30px);
+    line-height: 1.14;
+    margin-top: 26px;
+  }
+  .cuerpo :global(p) { margin: 0; }
+  .cuerpo :global(strong) { font-weight: 600; }
+  .cuerpo :global(ul) {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cuerpo :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cuerpo :global(th) {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--grafito);
+    padding: 0 12px 8px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .cuerpo :global(td) {
+    padding: 10px 12px 10px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .cuerpo :global(a) { color: var(--acento); }
+
+  .siguiente {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: var(--aire);
+    padding-top: 26px;
+    border-top: 1px solid var(--linea);
+  }
+  .siguiente a { text-decoration: none; }
+</style>

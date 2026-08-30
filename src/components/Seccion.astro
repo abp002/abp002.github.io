@@ -1,0 +1,54 @@
+---
+// Rótulo de sala. En una portada larga el lector pierde el sitio: un
+// encabezado numerado y consistente le dice dónde está sin obligarle a
+// volver arriba. La numeración es del componente, no del contenido, para
+// que reordenar secciones no obligue a renumerar a mano.
+
+interface Props {
+  numero: string;
+  titulo: string;
+  nota?: string;
+  id?: string;
+}
+const { numero, titulo, nota, id } = Astro.props;
+---
+
+<header class="rotulo revela" id={id}>
+  <div class="linea">
+    <span class="dato numero">{numero}</span>
+    <span class="regla" aria-hidden="true"></span>
+  </div>
+  <h2 class="titulo-obra">{titulo}</h2>
+  {nota && <p class="nota">{nota}</p>}
+</header>
+
+<style>
+  .rotulo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* La sangría negativa no existe: el rótulo se alinea con la obra que
+       anuncia, si no se lee como un elemento suelto. */
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .linea {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+  .numero { color: var(--acento); }
+  /* La regla es separador puro: 1,20:1 basta porque no comunica nada que
+     no esté ya escrito al lado. */
+  .regla {
+    flex: 1;
+    height: 1px;
+    background: var(--linea);
+  }
+
+  .nota {
+    color: var(--grafito);
+    max-width: 52ch;
+  }
+</style>

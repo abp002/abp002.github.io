@@ -1,0 +1,163 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Apertura from '../components/Apertura.astro';
+import Seccion from '../components/Seccion.astro';
+import Stack from '../components/Stack.astro';
+import Obra from '../components/Obra.astro';
+import Contacto from '../components/Contacto.astro';
+
+const proyectos = (await getCollection('proyectos')).sort(
+  (a, b) => a.data.orden - b.data.orden,
+);
+
+// Los principios viven aquí y no en el maquetado suelto porque son lo único
+// del "sobre mí" que se cita en una entrevista: conviene tenerlos juntos y
+// poder reordenarlos sin tocar CSS.
+const principios = [
+  {
+    titulo: 'Mido antes de optimizar',
+    texto:
+      'En el robot, la voz parecía el cuello de botella y era el 4 % del problema. Una tarde de mediciones evitó semanas de trabajo en la parte equivocada.',
+  },
+  {
+    titulo: 'Prefiero decisiones reversibles',
+    texto:
+      'Si volver atrás cuesta treinta segundos, la decisión se toma antes y se prueba más. La arquitectura sirve para eso, no para lucirse.',
+  },
+  {
+    titulo: 'Un fallo honesto gana a un remedio lento',
+    texto:
+      'Descarté un plan de respaldo que tardaba un minuto en rendirse: no era redundancia, era el mismo punto de fallo con otra cara.',
+  },
+  {
+    titulo: 'Si un número no lo he medido yo, no lo escribo',
+    texto:
+      'Todas las cifras de este sitio salen de una medición propia y reproducible. Las que no tengo, no están.',
+  },
+];
+---
+
+<Base>
+  <Apertura />
+
+  <!-- aria-label y no aria-labelledby: el rótulo incluye el número y la nota,
+       y como nombre accesible saldría "01 Con qué trabajo Lo que aparece...". -->
+  <section class="bloque contenedor" aria-label="Con qué trabajo">
+    <Seccion
+      numero="01"
+      titulo="Con qué trabajo"
+      id="stack"
+      nota="Lo que aparece aquí está en algo que he construido, no en un curso que hice."
+    />
+    <Stack />
+  </section>
+
+  <section class="bloque contenedor" aria-label="Trabajo">
+    <Seccion
+      numero="02"
+      titulo="Trabajo"
+      id="trabajo"
+      nota="Productos propios. Cada ficha dice en qué estado está de verdad: ninguno se vende como terminado."
+    />
+    <div class="sala">
+      {proyectos.map((p) => <Obra proyecto={p} />)}
+    </div>
+  </section>
+
+  <section class="bloque contenedor" aria-label="Sobre mí">
+    <Seccion numero="03" titulo="Sobre mí" id="sobre" />
+
+    <div class="sobre">
+      <div class="cuerpo revela">
+        <p>
+          Trabajo como desarrollador en una empresa de software de gestión: ERP a
+          medida, cumplimiento fiscal e integraciones con sistemas que no eligí yo.
+          Ahí no puedo enseñar pantallas ni nombres, porque el trabajo y los
+          clientes son de la empresa. Lo que sí puedo contar es lo que aprendí.
+        </p>
+        <p>
+          Fuera del trabajo construyo cosas completas y me las administro yo: un
+          ERP modular, un sistema de estudio con recuperación sobre mis propios
+          apuntes y un robot que conversa con todo el procesamiento en un servidor
+          de mi casa. Ninguno está terminado, y lo digo en cada ficha.
+        </p>
+        <p>
+          Estudio Ciencia de Datos. Lo que me interesa de la IA no es llamar a una
+          API: es lo que pasa cuando tienes que hacerla funcionar con tu hardware,
+          tus datos y un presupuesto de latencia que no puedes negociar.
+        </p>
+      </div>
+
+      <ol class="principios revela-tarde">
+        {principios.map((p) => (
+          <li>
+            <h3 class="nombre-principio">{p.titulo}</h3>
+            <p class="texto-principio">{p.texto}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bloque contenedor" aria-label="Contacto">
+    <Seccion numero="04" titulo="Hablamos" id="contacto" />
+    <Contacto />
+  </section>
+</Base>
+
+<style>
+  .bloque {
+    padding-block: 0 var(--aire);
+  }
+
+  .sala {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aire);
+  }
+
+  .sobre {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .sobre { grid-template-columns: 1fr; gap: 34px; }
+  }
+
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 52ch;
+  }
+
+  .principios {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .principios li {
+    padding-block: 16px;
+    border-top: 1px solid var(--linea);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .principios li:last-child { border-bottom: 1px solid var(--linea); }
+
+  .nombre-principio {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .texto-principio {
+    color: var(--grafito);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+</style>

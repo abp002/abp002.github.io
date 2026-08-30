@@ -1,0 +1,22 @@
+---
+// El "sobre mí" vive ahora en la sección 03 de la portada. Esta ruta se
+// mantiene como redirección en lugar de borrarse: si el enlace se hubiera
+// compartido en algún sitio, un 404 es peor que un salto.
+//
+// La redirección es de cliente porque el sitio es estático y el destino es
+// un fragmento (#sobre), que el servidor nunca llega a ver.
+const destino = '/#sobre';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${destino}`} />
+    <link rel="canonical" href={destino} />
+    <meta name="robots" content="noindex" />
+    <title>Sobre — Alejandro Borrego</title>
+  </head>
+  <body>
+    <p>Esta página se ha movido. <a href={destino}>Continuar</a>.</p>
+  </body>
+</html>

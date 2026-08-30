@@ -1,0 +1,171 @@
+/* ============================================================
+   La sala neutra
+   Paredes acromáticas, el color lo ponen las piezas.
+   Un solo acento, y solo en tipografía pequeña.
+   ============================================================ */
+
+@font-face { font-display: swap; }
+
+:root {
+  /* Superficies y tinta. Ratios medidos sobre Papel:
+     Tinta 16,71:1 · Grafito 6,13:1 · Bermellón 4,53:1 · Borde 3,16:1 */
+  --papel:   #F7F7F5;
+  --lienzo:  #FFFFFF;
+  --tinta:   #16171A;
+  --grafito: #5A5D66;
+  --linea:   #E3E3DF;  /* separador: 1,20:1, no vale como borde de control */
+  --borde:   #8A8A85;  /* borde de campo: necesita 3:1 y lo cumple justo */
+  --acento:  #C8442B;
+
+  /* Curvas. Las palabras clave de CSS son demasiado suaves; ease-in está
+     prohibido en interfaz porque arranca lento justo cuando se mira. */
+  --ease-salida: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-mov:    cubic-bezier(0.77, 0, 0.175, 1);
+
+  --t-micro: 160ms;  /* pulsación */
+  --t-hover: 550ms;  /* acercarse a la obra: decorativo, puede ser lento */
+  --t-obra:  500ms;  /* aparición al hacer scroll */
+  --t-sala:  380ms;  /* entrar en una ficha */
+  --t-vuelta: 260ms; /* volver: el sistema responde, y lo que responde va rápido */
+
+  --serif: 'Instrument Serif', 'Iowan Old Style', Palatino, Georgia, serif;
+  --sans:  'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
+  --mono:  'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  --medida: 66ch;
+  --margen: clamp(20px, 5vw, 64px);
+  --aire:   clamp(72px, 11vw, 132px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+/* La portada es larga y se navega por anclas. Dos cosas hacen falta:
+   que el salto no sea un corte seco, y que el rótulo de destino no quede
+   pegado al borde superior de la ventana. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+[id] { scroll-margin-top: clamp(24px, 6vw, 56px); }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
+p { margin: 0; }
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --- roles tipográficos --- */
+.display {
+  font-family: var(--serif);
+  font-size: clamp(34px, 6.2vw, 62px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  /* A este cuerpo un guion de división se ve como un error de composición.
+     `manual` deja partir solo donde haya un &shy; puesto a mano. */
+  hyphens: manual;
+}
+.titulo-obra {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+.dato {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--grafito);
+}
+.cifra {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--acento);
+}
+
+.contenedor {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: var(--margen);
+}
+
+/* ============================================================
+   Movimiento
+   Nada se mueve solo. Todo responde a un avance del visitante.
+   ============================================================ */
+
+/* 1 · Entrada a la sala. Solo la primera carga, en CSS puro. */
+.entrada > * {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 420ms var(--ease-salida),
+    translate 420ms var(--ease-salida);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    .entrada > * { opacity: 0; translate: 0 8px; }
+  }
+  .entrada > *:nth-child(2) { transition-delay: 60ms; }
+  .entrada > *:nth-child(3) { transition-delay: 120ms; }
+}
+
+/* 2 · Avance por la sala. Timeline nativo: sin JavaScript, y si el
+   navegador no lo soporta el contenido queda visible, nunca en blanco. */
+@keyframes aparecer {
+  from { opacity: 0; translate: 0 12px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .revela {
+      animation: aparecer linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 26%;
+    }
+    /* La cartela entra detrás de su imagen. Ese desfase es lo que hace
+       que la pareja se lea como compuesta y no como dos cosas sueltas. */
+    .revela-tarde {
+      animation: aparecer linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 32%;
+    }
+  }
+}
+
+/* 5 · Cambiar de sala. Entrar es una decisión, volver es el sistema
+   respondiendo: la vuelta va más rápida. */
+::view-transition-group(*) {
+  animation-duration: var(--t-sala);
+  animation-timing-function: var(--ease-mov);
+}
+:root[data-nav='atras'] ::view-transition-group(*) {
+  animation-duration: var(--t-vuelta);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 1ms !important;
+  }
+}

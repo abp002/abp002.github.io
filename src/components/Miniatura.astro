@@ -1,0 +1,62 @@
+---
+// Marcadores visuales hasta que haya fotografía y vídeo reales.
+// Son CSS, no imágenes: pesan cero y no hay que mantener assets que
+// van a sustituirse en cuanto Alejandro grabe el material.
+interface Props {
+  patron: 'talos' | 'arkon' | 'atenea' | 'kuro' | 'bythos';
+  nombre: string;
+  transitionName?: string;
+}
+const { patron, nombre, transitionName } = Astro.props;
+---
+
+<div
+  class:list={['miniatura', `p-${patron}`]}
+  role="img"
+  aria-label={`Imagen de ${nombre}`}
+  transition:name={transitionName}
+>
+</div>
+
+<style>
+  .miniatura {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    border-radius: 2px;
+    background-color: var(--tinta);
+  }
+
+  .p-talos {
+    background-image:
+      radial-gradient(circle at 50% 46%, #F7F7F5 0 5.5%, transparent 6%),
+      radial-gradient(circle at 50% 46%, transparent 0 15%, #4A4E58 15.4% 16.6%, transparent 17%),
+      radial-gradient(circle at 50% 46%, transparent 0 26%, #6E727C 26.4% 27.2%, transparent 27.6%),
+      linear-gradient(165deg, #24262C, #16171A);
+  }
+  .p-arkon {
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
+      linear-gradient(150deg, #1D2340, #0B1020);
+  }
+  .p-atenea {
+    background-image:
+      conic-gradient(from 210deg at 50% 50%, #E8E4DA, #C9C3B4, #EFECE4, #B9B3A4, #E8E4DA);
+  }
+  .p-kuro {
+    background-color: #08080A;
+    display: grid;
+    place-items: center;
+  }
+  .p-kuro::after {
+    content: '黒';
+    color: #E8E8E8;
+    font-size: clamp(38px, 7vw, 76px);
+    line-height: 1;
+  }
+  .p-bythos {
+    background-image:
+      radial-gradient(ellipse at 50% 24%, #F3E3BE 0 13%, transparent 46%),
+      linear-gradient(#EFEADF 0 48%, #2C4E77 48% 74%, #0F2645 74% 100%);
+  }
+</style>
