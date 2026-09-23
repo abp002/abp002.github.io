@@ -1,0 +1,76 @@
+---
+import { parrilla, mcp, iaAplicada } from '../config/logos';
+---
+
+<!-- La parrilla sustituye a la tabla de capas del CV: los nombres los pone
+     el logo, la jerarquía la pone el bloque aparte de IA aplicada. -->
+<ul class="parrilla revela" role="list">
+  {parrilla.map((l) => (
+    <li class="celda">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d={l.d} />
+      </svg>
+      <span class="nombre">{l.nombre}</span>
+    </li>
+  ))}
+</ul>
+
+<div class="ia revela-tarde">
+  <span class="dato rotulo-ia">IA aplicada</span>
+  {iaAplicada.map((concepto) =>
+    concepto.startsWith('MCP') ? (
+      <span class="chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d={mcp.d} />
+        </svg>
+        {concepto}
+      </span>
+    ) : (
+      <span class="chip">{concepto}</span>
+    ),
+  )}
+</div>
+
+<style>
+  .parrilla {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 40px 0 44px;
+    border-top: 1px solid var(--linea);
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    row-gap: 38px;
+    column-gap: 12px;
+    color: var(--sec);
+  }
+  .celda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
+  }
+  .nombre {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--mute);
+  }
+
+  .ia {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-block: 24px;
+    border-block: 1px solid var(--linea);
+  }
+  .rotulo-ia { color: var(--mute); margin-right: 10px; }
+
+  @media (max-width: 900px) {
+    .parrilla { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .parrilla { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 26px; }
+    .celda svg { width: 26px; height: 26px; }
+    .nombre { font-size: 10px; }
+  }
+</style>

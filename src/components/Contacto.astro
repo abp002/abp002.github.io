@@ -1,110 +1,71 @@
 ---
-import { contacto, perfil } from '../config/marca';
+import { marca, perfil, contacto } from '../config/marca';
+import Icono from './Icono.astro';
 
-// Solo se pintan las vías que tienen destino. Un GitHub sin URL no aparece
-// como fila vacía ni como enlace roto: no aparece.
-const vias = contacto.filter((v) => v.href && v.valor);
+const github = contacto.find((c) => c.etiqueta === 'GitHub');
+const linkedin = contacto.find((c) => c.etiqueta === 'LinkedIn');
 ---
 
-<div class="contacto revela">
-  <div class="mensaje">
-    <p class="frase">
-      Busco un sitio donde el criterio técnico cuente, no solo la entrega.
-      Si lo que has leído encaja con lo que necesitas, escríbeme.
-    </p>
+<div class="cierre revela">
+  <p class="invitacion">¿Encajo en tu equipo? <em>Escríbeme.</em></p>
+
+  <a href={`mailto:${marca.correo}`} class="correo">{marca.correo}</a>
+
+  <div class="acciones">
     {perfil.cv && (
-      <a href={perfil.cv} class="boton" download>Descargar CV</a>
+      <a href={perfil.cv} class="btn btn-primario" download>
+        <Icono nombre="descarga" tamano={15} />
+        Descargar CV (PDF)
+      </a>
+    )}
+    {github?.href && (
+      <a href={github.href} class="btn btn-borde">
+        <Icono nombre="github" tamano={15} />
+        GitHub — {github.valor}
+      </a>
+    )}
+    {linkedin?.href && (
+      <a href={linkedin.href} class="btn btn-borde">
+        <Icono nombre="linkedin" tamano={15} />
+        LinkedIn
+      </a>
     )}
   </div>
-
-  <ul class="vias">
-    {vias.map((v) => (
-      <li>
-        <span class="dato etiqueta">{v.etiqueta}</span>
-        <a href={v.href!} class="enlace">{v.valor}</a>
-      </li>
-    ))}
-  </ul>
 </div>
 
 <style>
-  .contacto {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(24px, 5vw, 64px);
-    align-items: start;
-  }
-  @media (max-width: 720px) {
-    .contacto { grid-template-columns: 1fr; gap: 28px; }
-  }
-
-  .mensaje {
+  .cierre {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 20px;
+    align-items: flex-start;
+    gap: 34px;
+    margin-top: 48px;
   }
-  .frase {
+
+  .invitacion {
     font-family: var(--serif);
-    font-size: clamp(20px, 2.6vw, 26px);
-    line-height: 1.3;
-    max-width: 26ch;
-    text-wrap: pretty;
+    font-size: clamp(30px, 4.4vw, 44px);
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    max-width: 760px;
   }
+  .invitacion em { font-style: italic; }
 
-  .vias {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  .vias li {
-    display: flex;
-    align-items: baseline;
-    gap: 18px;
-    padding-block: 14px;
-    border-bottom: 1px solid var(--linea);
-  }
-  .vias li:first-child { border-top: 1px solid var(--linea); }
-
-  .etiqueta {
-    /* Ancho fijo para que las etiquetas formen columna y los valores
-       queden alineados entre sí: una tabla sin ser una tabla. */
-    flex: 0 0 72px;
-  }
-
-  .enlace {
-    color: var(--acento);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    /* El subrayado aparece al pasar, pero el enlace ya se distingue por
-       color y por su etiqueta: no depende solo del color. */
-    transition: border-color var(--t-micro) var(--ease-salida);
-    word-break: break-word;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .enlace:hover { border-bottom-color: currentColor; }
-  }
-
-  .boton {
+  .correo {
     font-family: var(--mono);
-    font-size: 12.5px;
-    letter-spacing: 0.04em;
+    font-size: clamp(17px, 3vw, 28px);
+    font-weight: 500;
     text-decoration: none;
-    padding: 11px 20px;
-    border: 1px solid var(--borde);
-    border-radius: 2px;
-    color: var(--tinta);
-    transition:
-      background-color var(--t-micro) var(--ease-salida),
-      color var(--t-micro) var(--ease-salida);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .boton:hover { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+    border-bottom: 2px solid var(--acento);
+    padding-bottom: 8px;
+    overflow-wrap: anywhere;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .enlace, .boton { transition: none; }
+  .acciones { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+
+  @media (max-width: 680px) {
+    .acciones { width: 100%; }
+    .acciones .btn { width: 100%; justify-content: center; }
   }
 </style>

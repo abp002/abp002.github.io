@@ -1,10 +1,14 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { marca } from '../config/marca';
+import { marca, paleta, mostrarBlog } from '../config/marca';
+import Icono from '../components/Icono.astro';
+import Bandera from '../components/Bandera.astro';
 
-import '@fontsource/instrument-serif/400.css';
-import '@fontsource-variable/inter';
-import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '@fontsource-variable/instrument-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 
 interface Props {
@@ -13,9 +17,13 @@ interface Props {
 }
 const { titulo, descripcion = marca.subtitulo } = Astro.props;
 const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
+
+const anclas = marca.anclas.filter((a) => mostrarBlog || a.href !== '/#blog');
+const github = 'https://github.com/abp002';
+const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-algaba-b1652b388';
 ---
 
-<html lang="es">
+<html lang="es" data-paleta={paleta ?? undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,20 +36,43 @@ const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
   <body>
     <a class="saltar" href="#principal">Saltar al contenido</a>
 
-    <header class="nav contenedor">
-      <a href="/" class="firma">{marca.firma}</a>
-      <nav aria-label="Principal">
-        {marca.anclas.map((a) => <a href={a.href} class="dato ancla">{a.texto}</a>)}
-      </nav>
+    <header class="nav">
+      <div class="contenedor barra">
+        <a href="/" class="firma" aria-label={marca.firma}>
+          <span class="firma-larga" aria-hidden="true">{marca.firma}</span>
+          <span class="firma-corta" aria-hidden="true">{marca.iniciales}</span>
+        </a>
+        <nav aria-label="Principal" class="anclas">
+          {anclas.map((a) => <a href={a.href} class="ancla">{a.texto}</a>)}
+        </nav>
+        <div class="controles">
+          <div class="idioma" role="group" aria-label="Idioma">
+            <button type="button" class="lang" aria-pressed="true" aria-label="Español">
+              <Bandera pais="es" />
+            </button>
+            <button type="button" class="lang" aria-pressed="false" aria-label="English">
+              <Bandera pais="gb" />
+            </button>
+          </div>
+          <span class="separador" aria-hidden="true"></span>
+          <div class="redes">
+            <a href={github} aria-label="GitHub" class="red"><Icono nombre="github" /></a>
+            <a href={linkedin} aria-label="LinkedIn" class="red"><Icono nombre="linkedin" /></a>
+            <a href={`mailto:${marca.correo}`} aria-label="Correo" class="red"><Icono nombre="correo" /></a>
+          </div>
+        </div>
+      </div>
     </header>
 
     <main id="principal">
       <slot />
     </main>
 
-    <footer class="pie contenedor">
-      <span class="dato">{marca.dominio}</span>
-      <span class="dato">{new Date().getFullYear()}</span>
+    <footer class="pie">
+      <div class="contenedor pie-fila">
+        <span class="dato">© {new Date().getFullYear()} {marca.nombre}</span>
+        <span class="dato">{marca.dominio} · hecho con Astro</span>
+      </div>
     </footer>
 
     <script>
@@ -60,47 +91,106 @@ const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
   .saltar {
     position: absolute;
     left: -9999px;
-    background: var(--tinta);
-    color: var(--papel);
-    padding: 10px 16px;
-    z-index: 10;
-  }
-  .saltar:focus {
-    left: var(--margen);
     top: 12px;
+    z-index: 10;
+    background: var(--tinta);
+    color: var(--fondo);
+    padding: 10px 16px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  .saltar:focus-visible { left: 12px; }
+
+  .nav { border-bottom: 1px solid var(--linea); }
+  .barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    padding-block: 20px;
   }
 
-  .nav {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 24px;
-    padding-block: 26px 0;
-  }
   .firma {
     font-family: var(--serif);
     font-size: 19px;
+    font-weight: 600;
     letter-spacing: -0.01em;
     text-decoration: none;
+    white-space: nowrap;
   }
-  nav {
+  .firma-corta { display: none; }
+
+  .anclas {
     display: flex;
-    gap: 22px;
+    align-items: center;
+    gap: 24px;
   }
   .ancla {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--sec);
     text-decoration: none;
-    transition: color var(--t-micro) ease;
+    transition: color var(--t-micro) var(--ease-salida);
   }
-  @media (hover: hover) and (pointer: fine) {
-    .ancla:hover { color: var(--acento); }
+  .ancla:hover { color: var(--acento); }
+
+  /* El idioma queda a la izquierda del separador y los perfiles a la
+     derecha: la raya vertical separa "ajustar la página" de "escribirme". */
+  .controles { display: flex; align-items: center; gap: 20px; }
+  .redes { display: flex; align-items: center; gap: 18px; }
+  .separador { width: 1px; height: 18px; background: var(--linea-fuerte); opacity: 0.6; }
+
+  /* Estático a propósito: todavía no hay versión inglesa. Botones y no
+     enlaces porque un <a href="/en/"> hoy sería un 404 — un enlace promete
+     una navegación, un botón solo declara un estado. Cuando exista la
+     traducción se cambian por <a hreflang> y este CSS no se toca. */
+  .idioma { display: flex; align-items: center; gap: 7px; }
+  .lang {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    display: flex;
+    border-radius: 2px;
+    cursor: pointer;
+    /* El estado lo marca el color de la bandera, no un fondo: la activa a
+       todo color y la otra en gris. Así el único color ajeno a la paleta
+       que entra en la barra es el del idioma que está puesto. */
+    filter: grayscale(1);
+    opacity: 0.5;
+    transition: filter var(--t-micro) var(--ease-salida),
+                opacity var(--t-micro) var(--ease-salida);
+  }
+  .lang:hover { filter: grayscale(0); opacity: 1; }
+  .lang[aria-pressed='true'] { filter: none; opacity: 1; }
+  .red {
+    display: flex;
+    color: var(--sec);
+    transition: color var(--t-micro) var(--ease-salida);
+  }
+  .red:hover { color: var(--acento); }
+
+  /* En pantallas estrechas la página es un solo scroll: las anclas sobran
+     y quedan la firma y las redes. Sin menú hamburguesa, sin JavaScript. */
+  @media (max-width: 780px) {
+    .anclas { display: none; }
   }
 
-  .pie {
+  /* Medido, no estimado: firma entera + idioma + tres iconos piden 407 px y
+     un iPhone da 390. Por debajo de eso la firma pasa a iniciales (297 px,
+     entra hasta en 320). El nombre completo sigue siendo el nombre accesible
+     del enlace vía aria-label, así que el lector de pantalla no pierde nada. */
+  @media (max-width: 430px) {
+    .firma-larga { display: none; }
+    .firma-corta { display: inline; }
+  }
+
+  .pie { border-top: 1px solid var(--linea); margin-top: var(--aire); }
+  .pie-fila {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
-    margin-top: var(--aire);
-    padding-block: 26px 40px;
-    border-top: 1px solid var(--linea);
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-block: 26px 32px;
   }
 </style>

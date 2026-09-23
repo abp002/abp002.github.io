@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { proyecto: CollectionEntry<'proyectos'> }
+const { proyecto } = Astro.props;
+const d = proyecto.data;
+const url = `/proyectos/${proyecto.id}`;
+
+// El punto de estado dice la verdad de un vistazo: relleno = funcionando,
+// hueco = en curso, apagado = lo demás. La palabra lo confirma al lado.
+const tono =
+  d.estado === 'funcionando' ? 'lleno' : d.estado === 'en-curso' ? 'hueco' : 'apagado';
+---
+
+<a href={url} class="tarjeta revela">
+  <div class="cabeza">
+    <h3 class="nombre" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h3>
+    <span class={`estado estado-${tono}`}>
+      <span class="dot" aria-hidden="true"></span>
+      {d.estado.replace('-', ' ')}
+    </span>
+  </div>
+
+  <p class="tagline">{d.tagline}</p>
+
+  {d.metrica && (
+    <p class="metrica">
+      <span class="cifra valor">{d.metrica.valor}</span>
+      <span class="que">{d.metrica.que}</span>
+    </p>
+  )}
+
+  <span class="pie-stack">{d.stack.join(' · ')}</span>
+</a>
+
+<style>
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 30px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 3px;
+    text-decoration: none;
+    transition:
+      transform var(--t-micro) var(--ease-salida),
+      border-color var(--t-micro) var(--ease-salida);
+  }
+  .tarjeta:hover { transform: translateY(-2px); border-color: var(--linea-fuerte); }
+
+  .cabeza {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .nombre {
+    font-family: var(--serif);
+    font-size: 25px;
+    font-weight: 500;
+  }
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sec);
+    white-space: nowrap;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .estado-lleno .dot { background: var(--acento); }
+  .estado-hueco .dot { border: 1.5px solid var(--ter); }
+  .estado-apagado .dot { background: var(--borde); }
+
+  .tagline {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--sec);
+    flex-grow: 1;
+  }
+
+  .metrica { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .valor { font-size: 26px; }
+  .que {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--mute);
+  }
+
+  .pie-stack {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ter);
+    border-top: 1px solid var(--linea);
+    padding-top: 14px;
+  }
+</style>

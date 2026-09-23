@@ -1,0 +1,139 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { mostrarBlog } from '../../config/marca';
+
+export async function getStaticPaths() {
+  // Blog apagado: cero rutas en el build, aunque los .md sigan ahí.
+  if (!mostrarBlog) return [];
+  const posts = (await getCollection('blog', ({ data }) => !data.ejemplo)).sort(
+    (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
+  );
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+
+const fmt = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+const fecha = fmt.format(d.fecha).replace('.', '').toUpperCase();
+// Lectura a 200 palabras por minuto sobre el cuerpo en crudo. Aproximado
+// a propósito: nadie cronometra, pero orienta antes de entrar.
+const minutos = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 200));
+---
+
+<Base titulo={d.titulo} descripcion={d.resumen}>
+  <article class="post">
+    <header class="cabecera contenedor-post">
+      <a href="/blog" class="volver dato">← Blog</a>
+      <p class="meta">{fecha} · {d.tags.join(' · ').toUpperCase()} · {minutos} MIN</p>
+      <h1 class="titulo" transition:name={`post-${post.id}`}>{d.titulo}</h1>
+      <p class="standfirst">{d.resumen}</p>
+    </header>
+
+    <div class="cuerpo contenedor-post revela">
+      <Content />
+    </div>
+
+    <footer class="pie-post contenedor-post">
+      <span class="dato">{d.tags.join(' · ')}</span>
+      <a href="/blog" class="volver dato">← Volver al blog</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .contenedor-post {
+    width: 100%;
+    max-width: 720px;
+    margin-inline: auto;
+    padding-inline: var(--margen);
+  }
+
+  .cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-block: clamp(48px, 8vw, 90px) 8px;
+  }
+  .volver { text-decoration: none; }
+  .volver:hover { color: var(--acento); }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--ter);
+  }
+  .titulo {
+    font-family: var(--serif);
+    font-size: clamp(34px, 5.6vw, 54px);
+    line-height: 1.1;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .standfirst {
+    font-size: clamp(17px, 2.4vw, 20px);
+    line-height: 1.6;
+    color: var(--sec);
+  }
+
+  .cuerpo {
+    padding-block: 28px 12px;
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.78;
+    color: var(--prosa);
+  }
+  .cuerpo :global(p) { margin-block: 0 26px; }
+  .cuerpo :global(h2) {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-block: 40px 18px;
+  }
+  .cuerpo :global(blockquote) {
+    margin: 34px 0;
+    padding: 0;
+    border: none;
+    font-size: 26px;
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--sec);
+    text-align: center;
+  }
+  .cuerpo :global(blockquote p) { margin: 0; }
+  .cuerpo :global(blockquote p)::before { content: '«'; }
+  .cuerpo :global(blockquote p)::after { content: '»'; }
+  .cuerpo :global(pre) {
+    margin: 30px 0;
+    padding: 20px 18px;
+    border-radius: 4px;
+    border: 1px solid var(--borde);
+    font-size: 13.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .cuerpo :global(code) { font-family: var(--mono); }
+  .cuerpo :global(p code) {
+    font-size: 0.82em;
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    padding: 2px 6px;
+  }
+  .cuerpo :global(em) { font-style: italic; }
+
+  .pie-post {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--linea);
+    padding-block: 24px;
+    margin-top: 24px;
+  }
+</style>

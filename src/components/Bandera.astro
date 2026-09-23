@@ -1,0 +1,45 @@
+---
+// Banderas del selector de idioma. Componente aparte de Icono.astro a
+// propósito: aquel es monocromo con currentColor para que la paleta mande,
+// y una bandera es lo único del sitio que trae color propio.
+//
+// SVG y nunca emoji: Windows no tiene glifos de bandera en su fuente de
+// emoji, así que 🇪🇸 se pinta allí como las letras "ES" sueltas.
+//
+// Ambas normalizadas a 3:2 (la del Reino Unido es 2:1 de verdad) para que
+// las dos casillas midan lo mismo. La de España va sin escudo: a 21 px es
+// una mancha ilegible y su ausencia es la convención en los selectores.
+interface Props {
+  pais: 'es' | 'gb';
+  ancho?: number;
+}
+const { pais, ancho = 21 } = Astro.props;
+const alto = Math.round((ancho / 3) * 2);
+---
+
+{pais === 'es' && (
+  <svg class="bandera" width={ancho} height={alto} viewBox="0 0 60 40" aria-hidden="true">
+    <rect width="60" height="40" fill="#c60b1e" />
+    <rect y="10" width="60" height="20" fill="#ffc400" />
+  </svg>
+)}
+
+{pais === 'gb' && (
+  <svg class="bandera" width={ancho} height={alto} viewBox="0 0 60 40" aria-hidden="true">
+    <rect width="60" height="40" fill="#012169" />
+    <path d="M0 0 60 40M60 0 0 40" stroke="#fff" stroke-width="9" />
+    <path d="M0 0 60 40M60 0 0 40" stroke="#c8102e" stroke-width="5" />
+    <path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="14" />
+    <path d="M30 0V40M0 20H60" stroke="#c8102e" stroke-width="8" />
+  </svg>
+)}
+
+<style>
+  /* El borde evita que el blanco de la Union Jack y el amarillo de la
+     española se derramen sobre el papel, que también es claro. */
+  .bandera {
+    display: block;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--tinta) 16%, transparent);
+  }
+</style>

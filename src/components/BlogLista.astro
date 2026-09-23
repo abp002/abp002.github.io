@@ -1,0 +1,72 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icono from './Icono.astro';
+
+interface Props { posts: CollectionEntry<'blog'>[] }
+const { posts } = Astro.props;
+
+const fmt = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+const fecha = (d: Date) => fmt.format(d).replace('.', '').toUpperCase();
+---
+
+<div class="lista revela">
+  {posts.length === 0 && (
+    <p class="vacio">Aún no hay entradas publicadas. Las primeras notas están en camino.</p>
+  )}
+  {posts.map((p) => (
+    <a href={`/blog/${p.id}`} class="fila">
+      <span class="fecha">{fecha(p.data.fecha)}</span>
+      <span class="cuerpo">
+        <span class="titulo" transition:name={`post-${p.id}`}>{p.data.titulo}</span>
+        <span class="resumen">{p.data.resumen}</span>
+      </span>
+      <span class="flecha" aria-hidden="true"><Icono nombre="flecha" /></span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .lista { display: flex; flex-direction: column; margin-top: 40px; }
+
+  .fila {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr) 24px;
+    gap: 28px;
+    align-items: baseline;
+    padding-block: 26px;
+    border-top: 1px solid var(--linea);
+    text-decoration: none;
+  }
+  .fila:last-child { border-bottom: 1px solid var(--linea); }
+
+  .fecha {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .cuerpo { display: flex; flex-direction: column; gap: 6px; }
+  .titulo {
+    font-family: var(--serif);
+    font-size: 23px;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: color var(--t-micro) var(--ease-salida);
+  }
+  .fila:hover .titulo { color: var(--acento); }
+  .resumen { font-size: 15px; line-height: 1.5; color: var(--ter); }
+
+  .flecha { align-self: center; color: var(--linea-fuerte); }
+
+  .vacio {
+    padding-block: 26px;
+    border-block: 1px solid var(--linea);
+    font-size: 15px;
+    color: var(--ter);
+  }
+
+  @media (max-width: 680px) {
+    .fila { grid-template-columns: minmax(0, 1fr) 20px; gap: 14px; }
+    .fecha { grid-column: 1 / -1; }
+  }
+</style>

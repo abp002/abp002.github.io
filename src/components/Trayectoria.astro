@@ -1,0 +1,97 @@
+---
+import { experiencia, formacion } from '../config/trayectoria';
+---
+
+<div class="columnas">
+  <div class="columna revela">
+    <span class="dato rotulo">Experiencia</span>
+    {experiencia.map((e) => (
+      <article class="puesto">
+        <span class="periodo">{e.periodo}</span>
+        <div class="cabeza">
+          <h3 class="empresa">{e.empresa}</h3>
+          <span class="cargo">{e.cargo}</span>
+        </div>
+        <ul class="puntos" role="list">
+          {e.puntos.map((p) => (
+            <li class="punto"><span class="guion" aria-hidden="true">—</span>{p}</li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+
+  <div class="columna revela-tarde">
+    <span class="dato rotulo">Formación</span>
+    <div class="lista">
+      {formacion.map((f) => (
+        <div class="entrada-f">
+          <span class="periodo chico">{f.periodo}</span>
+          <span class="titulo-f">{f.titulo}</span>
+          <span class="centro">{f.centro}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .columnas {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(36px, 6vw, 80px);
+    margin-top: 40px;
+  }
+  @media (max-width: 860px) {
+    .columnas { grid-template-columns: 1fr; }
+  }
+
+  .columna { display: flex; flex-direction: column; gap: 20px; }
+  .rotulo { color: var(--mute); }
+
+  .puesto { display: flex; flex-direction: column; gap: 10px; }
+  .periodo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ter);
+    font-variant-numeric: tabular-nums;
+  }
+  .periodo.chico { font-size: 12px; }
+
+  .cabeza { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .empresa {
+    font-family: var(--serif);
+    font-size: 27px;
+    font-weight: 500;
+  }
+  .cargo { font-size: 15px; font-weight: 600; color: var(--acento); }
+
+  .puntos {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .punto {
+    display: flex;
+    gap: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--sec);
+  }
+  .guion { color: var(--linea-fuerte); }
+
+  .lista { display: flex; flex-direction: column; }
+  .entrada-f {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-block: 14px;
+    border-top: 1px solid var(--linea);
+  }
+  .entrada-f:last-child { border-bottom: 1px solid var(--linea); }
+  .titulo-f { font-size: 16.5px; font-weight: 600; }
+  .centro { font-size: 14px; color: var(--ter); }
+</style>

@@ -3,9 +3,33 @@
 Web personal de Alejandro Borrego. Arrancada el 25-jul-2026.
 Separada a propósito de Bythos: Bythos vende los productos, esto le vende a él.
 
-Arrancar: `npm run dev` (se usó el puerto 4322 para no chocar con bythos-egeo).
+Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar con bythos-egeo).
 
 ## Decisiones cerradas
+
+- **Rediseño «expediente editorial»** (02-sep). Sale de un canvas de diseño con
+  tres direcciones; ganó esta: Newsreader para leer, Instrument Sans para la
+  interfaz, IBM Plex Mono para los datos, papel cálido y un solo acento. La
+  paleta completa vive como tokens en `global.css` y se conmuta con
+  `data-paleta` en `<html>` (5 opciones; se elige en `src/config/marca.ts`,
+  `paleta`). El stack dejó de ser la tabla por capas del CV: parrilla de 21
+  logos oficiales (Simple Icons congelados en `src/config/logos.ts`, en
+  monocromo con `currentColor` para que la paleta siga mandando) más chips de
+  «IA aplicada» con jerarquía propia. Secciones: 01 sobre mí · 02 stack ·
+  03 trayectoria · 04 proyectos · 05 blog · 06 contacto. Win Innovación se
+  nombra (ya la nombra el CV público); el correo público pasa a
+  abp.0040@gmail.com (el del CV) y el CV se sirve en /cv-alejandro-borrego.pdf.
+  GitHub enlazado: abp002.
+  - La portada enseña 4 tarjetas (2×2, por `orden`); Bythos queda accesible
+    por URL. Los cuatro principios y las notas por capa del stack viejo
+    salieron de la portada en este corte: candidatos a volver en otra forma.
+  - El blog nace con 3 posts de ejemplo (frontmatter `ejemplo: true`) y un
+    interruptor `mostrarBlog` en marca.ts: a false, la sección, el índice y
+    las rutas desaparecen del build. Apagarlo antes de subir al dominio si no
+    hay contenido real.
+  - Se conservó entero el sistema de movimiento anterior (revela con
+    animation-timeline, view transitions con vuelta rápida) y la barrera
+    `visibilidad: 'sin-detalle'` de las fichas.
 
 - **El sujeto de la web soy yo, no los proyectos** (26-jul). El concepto de sala
   asumía que las obras aguantaban la página, y no las hay: ningún proyecto está

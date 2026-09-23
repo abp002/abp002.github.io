@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Seccion from '../../components/Seccion.astro';
+import BlogLista from '../../components/BlogLista.astro';
+import { mostrarBlog } from '../../config/marca';
+
+// Blog apagado: el índice redirige a la portada en vez de quedarse vacío.
+if (!mostrarBlog) return Astro.redirect('/');
+
+const posts = (await getCollection('blog', ({ data }) => !data.ejemplo)).sort(
+  (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
+);
+---
+
+<Base titulo="Blog" descripcion="Notas de trabajo: latencia, ERP modular, IA aplicada en local.">
+  <section class="bloque contenedor">
+    <Seccion numero="05" titulo="Blog" id="blog" />
+    <BlogLista posts={posts} />
+  </section>
+</Base>
+
+<style>
+  .bloque { padding-block: clamp(48px, 7vw, 88px) var(--aire); }
+</style>

@@ -1,21 +1,56 @@
 /* ============================================================
-   La sala neutra
-   Paredes acromáticas, el color lo ponen las piezas.
-   Un solo acento, y solo en tipografía pequeña.
+   Expediente editorial
+   Papel cálido, serif de lectura, mono para los datos.
+   Un solo acento; la paleta entera se conmuta con data-paleta
+   en <html> (se elige en src/config/marca.ts).
    ============================================================ */
 
-@font-face { font-display: swap; }
+:root {
+  /* Papel y óxido — la paleta de serie. */
+  color-scheme: light;
+  --fondo:        #faf7f2;
+  --superficie:   #fffcf7;
+  --tinta:        #1c1917;
+  --prosa:        #292524;
+  --sec:          #57534e;
+  --ter:          #78716c;
+  --mute:         #a29b8c;
+  --linea:        #e8e2d6;
+  --linea-fuerte: #b8b0a0;
+  --borde:        #cfc8ba;
+  --acento:       #b04324;
+  --acento-texto: #faf7f2;
+}
+:root[data-paleta='crema-cobalto'] {
+  --fondo: #f6f6f3; --superficie: #fdfdfb; --tinta: #16181d; --prosa: #24262c;
+  --sec: #4e5258; --ter: #73777e; --mute: #9a9ea6; --linea: #e3e3dd;
+  --linea-fuerte: #aeb0a8; --borde: #c9cac2; --acento: #2d4fc4; --acento-texto: #f6f6f3;
+}
+:root[data-paleta='salvia'] {
+  --fondo: #f3f5ef; --superficie: #fbfcf8; --tinta: #191d18; --prosa: #262b24;
+  --sec: #4f564c; --ter: #747c70; --mute: #9aa295; --linea: #e0e4d9;
+  --linea-fuerte: #a9b1a1; --borde: #c5ccbc; --acento: #3d6b52; --acento-texto: #f3f5ef;
+}
+:root[data-paleta='nocturna'] {
+  /* No es la clara invertida: superficie MÁS clara que el fondo, acento
+     rebajado a ámbar, líneas apenas visibles. Token a token. */
+  color-scheme: dark;
+  --fondo: #161311; --superficie: #1f1b18; --tinta: #ede7dc; --prosa: #ddd5c8;
+  --sec: #b3aa9b; --ter: #8d8477; --mute: #6e6659; --linea: #2e2925;
+  --linea-fuerte: #4a443d; --borde: #3a342e; --acento: #d98e3b; --acento-texto: #161311;
+}
+:root[data-paleta='archivo'] {
+  --fondo: #fbfaf8; --superficie: #ffffff; --tinta: #141312; --prosa: #232120;
+  --sec: #504d49; --ter: #787470; --mute: #a3a09b; --linea: #e8e6e2;
+  --linea-fuerte: #b5b2ac; --borde: #d0cdc7; --acento: #c92f1e; --acento-texto: #fbfaf8;
+}
 
 :root {
-  /* Superficies y tinta. Ratios medidos sobre Papel:
-     Tinta 16,71:1 · Grafito 6,13:1 · Bermellón 4,53:1 · Borde 3,16:1 */
-  --papel:   #F7F7F5;
-  --lienzo:  #FFFFFF;
-  --tinta:   #16171A;
-  --grafito: #5A5D66;
-  --linea:   #E3E3DF;  /* separador: 1,20:1, no vale como borde de control */
-  --borde:   #8A8A85;  /* borde de campo: necesita 3:1 y lo cumple justo */
-  --acento:  #C8442B;
+  /* Alias del diseño anterior: la ficha de proyecto y las miniaturas
+     los siguen usando y no hay motivo para tocarlas una a una. */
+  --papel:   var(--fondo);
+  --lienzo:  var(--superficie);
+  --grafito: var(--sec);
 
   /* Curvas. Las palabras clave de CSS son demasiado suaves; ease-in está
      prohibido en interfaz porque arranca lento justo cuando se mira. */
@@ -28,9 +63,9 @@
   --t-sala:  380ms;  /* entrar en una ficha */
   --t-vuelta: 260ms; /* volver: el sistema responde, y lo que responde va rápido */
 
-  --serif: 'Instrument Serif', 'Iowan Old Style', Palatino, Georgia, serif;
-  --sans:  'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
-  --mono:  'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --serif: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
+  --sans:  'Instrument Sans Variable', 'Helvetica Neue', system-ui, sans-serif;
+  --mono:  'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
   --medida: 66ch;
   --margen: clamp(20px, 5vw, 64px);
@@ -51,7 +86,7 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--papel);
+  background: var(--fondo);
   color: var(--tinta);
   font-family: var(--sans);
   font-size: 17px;
@@ -60,7 +95,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
+h1, h2, h3, h4 { margin: 0; font-weight: 500; text-wrap: balance; }
 p { margin: 0; }
 img { max-width: 100%; display: block; }
 
@@ -71,21 +106,27 @@ a:focus-visible, button:focus-visible {
   border-radius: 2px;
 }
 
+::selection { background: color-mix(in oklab, var(--acento) 24%, transparent); }
+
 /* --- roles tipográficos --- */
 .display {
   font-family: var(--serif);
-  font-size: clamp(34px, 6.2vw, 62px);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
+  font-size: clamp(38px, 6.4vw, 76px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 500;
   /* A este cuerpo un guion de división se ve como un error de composición.
      `manual` deja partir solo donde haya un &shy; puesto a mano. */
   hyphens: manual;
 }
+.display em { font-style: italic; }
+
 .titulo-obra {
   font-family: var(--serif);
-  font-size: clamp(26px, 3.4vw, 38px);
-  line-height: 1.08;
+  font-size: clamp(24px, 3.2vw, 34px);
+  line-height: 1.1;
   letter-spacing: -0.015em;
+  font-weight: 500;
 }
 .dato {
   font-family: var(--mono);
@@ -93,17 +134,54 @@ a:focus-visible, button:focus-visible {
   letter-spacing: 0.11em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: var(--grafito);
+  color: var(--sec);
 }
 .cifra {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
+  font-weight: 500;
   color: var(--acento);
+}
+.prosa-serif {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--prosa);
+}
+
+/* --- botones del expediente --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 21px;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity var(--t-micro) var(--ease-salida),
+              transform var(--t-micro) var(--ease-salida);
+}
+.btn:hover { opacity: 0.85; }
+.btn:active { transform: translateY(1px); }
+.btn-primario { background: var(--acento); color: var(--acento-texto); }
+.btn-borde { border: 1px solid var(--borde); color: var(--tinta); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 8px 15px;
+  border: 1px solid var(--borde);
+  border-radius: 3px;
+  color: var(--tinta);
 }
 
 .contenedor {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1160px;
   margin-inline: auto;
   padding-inline: var(--margen);
 }
@@ -113,7 +191,7 @@ a:focus-visible, button:focus-visible {
    Nada se mueve solo. Todo responde a un avance del visitante.
    ============================================================ */
 
-/* 1 · Entrada a la sala. Solo la primera carga, en CSS puro. */
+/* 1 · Entrada. Solo la primera carga, en CSS puro. */
 .entrada > * {
   opacity: 1;
   translate: 0 0;
@@ -127,9 +205,10 @@ a:focus-visible, button:focus-visible {
   }
   .entrada > *:nth-child(2) { transition-delay: 60ms; }
   .entrada > *:nth-child(3) { transition-delay: 120ms; }
+  .entrada > *:nth-child(4) { transition-delay: 180ms; }
 }
 
-/* 2 · Avance por la sala. Timeline nativo: sin JavaScript, y si el
+/* 2 · Avance por la página. Timeline nativo: sin JavaScript, y si el
    navegador no lo soporta el contenido queda visible, nunca en blanco. */
 @keyframes aparecer {
   from { opacity: 0; translate: 0 12px; }
@@ -142,8 +221,6 @@ a:focus-visible, button:focus-visible {
       animation-timeline: view();
       animation-range: entry 4% cover 26%;
     }
-    /* La cartela entra detrás de su imagen. Ese desfase es lo que hace
-       que la pareja se lea como compuesta y no como dos cosas sueltas. */
     .revela-tarde {
       animation: aparecer linear both;
       animation-timeline: view();
@@ -152,7 +229,7 @@ a:focus-visible, button:focus-visible {
   }
 }
 
-/* 5 · Cambiar de sala. Entrar es una decisión, volver es el sistema
+/* 3 · Cambiar de página. Entrar es una decisión, volver es el sistema
    respondiendo: la vuelta va más rápida. */
 ::view-transition-group(*) {
   animation-duration: var(--t-sala);

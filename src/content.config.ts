@@ -31,4 +31,19 @@ const proyectos = defineCollection({
   }),
 });
 
-export const collections = { proyectos };
+// El blog. Mientras `mostrarBlog` (src/config/marca.ts) esté a false,
+// nada de esto llega al build aunque los ficheros existan.
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: z.object({
+    titulo: z.string(),
+    resumen: z.string(),
+    fecha: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    // Los posts de arranque son borradores de ejemplo; se marca en el dato
+    // para poder filtrarlos de golpe cuando haya contenido real.
+    ejemplo: z.boolean().default(false),
+  }),
+});
+
+export const collections = { proyectos, blog };

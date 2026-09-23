@@ -1,78 +1,50 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Apertura from '../components/Apertura.astro';
+import Hero from '../components/Hero.astro';
 import Seccion from '../components/Seccion.astro';
-import Stack from '../components/Stack.astro';
-import Obra from '../components/Obra.astro';
+import StackLogos from '../components/StackLogos.astro';
+import Trayectoria from '../components/Trayectoria.astro';
+import TarjetaProyecto from '../components/TarjetaProyecto.astro';
+import BlogLista from '../components/BlogLista.astro';
 import Contacto from '../components/Contacto.astro';
+import { marca, perfil, mostrarBlog } from '../config/marca';
 
-const proyectos = (await getCollection('proyectos')).sort(
-  (a, b) => a.data.orden - b.data.orden,
-);
+// La portada enseña cuatro tarjetas: las cuatro primeras por `orden`.
+// Bythos (orden 5) queda accesible por URL; una parrilla 2×2 completa
+// vale más que una de cinco con un hueco.
+const proyectos = (await getCollection('proyectos'))
+  .sort((a, b) => a.data.orden - b.data.orden)
+  .slice(0, 4);
 
-// Los principios viven aquí y no en el maquetado suelto porque son lo único
-// del "sobre mí" que se cita en una entrevista: conviene tenerlos juntos y
-// poder reordenarlos sin tocar CSS.
-const principios = [
-  {
-    titulo: 'Mido antes de optimizar',
-    texto:
-      'En el robot, la voz parecía el cuello de botella y era el 4 % del problema. Una tarde de mediciones evitó semanas de trabajo en la parte equivocada.',
-  },
-  {
-    titulo: 'Prefiero decisiones reversibles',
-    texto:
-      'Si volver atrás cuesta treinta segundos, la decisión se toma antes y se prueba más. La arquitectura sirve para eso, no para lucirse.',
-  },
-  {
-    titulo: 'Un fallo honesto gana a un remedio lento',
-    texto:
-      'Descarté un plan de respaldo que tardaba un minuto en rendirse: no era redundancia, era el mismo punto de fallo con otra cara.',
-  },
-  {
-    titulo: 'Si un número no lo he medido yo, no lo escribo',
-    texto:
-      'Todas las cifras de este sitio salen de una medición propia y reproducible. Las que no tengo, no están.',
-  },
-];
+const posts = mostrarBlog
+  ? (await getCollection('blog', ({ data }) => !data.ejemplo))
+      .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
+      .slice(0, 3)
+  : [];
+
+// Numeración corrida: si el blog se apaga, contacto pasa de 06 a 05
+// sin dejar un salto en el expediente.
+const nContacto = mostrarBlog ? '06' : '05';
+
+const datos = [
+  { etiqueta: 'Ubicación', valor: perfil.ubicacion },
+  { etiqueta: 'Web', valor: marca.dominio },
+  { etiqueta: 'Idiomas', valor: perfil.idiomas },
+  { etiqueta: 'Movilidad', valor: perfil.movilidad },
+].filter((d) => d.valor !== null);
 ---
 
 <Base>
-  <Apertura />
-
-  <!-- aria-label y no aria-labelledby: el rótulo incluye el número y la nota,
-       y como nombre accesible saldría "01 Con qué trabajo Lo que aparece...". -->
-  <section class="bloque contenedor" aria-label="Con qué trabajo">
-    <Seccion
-      numero="01"
-      titulo="Con qué trabajo"
-      id="stack"
-      nota="Lo que aparece aquí está en algo que he construido, no en un curso que hice."
-    />
-    <Stack />
-  </section>
-
-  <section class="bloque contenedor" aria-label="Trabajo">
-    <Seccion
-      numero="02"
-      titulo="Trabajo"
-      id="trabajo"
-      nota="Productos propios. Cada ficha dice en qué estado está de verdad: ninguno se vende como terminado."
-    />
-    <div class="sala">
-      {proyectos.map((p) => <Obra proyecto={p} />)}
-    </div>
-  </section>
+  <Hero />
 
   <section class="bloque contenedor" aria-label="Sobre mí">
-    <Seccion numero="03" titulo="Sobre mí" id="sobre" />
-
+    <Seccion numero="01" titulo="Sobre mí" id="sobre-mi" />
     <div class="sobre">
-      <div class="cuerpo revela">
+      <div class="cuerpo prosa-serif revela">
         <p>
-          Trabajo como desarrollador en una empresa de software de gestión: ERP a
-          medida, cumplimiento fiscal e integraciones con sistemas que no eligí yo.
+          Trabajo como desarrollador de ERP en Win Innovación: contabilidad,
+          cumplimiento fiscal e integraciones con sistemas que no eligí yo.
           Ahí no puedo enseñar pantallas ni nombres, porque el trabajo y los
           clientes son de la empresa. Lo que sí puedo contar es lo que aprendí.
         </p>
@@ -89,38 +61,55 @@ const principios = [
         </p>
       </div>
 
-      <ol class="principios revela-tarde">
-        {principios.map((p) => (
-          <li>
-            <h3 class="nombre-principio">{p.titulo}</h3>
-            <p class="texto-principio">{p.texto}</p>
-          </li>
+      <dl class="fichas revela-tarde">
+        {datos.map((d) => (
+          <div class="ficha-dato">
+            <dt class="dato">{d.etiqueta}</dt>
+            <dd class="valor">{d.valor}</dd>
+          </div>
         ))}
-      </ol>
+      </dl>
     </div>
   </section>
 
+  <section class="bloque contenedor" aria-label="Stack">
+    <Seccion numero="02" titulo="Stack" id="stack" />
+    <StackLogos />
+  </section>
+
+  <section class="bloque contenedor" aria-label="Trayectoria">
+    <Seccion numero="03" titulo="Trayectoria" id="trayectoria" />
+    <Trayectoria />
+  </section>
+
+  <section class="bloque contenedor" aria-label="Proyectos">
+    <Seccion numero="04" titulo="Proyectos" id="proyectos" />
+    <div class="parrilla-proyectos">
+      {proyectos.map((p) => <TarjetaProyecto proyecto={p} />)}
+    </div>
+  </section>
+
+  {mostrarBlog && (
+    <section class="bloque contenedor" aria-label="Blog">
+      <Seccion numero="05" titulo="Blog" id="blog" />
+      <BlogLista posts={posts} />
+    </section>
+  )}
+
   <section class="bloque contenedor" aria-label="Contacto">
-    <Seccion numero="04" titulo="Hablamos" id="contacto" />
+    <Seccion numero={nContacto} titulo="Contacto" id="contacto" />
     <Contacto />
   </section>
 </Base>
 
 <style>
-  .bloque {
-    padding-block: 0 var(--aire);
-  }
-
-  .sala {
-    display: flex;
-    flex-direction: column;
-    gap: var(--aire);
-  }
+  .bloque { padding-block: 0 var(--aire); }
 
   .sobre {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(28px, 5vw, 64px);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(36px, 6vw, 80px);
+    margin-top: 40px;
     align-items: start;
   }
   @media (max-width: 860px) {
@@ -130,34 +119,28 @@ const principios = [
   .cuerpo {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    max-width: 52ch;
+    gap: 20px;
   }
 
-  .principios {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  .principios li {
-    padding-block: 16px;
+  .fichas { display: flex; flex-direction: column; margin: 0; }
+  .ficha-dato {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 14px;
     border-top: 1px solid var(--linea);
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
   }
-  .principios li:last-child { border-bottom: 1px solid var(--linea); }
+  .ficha-dato:last-child { border-bottom: 1px solid var(--linea); }
+  .ficha-dato .dato { color: var(--mute); }
+  .valor { margin: 0; font-size: 14.5px; font-weight: 500; }
 
-  .nombre-principio {
-    font-family: var(--serif);
-    font-size: 20px;
-    line-height: 1.2;
+  .parrilla-proyectos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 40px;
   }
-  .texto-principio {
-    color: var(--grafito);
-    font-size: 15px;
-    line-height: 1.55;
+  @media (max-width: 780px) {
+    .parrilla-proyectos { grid-template-columns: 1fr; gap: 16px; }
   }
 </style>
