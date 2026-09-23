@@ -7,6 +7,12 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 ## Decisiones cerradas
 
+- **Publicada en abp002.github.io** (23-sep). abpdev.es sigue sin comprar; el repo
+  pasó de `portfolio` privado a `abp002.github.io` público y despliega con
+  GitHub Actions en cada push a main. El blog se ve pero vacío: los posts con
+  `ejemplo: true` se filtran en `getCollection`. `cv/` (fuentes, foto, teléfono)
+  queda fuera del repo; el PDF servido vive en `public/`.
+
 - **Rediseño «expediente editorial»** (02-sep). Sale de un canvas de diseño con
   tres direcciones; ganó esta: Newsreader para leer, Instrument Sans para la
   interfaz, IBM Plex Mono para los datos, papel cálido y un solo acento. La
