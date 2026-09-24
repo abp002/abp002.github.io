@@ -5,7 +5,7 @@ anio: 2026
 orden: 1
 estado: produccion
 rol: full-stack, integraciones e IA — en Win Innovación
-stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis, CopilotKit, OpenAI]
+stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
 patron: spartan
 visibilidad: publico
 enlaces:

@@ -2,7 +2,6 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Miniatura from '../../components/Miniatura.astro';
-import { etiquetaEstado } from '../../config/estados';
 
 export async function getStaticPaths() {
   const proyectos = (await getCollection('proyectos')).sort(
@@ -53,9 +52,6 @@ const conDetalle = d.visibilidad === 'publico';
     </header>
 
     <dl class="datos revela">
-      <div><dt class="dato">Año</dt><dd>{d.anio}</dd></div>
-      <div><dt class="dato">Estado</dt><dd>{etiquetaEstado(d.estado)}</dd></div>
-      <div><dt class="dato">Papel</dt><dd>{d.rol}</dd></div>
       <div class="ancho"><dt class="dato">Herramientas</dt><dd>{d.stack.join(' · ')}</dd></div>
     </dl>
 
