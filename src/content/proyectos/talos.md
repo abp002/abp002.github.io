@@ -2,7 +2,7 @@
 nombre: Talos
 tagline: Le quité el cerebro alquilado a un robot y le puse uno propio.
 anio: 2026
-orden: 1
+orden: 2
 estado: funcionando
 rol: arquitectura, código y las mediciones
 stack: [Python, asyncio, WebSocket, Silero VAD, faster-whisper, Kokoro, Docker]

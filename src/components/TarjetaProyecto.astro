@@ -1,15 +1,17 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { etiquetaEstado } from '../config/estados';
 
 interface Props { proyecto: CollectionEntry<'proyectos'> }
 const { proyecto } = Astro.props;
 const d = proyecto.data;
 const url = `/proyectos/${proyecto.id}`;
 
-// El punto de estado dice la verdad de un vistazo: relleno = funcionando,
+// El punto de estado dice la verdad de un vistazo: relleno = en producción
+// o funcionando,
 // hueco = en curso, apagado = lo demás. La palabra lo confirma al lado.
 const tono =
-  d.estado === 'funcionando' ? 'lleno' : d.estado === 'en-curso' ? 'hueco' : 'apagado';
+  d.estado === 'produccion' || d.estado === 'funcionando' ? 'lleno' : d.estado === 'en-curso' ? 'hueco' : 'apagado';
 ---
 
 <a href={url} class="tarjeta revela">
@@ -17,7 +19,7 @@ const tono =
     <h3 class="nombre" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h3>
     <span class={`estado estado-${tono}`}>
       <span class="dot" aria-hidden="true"></span>
-      {d.estado.replace('-', ' ')}
+      {etiquetaEstado(d.estado)}
     </span>
   </div>
 

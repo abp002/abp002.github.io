@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Miniatura from '../../components/Miniatura.astro';
+import { etiquetaEstado } from '../../config/estados';
 
 export async function getStaticPaths() {
   const proyectos = (await getCollection('proyectos')).sort(
@@ -35,6 +36,13 @@ const conDetalle = d.visibilidad === 'publico';
             <span class="dato">{d.metrica.que}</span>
           </p>
         )}
+        {conDetalle && d.enlaces && (
+          <p class="enlaces">
+            {d.enlaces.web && <a href={d.enlaces.web} rel="noopener" target="_blank">Ver en producción ↗</a>}
+            {d.enlaces.demo && <a href={d.enlaces.demo} rel="noopener" target="_blank">Ver la demo ↗</a>}
+            {d.enlaces.repo && <a href={d.enlaces.repo} rel="noopener" target="_blank">Código ↗</a>}
+          </p>
+        )}
       </div>
 
       {conDetalle && (
@@ -46,7 +54,7 @@ const conDetalle = d.visibilidad === 'publico';
 
     <dl class="datos revela">
       <div><dt class="dato">Año</dt><dd>{d.anio}</dd></div>
-      <div><dt class="dato">Estado</dt><dd>{d.estado.replace('-', ' ')}</dd></div>
+      <div><dt class="dato">Estado</dt><dd>{etiquetaEstado(d.estado)}</dd></div>
       <div><dt class="dato">Papel</dt><dd>{d.rol}</dd></div>
       <div class="ancho"><dt class="dato">Herramientas</dt><dd>{d.stack.join(' · ')}</dd></div>
     </dl>
@@ -84,6 +92,14 @@ const conDetalle = d.visibilidad === 'publico';
   .tagline { color: var(--grafito); max-width: 34ch; }
   .metrica { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
   .metrica .cifra { font-size: clamp(26px, 4vw, 40px); }
+  .enlaces { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 6px; }
+  .enlaces a {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--acento);
+    text-underline-offset: 4px;
+  }
 
   .datos {
     display: grid;

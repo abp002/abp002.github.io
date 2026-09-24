@@ -3,7 +3,7 @@
 // Son CSS, no imágenes: pesan cero y no hay que mantener assets que
 // van a sustituirse en cuanto Alejandro grabe el material.
 interface Props {
-  patron: 'talos' | 'arkon' | 'atenea' | 'kuro' | 'bythos';
+  patron: 'spartan' | 'talos' | 'arkon' | 'atenea' | 'kuro' | 'bythos';
   nombre: string;
   transitionName?: string;
 }
@@ -26,6 +26,26 @@ const { patron, nombre, transitionName } = Astro.props;
     background-color: var(--tinta);
   }
 
+  /* Spartan Comunica: la rejilla del calendario con publicaciones ya
+     colocadas, que es lo que el producto vende. */
+  .p-spartan {
+    /* 7 columnas × 4 filas. Con tamaño w, la posición p% deja el borde en
+       p·(1−w): columna c → c/6, y cada post ocupa el 12 % de alto. */
+    --post: calc(100% / 7) 12%;
+    background-image:
+      linear-gradient(90deg, transparent 8%, #C8442B 8% 92%, transparent 92%),
+      linear-gradient(90deg, transparent 8%, #E9E4D8 8% 92%, transparent 92%),
+      linear-gradient(90deg, transparent 8%, #8FA3BF 8% 92%, transparent 92%),
+      linear-gradient(90deg, transparent 8%, #C8442B 8% 92%, transparent 92%),
+      linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,.14) 1px, transparent 1px),
+      linear-gradient(160deg, #22252C, #121317);
+    background-size: var(--post), var(--post), var(--post), var(--post),
+      calc(100% / 7) 25%, calc(100% / 7) 25%, auto;
+    background-position: 16.67% 35.8%, 66.67% 64.2%, 50% 92.6%, 83.33% 7.4%,
+      0 0, 0 0, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
+  }
   .p-talos {
     background-image:
       radial-gradient(circle at 50% 46%, #F7F7F5 0 5.5%, transparent 6%),

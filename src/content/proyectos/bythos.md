@@ -2,7 +2,7 @@
 nombre: Bythos
 tagline: La identidad y la web del ecosistema de producto que estoy montando.
 anio: 2026
-orden: 5
+orden: 6
 estado: en-curso
 rol: identidad, diseño y código
 stack: [Astro, CSS, sistema de diseño]

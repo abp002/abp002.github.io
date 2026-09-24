@@ -2,7 +2,7 @@
 nombre: Atenea
 tagline: Un sistema de estudio que entiende mis apuntes y decide qué repasar hoy.
 anio: 2026
-orden: 3
+orden: 4
 estado: en-curso
 rol: diseño del sistema y código
 stack: [Python, RAG, FSRS, embeddings locales]

@@ -2,7 +2,7 @@
 nombre: Arkon
 tagline: Un ERP modular donde cada área de negocio es un módulo que se enchufa.
 anio: 2026
-orden: 2
+orden: 3
 estado: en-curso
 rol: producto, arquitectura y código
 stack: [NestJS, React, Prisma, PostgreSQL, TypeScript]

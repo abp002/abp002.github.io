@@ -15,16 +15,20 @@ const proyectos = defineCollection({
     tagline: z.string(),
     anio: z.number(),
     orden: z.number(),
-    estado: z.enum(['idea', 'en-curso', 'funcionando', 'congelado', 'concepto']),
+    estado: z.enum(['produccion', 'idea', 'en-curso', 'funcionando', 'congelado', 'concepto']),
     rol: z.string(),
     stack: z.array(z.string()),
-    patron: z.enum(['talos', 'arkon', 'atenea', 'kuro', 'bythos']),
+    patron: z.enum(['spartan', 'talos', 'arkon', 'atenea', 'kuro', 'bythos']),
     metrica: z
       .object({ valor: z.string(), que: z.string() })
       .optional(),
     visibilidad: z.enum(['publico', 'sin-detalle']).default('publico'),
     enlaces: z
-      .object({ repo: z.string().url().optional(), demo: z.string().url().optional() })
+      .object({
+        web: z.string().url().optional(),
+        repo: z.string().url().optional(),
+        demo: z.string().url().optional(),
+      })
       .optional(),
     // Sin texto largo todavía: la portada la muestra igual, la ficha avisa.
     borrador: z.boolean().default(false),

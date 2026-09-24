@@ -2,7 +2,7 @@
 nombre: Kuro Void
 tagline: Una marca de ropa que no existe, llevada hasta la última ficha de producto.
 anio: 2026
-orden: 4
+orden: 5
 estado: concepto
 rol: dirección de arte y desarrollo
 stack: [Next.js, React, TypeScript, Tailwind, Motion]
