@@ -7,9 +7,6 @@ estado: produccion
 rol: full-stack, integraciones e IA — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis, CopilotKit, OpenAI]
 patron: spartan
-metrica:
-  valor: 260+ commits
-  que: de junio a septiembre de 2026
 visibilidad: publico
 enlaces:
   web: https://spartancomunica.es
