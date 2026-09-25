@@ -46,7 +46,19 @@ const conDetalle = d.visibilidad === 'publico';
 
       {conDetalle && (
         <div class="imagen">
-          <Miniatura patron={d.patron} nombre={d.nombre} transitionName={`obra-${proyecto.id}`} />
+          {d.video ? (
+            <iframe
+              class="video"
+              src={`https://www.youtube-nocookie.com/embed/${d.video}`}
+              title={`Vídeo de ${d.nombre}`}
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          ) : (
+            <Miniatura patron={d.patron} nombre={d.nombre} transitionName={`obra-${proyecto.id}`} />
+          )}
         </div>
       )}
     </header>
@@ -83,6 +95,14 @@ const conDetalle = d.visibilidad === 'publico';
   }
   @media (max-width: 760px) {
     .cabecera { grid-template-columns: 1fr; align-items: start; }
+  }
+  .video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 2px;
+    background: var(--tinta);
   }
   .rotulo { display: flex; flex-direction: column; gap: 14px; }
   .tagline { color: var(--grafito); max-width: 34ch; }

@@ -3,7 +3,7 @@
 // Son CSS, no imágenes: pesan cero y no hay que mantener assets que
 // van a sustituirse en cuanto Alejandro grabe el material.
 interface Props {
-  patron: 'spartan' | 'talos' | 'arkon' | 'atenea' | 'kuro' | 'bythos';
+  patron: 'spartan' | 'sello' | 'arkon' | 'kuro' | 'bythos';
   nombre: string;
   transitionName?: string;
 }
@@ -46,22 +46,19 @@ const { patron, nombre, transitionName } = Astro.props;
       0 0, 0 0, 0 0;
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, no-repeat;
   }
-  .p-talos {
+  /* Sello: el sello sobre el papel, la marca que certifica. */
+  .p-sello {
     background-image:
-      radial-gradient(circle at 50% 46%, #F7F7F5 0 5.5%, transparent 6%),
-      radial-gradient(circle at 50% 46%, transparent 0 15%, #4A4E58 15.4% 16.6%, transparent 17%),
-      radial-gradient(circle at 50% 46%, transparent 0 26%, #6E727C 26.4% 27.2%, transparent 27.6%),
-      linear-gradient(165deg, #24262C, #16171A);
+      radial-gradient(circle at 50% 50%, transparent 0 13%, #C8442B 13.5% 15%, transparent 15.5%),
+      radial-gradient(circle at 50% 50%, transparent 0 17%, #C8442B 17.5% 18.3%, transparent 18.8%),
+      repeating-linear-gradient(0deg, rgba(20,20,24,.10) 0 1px, transparent 1px 18px),
+      linear-gradient(170deg, #EFEBE1, #E2DCCD);
   }
   .p-arkon {
     background-image:
       repeating-linear-gradient(0deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
       repeating-linear-gradient(90deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
       linear-gradient(150deg, #1D2340, #0B1020);
-  }
-  .p-atenea {
-    background-image:
-      conic-gradient(from 210deg at 50% 50%, #E8E4DA, #C9C3B4, #EFECE4, #B9B3A4, #E8E4DA);
   }
   .p-kuro {
     background-color: #08080A;
