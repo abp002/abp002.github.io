@@ -57,13 +57,6 @@ export const perfil = {
   cv: '/cv-alejandro-borrego.pdf' as string | null,
 } as const;
 
-// Las tres señales bajo el titular. Escaneables antes que ninguna prosa.
-export const senales = [
-  { etiqueta: 'Ahora', valor: 'Dev ERP · Win Innovación' },
-  { etiqueta: 'Formación', valor: 'Ciencia de Datos · UOC' },
-  { etiqueta: 'Idiomas', valor: 'Español nativo · Inglés medio' },
-] as const;
-
 // Vías de contacto. El orden importa: es el orden en que aparecen.
 export const contacto = [
   { etiqueta: 'Correo', valor: 'abp.0040@gmail.com', href: 'mailto:abp.0040@gmail.com' },

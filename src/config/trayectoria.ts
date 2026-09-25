@@ -20,8 +20,9 @@ export const experiencia: Experiencia[] = [
     cargo: 'Desarrollador ERP',
     periodo: 'MAYO 2026 — ACTUALIDAD',
     puntos: [
-      'ERP a medida en producción: contabilidad, cumplimiento fiscal e integraciones con sistemas de terceros.',
-      'Automatización de procesos internos aplicando IA sobre datos reales del negocio.',
+      'Desarrollo de software de gestión empresarial, especializado en software contable con cumplimiento fiscal e integraciones con sistemas de terceros.',
+      'Liderazgo de estos proyectos de principio a fin, además de su desarrollo.',
+      'Automatización de procesos internos aplicando IA.',
     ],
   },
 ];

@@ -1,12 +1,12 @@
 ---
-import { marca, perfil, senales } from '../config/marca';
+import { marca, perfil } from '../config/marca';
 import Icono from './Icono.astro';
 ---
 
 <section class="hero contenedor entrada" aria-label="Presentación">
   <p class="kicker">
     <span class="punto" aria-hidden="true"></span>
-    {marca.nombre} — {perfil.ubicacion}
+    {perfil.ubicacion}
   </p>
 
   <!-- El titular se parte donde se decide, no donde caiga: "full-stack"
@@ -20,26 +20,11 @@ import Icono from './Icono.astro';
   </p>
 
   <div class="acciones">
-    {perfil.cv && (
-      <a href={perfil.cv} class="btn btn-primario" download>
-        <Icono nombre="descarga" tamano={16} />
-        Descargar CV (PDF)
-      </a>
-    )}
     <a href={`mailto:${marca.correo}`} class="btn btn-borde">
       <Icono nombre="correo" tamano={16} />
       {marca.correo}
     </a>
   </div>
-
-  <dl class="senales">
-    {senales.map((s) => (
-      <div class="senal">
-        <dt class="dato etiqueta">{s.etiqueta}</dt>
-        <dd class="valor">{s.valor}</dd>
-      </div>
-    ))}
-  </dl>
 </section>
 
 <style>
@@ -80,32 +65,7 @@ import Icono from './Icono.astro';
     margin-top: 40px;
   }
 
-  .senales {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 60px 0 0;
-  }
-  .senal {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-inline: 32px;
-    border-left: 1px solid var(--linea);
-  }
-  .senal:first-child { padding-left: 0; border-left: none; }
-  .etiqueta { color: var(--mute); }
-  .valor { margin: 0; font-size: 14.5px; font-weight: 500; }
-
   @media (max-width: 680px) {
     .acciones .btn { width: 100%; justify-content: center; }
-    .senales { flex-direction: column; gap: 0; margin-top: 40px; }
-    .senal {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 12px 0;
-      border-left: none;
-      border-top: 1px solid var(--linea);
-    }
   }
 </style>
