@@ -20,8 +20,7 @@ export const experiencia: Experiencia[] = [
     cargo: 'Desarrollador',
     periodo: 'MAYO 2026 — ACTUALIDAD',
     puntos: [
-      'Desarrollo de software de gestión empresarial, especializado en software contable con cumplimiento fiscal e integraciones con sistemas de terceros.',
-      'Liderazgo de estos proyectos de principio a fin, además de su desarrollo.',
+      'Desarrollo y liderazgo de proyectos de software de gestión empresarial, especializado en software contable con cumplimiento fiscal e integraciones con sistemas de terceros.',
       'Modernización del flujo de desarrollo del equipo: control de versiones, despliegue automático con CI/CD y contenedores Docker.',
       'Introducción de harnesses de programación en el día a día, con base de conocimiento.',
     ],

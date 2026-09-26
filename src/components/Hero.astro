@@ -13,12 +13,6 @@ import Icono from './Icono.astro';
        entero en la primera línea y la conjunción arrastrada a la segunda. -->
   <h1 class="display">Desarrollador full-stack<br /><em>e IA aplicada.</em></h1>
 
-  <p class="sub">
-    ERP en producción, automatización con IA y producto propio. Ahora:
-    desarrollador en Win Innovación y Grado en Ciencia de Datos Aplicada
-    en la UOC.
-  </p>
-
   <div class="acciones">
     <a href={`mailto:${marca.correo}`} class="btn btn-borde">
       <Icono nombre="correo" tamano={16} />
@@ -50,13 +44,6 @@ import Icono from './Icono.astro';
 
   .display { margin-top: 28px; }
 
-  .sub {
-    margin-top: 28px;
-    max-width: 620px;
-    font-size: clamp(17px, 2.2vw, 19px);
-    line-height: 1.6;
-    color: var(--sec);
-  }
 
   .acciones {
     display: flex;
