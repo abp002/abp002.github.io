@@ -47,5 +47,8 @@ export const iaAplicada = [
   'Function calling',
   'MCP — servidores',
   'pgvector',
+  'STT · TTS en streaming',
+  'Machine learning',
+  'Fine-tuning con QLoRA',
   'Integración de IA en procesos',
 ];

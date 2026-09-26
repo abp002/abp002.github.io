@@ -17,12 +17,13 @@ export interface Formacion {
 export const experiencia: Experiencia[] = [
   {
     empresa: 'Win Innovación',
-    cargo: 'Desarrollador ERP',
+    cargo: 'Desarrollador',
     periodo: 'MAYO 2026 — ACTUALIDAD',
     puntos: [
       'Desarrollo de software de gestión empresarial, especializado en software contable con cumplimiento fiscal e integraciones con sistemas de terceros.',
       'Liderazgo de estos proyectos de principio a fin, además de su desarrollo.',
-      'Automatización de procesos internos aplicando IA.',
+      'Modernización del flujo de desarrollo del equipo: control de versiones, despliegue automático con CI/CD y contenedores Docker.',
+      'Introducción de harnesses de programación en el día a día, con base de conocimiento.',
     ],
   },
 ];
