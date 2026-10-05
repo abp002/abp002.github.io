@@ -1,30 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Seccion from '../components/Seccion.astro';
 import StackLogos from '../components/StackLogos.astro';
 import Trayectoria from '../components/Trayectoria.astro';
-import TarjetaProyecto from '../components/TarjetaProyecto.astro';
-import BlogLista from '../components/BlogLista.astro';
 import Contacto from '../components/Contacto.astro';
-import { perfil, contacto, mostrarBlog } from '../config/marca';
+import { perfil, contacto } from '../config/marca';
 
-// La portada enseña cuatro tarjetas: las cuatro primeras por `orden`.
-// Una parrilla 2×2 completa vale más que una de cinco con un hueco.
-const proyectos = (await getCollection('proyectos'))
-  .sort((a, b) => a.data.orden - b.data.orden)
-  .slice(0, 4);
-
-const posts = mostrarBlog
-  ? (await getCollection('blog', ({ data }) => !data.ejemplo))
-      .sort((a, b) => b.data.fecha.getTime() - a.data.fecha.getTime())
-      .slice(0, 3)
-  : [];
-
-// Numeración corrida: si el blog se apaga, contacto pasa de 06 a 05
-// sin dejar un salto en el expediente.
-const nContacto = mostrarBlog ? '06' : '05';
+// Proyectos y blog tienen página propia (/proyectos, /blog) y no se
+// repiten aquí: la portada es quién soy y cómo escribirme.
 
 // GitHub y LinkedIn salen de `contacto` para no duplicar las URL.
 const red = (etiqueta: string) => contacto.find((c) => c.etiqueta === etiqueta);
@@ -84,22 +68,8 @@ const datos: { etiqueta: string; valor: string | null; href?: string }[] = [
     <Trayectoria />
   </section>
 
-  <section class="bloque contenedor" aria-label="Proyectos">
-    <Seccion numero="04" titulo="Proyectos" id="proyectos" />
-    <div class="parrilla-proyectos">
-      {proyectos.map((p) => <TarjetaProyecto proyecto={p} />)}
-    </div>
-  </section>
-
-  {mostrarBlog && (
-    <section class="bloque contenedor" aria-label="Blog">
-      <Seccion numero="05" titulo="Blog" id="blog" />
-      <BlogLista posts={posts} />
-    </section>
-  )}
-
   <section class="bloque contenedor" aria-label="Contacto">
-    <Seccion numero={nContacto} titulo="Contacto" id="contacto" />
+    <Seccion numero="04" titulo="Contacto" id="contacto" />
     <Contacto />
   </section>
 </Base>
@@ -137,14 +107,4 @@ const datos: { etiqueta: string; valor: string | null; href?: string }[] = [
   .valor { margin: 0; font-size: 14.5px; font-weight: 500; }
   .valor a { color: inherit; text-decoration: underline; text-decoration-color: var(--borde, currentColor); text-underline-offset: 3px; }
   .valor a:hover { text-decoration-color: currentColor; }
-
-  .parrilla-proyectos {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
-    margin-top: 40px;
-  }
-  @media (max-width: 780px) {
-    .parrilla-proyectos { grid-template-columns: 1fr; gap: 16px; }
-  }
 </style>

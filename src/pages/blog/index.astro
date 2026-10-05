@@ -15,7 +15,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.ejemplo)).sort(
 
 <Base titulo="Blog" descripcion="Notas de trabajo: latencia, ERP modular, IA aplicada en local.">
   <section class="bloque contenedor">
-    <Seccion numero="05" titulo="Blog" id="blog" />
+    <Seccion titulo="Blog" id="blog" nivel={1} />
     <BlogLista posts={posts} />
   </section>
 </Base>

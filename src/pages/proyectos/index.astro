@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Seccion from '../../components/Seccion.astro';
+import TarjetaProyecto from '../../components/TarjetaProyecto.astro';
+
+// Todos, por `orden`. Con página propia ya no hace falta recortar a la
+// parrilla 2×2 que imponía la portada.
+const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+---
+
+<Base titulo="Proyectos" descripcion="Proyectos propios y de trabajo: ERP, integraciones e IA aplicada.">
+  <section class="bloque contenedor">
+    <Seccion titulo="Proyectos" id="proyectos" nivel={1} />
+    <div class="parrilla-proyectos">
+      {proyectos.map((p) => <TarjetaProyecto proyecto={p} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bloque { padding-block: clamp(48px, 7vw, 88px) var(--aire); }
+
+  .parrilla-proyectos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+  }
+  @media (max-width: 780px) {
+    .parrilla-proyectos { grid-template-columns: 1fr; gap: 16px; }
+  }
+</style>

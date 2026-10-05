@@ -18,7 +18,10 @@ interface Props {
 const { titulo, descripcion = marca.subtitulo } = Astro.props;
 const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
 
-const anclas = marca.anclas.filter((a) => mostrarBlog || a.href !== '/#blog');
+const anclas = marca.anclas.filter((a) => mostrarBlog || a.href !== '/blog');
+// La sección actual se marca también dentro de sus fichas (/proyectos/sello).
+const ruta = Astro.url.pathname.replace(/\/$/, '');
+const actual = (href: string) => ruta === href || ruta.startsWith(`${href}/`);
 const github = 'https://github.com/abp002';
 const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-algaba-b1652b388';
 ---
@@ -43,7 +46,9 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
           <span class="firma-corta" aria-hidden="true">{marca.iniciales}</span>
         </a>
         <nav aria-label="Principal" class="anclas">
-          {anclas.map((a) => <a href={a.href} class="ancla">{a.texto}</a>)}
+          {anclas.map((a) => (
+            <a href={a.href} class="ancla" aria-current={actual(a.href) ? 'page' : undefined}>{a.texto}</a>
+          ))}
         </nav>
         <div class="controles">
           <div class="idioma" role="group" aria-label="Idioma">
@@ -133,6 +138,7 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
     transition: color var(--t-micro) var(--ease-salida);
   }
   .ancla:hover { color: var(--acento); }
+  .ancla[aria-current='page'] { color: var(--tinta); }
 
   /* El idioma queda a la izquierda del separador y los perfiles a la
      derecha: la raya vertical separa "ajustar la página" de "escribirme". */
@@ -170,10 +176,12 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
   }
   .red:hover { color: var(--acento); }
 
-  /* En pantallas estrechas la página es un solo scroll: las anclas sobran
-     y quedan la firma y las redes. Sin menú hamburguesa, sin JavaScript. */
+  /* Proyectos y blog son páginas, no anclas: en móvil no pueden
+     desaparecer. Bajan a una segunda fila bajo la firma y las redes, que ya
+     llenan los 390 px de un iPhone. Sin menú hamburguesa, sin JavaScript. */
   @media (max-width: 780px) {
-    .anclas { display: none; }
+    .barra { flex-wrap: wrap; row-gap: 14px; }
+    .anclas { order: 3; width: 100%; }
   }
 
   /* Medido, no estimado: firma entera + idioma + tres iconos piden 407 px y

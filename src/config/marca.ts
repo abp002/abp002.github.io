@@ -32,14 +32,12 @@ export const marca = {
   subtitulo:
     'Desarrollador full-stack e IA aplicada. ERP en producción, integraciones y productos propios con modelos corriendo en mi propia infraestructura.',
 
-  // Solo las dos secciones con contenido propio que crece. Sobre mí, stack,
-  // trayectoria y contacto conservan sus ids en la portada y siguen siendo
-  // enlazables a mano; lo que no hacen es ocupar barra. Seis anclas a la
-  // misma página se leen como un índice, y un índice de una sola página
-  // le dice al lector que hay más sitios de los que hay.
+  // Las dos partes con contenido propio que crece, cada una en su página.
+  // Sobre mí, stack, trayectoria y contacto viven en la portada con sus ids
+  // y siguen siendo enlazables a mano; lo que no hacen es ocupar barra.
   anclas: [
-    { texto: 'Proyectos', href: '/#proyectos' },
-    { texto: 'Blog', href: '/#blog' },
+    { texto: 'Proyectos', href: '/proyectos' },
+    { texto: 'Blog', href: '/blog' },
   ],
 } as const;
 

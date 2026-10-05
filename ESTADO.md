@@ -7,6 +7,13 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 ## Decisiones cerradas
 
+- **Proyectos y blog, páginas aparte** (05-oct). Salen de la portada y viven en
+  `/proyectos` (todas las fichas, sin el recorte 2×2) y `/blog`. La portada se
+  queda en 01 sobre mí · 02 stack · 03 trayectoria · 04 contacto. La barra
+  enlaza a las dos páginas, marca la actual con `aria-current` y en móvil ya no
+  se oculta: baja a una segunda fila. Revierte «Portada larga, una sola página»
+  (26-jul) en lo que toca a proyectos y blog.
+
 - **Publicada en abp002.github.io** (23-sep). abpdev.es sigue sin comprar; el repo
   pasó de `portfolio` privado a `abp002.github.io` público y despliega con
   GitHub Actions en cada push a main. El blog se ve pero vacío: los posts con
@@ -56,7 +63,7 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 - **Lector objetivo: reclutador / empresa** (26-jul). Manda que rol, stack y
   contacto sean escaneables en veinte segundos. De ahí la fila de señales bajo
   el titular y la sección de stack antes que la de trabajo.
-- **Portada larga, una sola página** (26-jul). Cuatro secciones numeradas
+- **Portada larga, una sola página** (26-jul; proyectos y blog salieron el 05-oct). Cuatro secciones numeradas
   (01 stack · 02 trabajo · 03 sobre mí · 04 contacto) y navegación por anclas.
   Solo los proyectos tienen página propia. Con este volumen de contenido, una
   portada larga se lee como abundancia y cuatro páginas cortas como vacío.

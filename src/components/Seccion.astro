@@ -2,17 +2,22 @@
 // Cabecera de sección del expediente: regla fuerte, número en acento,
 // título en serif. El número es parte de la retórica de la página
 // (documento numerado), no decoración.
+// En la portada numera el expediente; en una página propia (/proyectos,
+// /blog) es el h1 y va sin número, porque fuera de la portada no hay
+// secuencia que contar.
 interface Props {
-  numero: string;
+  numero?: string;
   titulo: string;
   id: string;
+  nivel?: 1 | 2;
 }
-const { numero, titulo, id } = Astro.props;
+const { numero, titulo, id, nivel = 2 } = Astro.props;
+const Titulo = nivel === 1 ? 'h1' : 'h2';
 ---
 
 <div class="cabecera" id={id}>
-  <span class="numero" aria-hidden="true">{numero}</span>
-  <h2 class="titulo">{titulo}</h2>
+  {numero && <span class="numero" aria-hidden="true">{numero}</span>}
+  <Titulo class="titulo">{titulo}</Titulo>
 </div>
 
 <style>
