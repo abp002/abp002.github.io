@@ -13,7 +13,6 @@ const es = {
     navPrincipal: 'Principal',
     grupoIdioma: 'Idioma',
     correo: 'Correo',
-    hecho: 'hecho con Astro',
   },
   nav: { proyectos: 'Proyectos', blog: 'Blog' },
   hero: {
@@ -72,7 +71,6 @@ const en: Textos = {
     navPrincipal: 'Main',
     grupoIdioma: 'Language',
     correo: 'Email',
-    hecho: 'built with Astro',
   },
   nav: { proyectos: 'Projects', blog: 'Blog' },
   hero: {
