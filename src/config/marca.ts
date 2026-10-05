@@ -51,8 +51,9 @@ export const perfil = {
   idiomas: 'Español nativo · Inglés medio' as string | null,
   movilidad: 'Carnet B · disponible para viajar' as string | null,
   disponibilidad: null as string | null,
-  // Ruta dentro de /public.
-  cv: '/cv-alejandro-borrego.pdf' as string | null,
+  // Ruta dentro de /public. A null mientras el CV no esté en condiciones:
+  // Contacto deja de pintar el botón de descarga.
+  cv: null as string | null,
 } as const;
 
 // Vías de contacto. El orden importa: es el orden en que aparecen.
