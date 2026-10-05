@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Seccion from '../components/Seccion.astro';
+import StackLogos from '../components/StackLogos.astro';
+import Trayectoria from '../components/Trayectoria.astro';
+import Contacto from '../components/Contacto.astro';
+import { contacto } from '../config/marca';
+import { textos } from '../i18n/textos';
+import type { Idioma } from '../i18n/rutas';
+
+// La portada en cualquier idioma; /index.astro y /en/index.astro solo
+// eligen cuál. Proyectos y blog tienen página propia y no se repiten aquí:
+// la portada es quién soy y cómo escribirme.
+interface Props { lang: Idioma }
+const { lang } = Astro.props;
+const t = textos[lang];
+const s = t.secciones;
+
+// GitHub y LinkedIn salen de `contacto` para no duplicar las URL.
+const red = (etiqueta: string) => contacto.find((c) => c.etiqueta === etiqueta);
+
+const datos: { etiqueta: string; valor: string | null; href?: string }[] = [
+  { etiqueta: 'GitHub', valor: red('GitHub')?.valor ?? null, href: red('GitHub')?.href },
+  { etiqueta: 'LinkedIn', valor: red('LinkedIn')?.valor ?? null, href: red('LinkedIn')?.href },
+  { etiqueta: t.perfil.idiomasEtiqueta, valor: t.perfil.idiomas },
+  { etiqueta: t.perfil.movilidadEtiqueta, valor: t.perfil.movilidad },
+].filter((d) => d.valor !== null);
+---
+
+<Base descripcion={t.meta.subtitulo}>
+  <Hero lang={lang} />
+
+  <section class="bloque contenedor" aria-label={s.sobre.titulo}>
+    <Seccion numero="01" titulo={s.sobre.titulo} id={s.sobre.id} />
+    <div class="sobre">
+      <div class="cuerpo prosa-serif revela">
+        {t.sobre.map((parrafo) => <p>{parrafo}</p>)}
+      </div>
+
+      <dl class="fichas revela-tarde">
+        {datos.map((d) => (
+          <div class="ficha-dato">
+            <dt class="dato">{d.etiqueta}</dt>
+            <dd class="valor">
+              {d.href ? <a href={d.href} rel="me noopener" target="_blank">{d.valor}</a> : d.valor}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="bloque contenedor" aria-label={s.stack.titulo}>
+    <Seccion numero="02" titulo={s.stack.titulo} id={s.stack.id} />
+    <StackLogos lang={lang} />
+  </section>
+
+  <section class="bloque contenedor" aria-label={s.trayectoria.titulo}>
+    <Seccion numero="03" titulo={s.trayectoria.titulo} id={s.trayectoria.id} />
+    <Trayectoria lang={lang} />
+  </section>
+
+  <section class="bloque contenedor" aria-label={s.contacto.titulo}>
+    <Seccion numero="04" titulo={s.contacto.titulo} id={s.contacto.id} />
+    <Contacto lang={lang} />
+  </section>
+</Base>
+
+<style>
+  .bloque { padding-block: 0 var(--aire); }
+
+  .sobre {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(36px, 6vw, 80px);
+    margin-top: 40px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .sobre { grid-template-columns: 1fr; gap: 34px; }
+  }
+
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .fichas { display: flex; flex-direction: column; margin: 0; }
+  .ficha-dato {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 14px;
+    border-top: 1px solid var(--linea);
+  }
+  .ficha-dato:last-child { border-bottom: 1px solid var(--linea); }
+  .ficha-dato .dato { color: var(--mute); }
+  .valor { margin: 0; font-size: 14.5px; font-weight: 500; }
+  .valor a { color: inherit; text-decoration: underline; text-decoration-color: var(--borde, currentColor); text-underline-offset: 3px; }
+  .valor a:hover { text-decoration-color: currentColor; }
+</style>

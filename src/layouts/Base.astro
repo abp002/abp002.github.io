@@ -3,6 +3,8 @@ import { ClientRouter } from 'astro:transitions';
 import { marca, paleta, mostrarBlog } from '../config/marca';
 import Icono from '../components/Icono.astro';
 import Bandera from '../components/Bandera.astro';
+import { textos } from '../i18n/textos';
+import { idiomaDe, rutaEquivalente, rutaPortada, rutaProyectos } from '../i18n/rutas';
 
 import '@fontsource-variable/newsreader';
 import '@fontsource-variable/newsreader/wght-italic.css';
@@ -15,55 +17,109 @@ interface Props {
   titulo?: string;
   descripcion?: string;
 }
-const { titulo, descripcion = marca.subtitulo } = Astro.props;
+// El idioma lo dice la URL (/en/… o no), así ninguna página puede pintar
+// la barra en un idioma y el contenido en otro.
+const lang = idiomaDe(Astro.url.pathname);
+const t = textos[lang];
+const { titulo, descripcion = t.meta.subtitulo } = Astro.props;
 const tituloCompleto = titulo ? `${titulo} — ${marca.nombre}` : marca.nombre;
 
-const anclas = marca.anclas.filter((a) => mostrarBlog || a.href !== '/blog');
+// El blog solo existe en español: en inglés no ocupa barra.
+const anclas = marca.anclas
+  .filter((a) => a !== 'blog' || (mostrarBlog && lang === 'es'))
+  .map((a) => ({
+    texto: t.nav[a],
+    href: a === 'proyectos' ? rutaProyectos(lang) : '/blog',
+  }));
 // La sección actual se marca también dentro de sus fichas (/proyectos/sello).
 const ruta = Astro.url.pathname.replace(/\/$/, '');
 const actual = (href: string) => ruta === href || ruta.startsWith(`${href}/`);
+
+const site = Astro.site ?? new URL('https://abp002.github.io');
+const versiones = {
+  es: rutaEquivalente(Astro.url.pathname, 'es'),
+  en: rutaEquivalente(Astro.url.pathname, 'en'),
+};
+const alternativa = versiones[lang === 'es' ? 'en' : 'es'];
 const github = 'https://github.com/abp002';
 const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-algaba-b1652b388';
 ---
 
-<html lang="es" data-paleta={paleta ?? undefined}>
+<html lang={lang} data-paleta={paleta ?? undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloCompleto}</title>
     <meta name="description" content={descripcion} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" hreflang="es" href={new URL(versiones.es, site).href} />
+    <link rel="alternate" hreflang="en" href={new URL(versiones.en, site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(versiones.es, site).href} />
+    {lang === 'es' && (
+      <script is:inline define:vars={{ destino: alternativa }}>
+        // Primera visita en español desde un navegador que no lee español:
+        // a la misma página en inglés. Solo si nadie ha elegido idioma a mano
+        // (las banderas lo guardan) y nunca a un buscador, que tiene que ver
+        // las dos versiones. Es el idioma del navegador y no la IP: un
+        // reclutador español en Londres lee español.
+        try {
+          var elegido = localStorage.getItem('idioma');
+          var bot = /bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent);
+          var lenguas = navigator.languages && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language || ''];
+          var leeEspanol = lenguas.some(function (l) { return /^es\b/i.test(l); });
+          if (!elegido && !bot && !leeEspanol) location.replace(destino + location.hash);
+        } catch (e) {}
+      </script>
+    )}
     <ClientRouter />
   </head>
 
   <body>
-    <a class="saltar" href="#principal">Saltar al contenido</a>
+    <a class="saltar" href="#principal">{t.base.saltar}</a>
 
     <header class="nav">
       <div class="contenedor barra">
-        <a href="/" class="firma" aria-label={marca.firma}>
+        <a href={rutaPortada(lang)} class="firma" aria-label={marca.firma}>
           <span class="firma-larga" aria-hidden="true">{marca.firma}</span>
           <span class="firma-corta" aria-hidden="true">{marca.iniciales}</span>
         </a>
-        <nav aria-label="Principal" class="anclas">
+        <nav aria-label={t.base.navPrincipal} class="anclas">
           {anclas.map((a) => (
             <a href={a.href} class="ancla" aria-current={actual(a.href) ? 'page' : undefined}>{a.texto}</a>
           ))}
         </nav>
         <div class="controles">
-          <div class="idioma" role="group" aria-label="Idioma">
-            <button type="button" class="lang" aria-pressed="true" aria-label="Español">
+          <div class="idioma" role="group" aria-label={t.base.grupoIdioma}>
+            <a
+              href={versiones.es}
+              hreflang="es"
+              lang="es"
+              class="lang"
+              data-idioma="es"
+              aria-label="Español"
+              aria-current={lang === 'es' ? 'true' : undefined}
+            >
               <Bandera pais="es" />
-            </button>
-            <button type="button" class="lang" aria-pressed="false" aria-label="English">
+            </a>
+            <a
+              href={versiones.en}
+              hreflang="en"
+              lang="en"
+              class="lang"
+              data-idioma="en"
+              aria-label="English"
+              aria-current={lang === 'en' ? 'true' : undefined}
+            >
               <Bandera pais="gb" />
-            </button>
+            </a>
           </div>
           <span class="separador" aria-hidden="true"></span>
           <div class="redes">
             <a href={github} aria-label="GitHub" class="red"><Icono nombre="github" /></a>
             <a href={linkedin} aria-label="LinkedIn" class="red"><Icono nombre="linkedin" /></a>
-            <a href={`mailto:${marca.correo}`} aria-label="Correo" class="red"><Icono nombre="correo" /></a>
+            <a href={`mailto:${marca.correo}`} aria-label={t.base.correo} class="red"><Icono nombre="correo" /></a>
           </div>
         </div>
       </div>
@@ -76,11 +132,26 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
     <footer class="pie">
       <div class="contenedor pie-fila">
         <span class="dato">© {new Date().getFullYear()} {marca.nombre}</span>
-        <span class="dato">{marca.dominio} · hecho con Astro</span>
+        <span class="dato">{marca.dominio} · {t.base.hecho}</span>
       </div>
     </footer>
 
     <script>
+      // Elegir bandera es elegir idioma para siempre: la detección del
+      // navegador deja de actuar. En captura, antes de que el router de
+      // transiciones se lleve el clic.
+      document.addEventListener(
+        'click',
+        (event) => {
+          const enlace = (event.target as Element | null)?.closest<HTMLElement>('[data-idioma]');
+          if (!enlace) return;
+          try {
+            localStorage.setItem('idioma', enlace.dataset.idioma ?? '');
+          } catch {}
+        },
+        true,
+      );
+
       // Volver debe ir más rápido que entrar. Astro dice en qué dirección
       // navega antes de preparar la transición; el CSS lee este atributo.
       document.addEventListener('astro:before-preparation', (event) => {
@@ -146,16 +217,10 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
   .redes { display: flex; align-items: center; gap: 18px; }
   .separador { width: 1px; height: 18px; background: var(--linea-fuerte); opacity: 0.6; }
 
-  /* Estático a propósito: todavía no hay versión inglesa. Botones y no
-     enlaces porque un <a href="/en/"> hoy sería un 404 — un enlace promete
-     una navegación, un botón solo declara un estado. Cuando exista la
-     traducción se cambian por <a hreflang> y este CSS no se toca. */
+  /* Enlaces con hreflang a la misma página en el otro idioma; el activo
+     lleva aria-current. */
   .idioma { display: flex; align-items: center; gap: 7px; }
   .lang {
-    appearance: none;
-    background: none;
-    border: 0;
-    padding: 0;
     display: flex;
     border-radius: 2px;
     cursor: pointer;
@@ -168,7 +233,7 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
                 opacity var(--t-micro) var(--ease-salida);
   }
   .lang:hover { filter: grayscale(0); opacity: 1; }
-  .lang[aria-pressed='true'] { filter: none; opacity: 1; }
+  .lang[aria-current='true'] { filter: none; opacity: 1; }
   .red {
     display: flex;
     color: var(--sec);

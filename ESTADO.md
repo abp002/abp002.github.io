@@ -7,6 +7,20 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 ## Decisiones cerradas
 
+- **Versión inglesa en /en/** (05-oct). Español en la raíz, inglés en `/en/` con
+  rutas propias (`/en/projects/<slug>`). Textos de interfaz en
+  `src/i18n/textos.ts` (el inglés se tipa contra el español: sin traducción no
+  compila); rutas en `src/i18n/rutas.ts`; fichas inglesas en
+  `src/content/proyectos-en/` solo con lo traducible: stack, orden y
+  `visibilidad` siguen viviendo en la española, y si falta una ficha el build
+  falla. Portada, lista y ficha son vistas en `src/vistas/` que reciben `lang`.
+  - Detección por idioma del navegador, no por IP: GitHub Pages no ve la IP y
+    el país no dice qué lee alguien. Sin `es` en `navigator.languages` se
+    redirige a la misma página en inglés; elegir bandera lo guarda en
+    localStorage y anula la detección; los bots no se redirigen (hreflang en
+    las dos versiones para que Google indexe ambas).
+  - El blog solo existe en español y en inglés no ocupa barra.
+
 - **Proyectos y blog, páginas aparte** (05-oct). Salen de la portada y viven en
   `/proyectos` (todas las fichas, sin el recorte 2×2) y `/blog`. La portada se
   queda en 01 sobre mí · 02 stack · 03 trayectoria · 04 contacto. La barra

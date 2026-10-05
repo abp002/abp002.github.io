@@ -38,6 +38,20 @@ const proyectos = defineCollection({
   }),
 });
 
+// La versión inglesa de cada ficha: solo lo que se traduce, más el cuerpo.
+// Stack, orden, vídeo, enlaces y sobre todo `visibilidad` viven únicamente
+// en la española, así que la barrera no puede quedarse abierta en un idioma.
+// El id (nombre del fichero) tiene que coincidir con el de la española.
+const proyectosEn = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/proyectos-en' }),
+  schema: z.object({
+    nombre: z.string().optional(),
+    tagline: z.string(),
+    rol: z.string(),
+    metrica: z.object({ valor: z.string(), que: z.string() }).optional(),
+  }),
+});
+
 // El blog. Mientras `mostrarBlog` (src/config/marca.ts) esté a false,
 // nada de esto llega al build aunque los ficheros existan.
 const blog = defineCollection({
@@ -56,4 +70,4 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { proyectos, blog };
+export const collections = { proyectos, proyectosEn, blog };

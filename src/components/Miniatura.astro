@@ -6,14 +6,15 @@ interface Props {
   patron: 'spartan' | 'sello' | 'arkon' | 'kuro' | 'dental';
   nombre: string;
   transitionName?: string;
+  etiqueta?: string;
 }
-const { patron, nombre, transitionName } = Astro.props;
+const { patron, nombre, transitionName, etiqueta = 'Imagen de' } = Astro.props;
 ---
 
 <div
   class:list={['miniatura', `p-${patron}`]}
   role="img"
-  aria-label={`Imagen de ${nombre}`}
+  aria-label={`${etiqueta} ${nombre}`}
   transition:name={transitionName}
 >
 </div>

@@ -1,3 +1,4 @@
+import type { Idioma } from '../i18n/rutas';
 // Logos del stack, como dato. Los `d` son los paths oficiales de Simple
 // Icons (CC0, viewBox 0 0 24 24), descargados el 02-sep-2026 y congelados
 // aquí: sin dependencia en runtime y sin peticiones a terceros. Se pintan
@@ -42,13 +43,25 @@ export const mcp = logos.find((l) => l.slug === 'modelcontextprotocol')!;
 
 // Conceptos sin logo: son el diferencial y van con jerarquía propia,
 // no enterrados entre veinte marcas.
-export const iaAplicada = [
-  'RAG',
-  'Function calling',
-  'MCP — servidores',
-  'pgvector',
-  'STT · TTS en streaming',
-  'Machine learning',
-  'Fine-tuning con QLoRA',
-  'Integración de IA en procesos',
-];
+export const iaAplicada: Record<Idioma, string[]> = {
+  es: [
+    'RAG',
+    'Function calling',
+    'MCP — servidores',
+    'pgvector',
+    'STT · TTS en streaming',
+    'Machine learning',
+    'Fine-tuning con QLoRA',
+    'Integración de IA en procesos',
+  ],
+  en: [
+    'RAG',
+    'Function calling',
+    'MCP — servers',
+    'pgvector',
+    'Streaming STT · TTS',
+    'Machine learning',
+    'QLoRA fine-tuning',
+    'AI in business processes',
+  ],
+};

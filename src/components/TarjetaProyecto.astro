@@ -1,10 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 
-interface Props { proyecto: CollectionEntry<'proyectos'> }
-const { proyecto } = Astro.props;
-const d = proyecto.data;
-const url = `/proyectos/${proyecto.id}`;
+import { rutaProyecto, type Idioma } from '../i18n/rutas';
+
+// `datos` llega ya en el idioma de la página (la ficha inglesa fundida
+// sobre la española); el id es el mismo en los dos.
+interface Props {
+  proyecto: CollectionEntry<'proyectos'>;
+  datos?: CollectionEntry<'proyectos'>['data'];
+  lang?: Idioma;
+}
+const { proyecto, datos, lang = 'es' } = Astro.props;
+const d = datos ?? proyecto.data;
+const url = rutaProyecto(lang, proyecto.id);
 
 ---
 

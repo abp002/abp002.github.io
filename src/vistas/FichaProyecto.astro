@@ -1,0 +1,199 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Miniatura from '../components/Miniatura.astro';
+import type { ProyectoLocal } from '../i18n/proyectos';
+import { textos } from '../i18n/textos';
+import { rutaProyecto, type Idioma } from '../i18n/rutas';
+
+// La ficha en cualquier idioma. Las rutas (/proyectos/[slug] y
+// /en/projects/[slug]) generan los paths y le pasan el proyecto ya
+// resuelto en su idioma.
+interface Props {
+  lang: Idioma;
+  actual: ProyectoLocal;
+  siguiente: ProyectoLocal;
+}
+const { lang, actual, siguiente } = Astro.props;
+const proyecto = actual.proyecto;
+const d = actual.datos;
+const t = textos[lang].ficha;
+const { Content } = await render(actual.cuerpo);
+
+// La barrera contra publicar trabajo del empleador: si la ficha está
+// marcada sin detalle, no se pintan imágenes ni enlaces. Lo decide el
+// dato, no que yo me acuerde al escribir el componente. Viene siempre de
+// la ficha española: la inglesa no puede abrirla.
+const conDetalle = d.visibilidad === 'publico';
+---
+
+<Base titulo={d.nombre} descripcion={d.tagline}>
+  <article class="ficha contenedor">
+    <header class="cabecera">
+      <div class="rotulo">
+        <h1 class="display" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h1>
+        <p class="tagline">{d.tagline}</p>
+        {d.metrica && (
+          <p class="metrica">
+            <span class="cifra">{d.metrica.valor}</span>
+            <span class="dato">{d.metrica.que}</span>
+          </p>
+        )}
+        {conDetalle && d.enlaces && (
+          <p class="enlaces">
+            {d.enlaces.web && <a href={d.enlaces.web} rel="noopener" target="_blank">{t.web}</a>}
+            {d.enlaces.demo && <a href={d.enlaces.demo} rel="noopener" target="_blank">{t.demo}</a>}
+            {d.enlaces.repo && <a href={d.enlaces.repo} rel="noopener" target="_blank">{t.repo}</a>}
+          </p>
+        )}
+      </div>
+
+      {conDetalle && (
+        <div class="imagen">
+          {d.video ? (
+            <iframe
+              class="video"
+              src={`https://www.youtube-nocookie.com/embed/${d.video}`}
+              title={`${t.video} ${d.nombre}`}
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          ) : (
+            <Miniatura patron={d.patron} nombre={d.nombre} etiqueta={t.imagen} transitionName={`obra-${proyecto.id}`} />
+          )}
+        </div>
+      )}
+    </header>
+
+    <dl class="datos revela">
+      <div><dt class="dato">{t.anio}</dt><dd>{d.anio}</dd></div>
+      <div class="ancho"><dt class="dato">{t.herramientas}</dt><dd>{d.stack.join(' · ')}</dd></div>
+    </dl>
+
+    {d.borrador && (
+      <p class="aviso">
+        {t.borrador}
+      </p>
+    )}
+
+    <div class="cuerpo revela">
+      <Content />
+    </div>
+
+    <nav class="siguiente revela">
+      <span class="dato">{t.siguiente}</span>
+      <a href={rutaProyecto(lang, siguiente.proyecto.id)} class="titulo-obra">{siguiente.datos.nombre}</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .ficha { padding-block: clamp(40px, 8vw, 88px) 0; }
+
+  .cabecera {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+  }
+  @media (max-width: 760px) {
+    .cabecera { grid-template-columns: 1fr; align-items: start; }
+  }
+  .video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 2px;
+    background: var(--tinta);
+  }
+  .rotulo { display: flex; flex-direction: column; gap: 14px; }
+  .tagline { color: var(--grafito); max-width: 34ch; }
+  .metrica { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .metrica .cifra { font-size: clamp(26px, 4vw, 40px); }
+  .enlaces { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 6px; }
+  .enlaces a {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--acento);
+    text-underline-offset: 4px;
+  }
+
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px 28px;
+    margin: var(--aire) 0 0;
+    padding-block: 22px;
+    border-block: 1px solid var(--linea);
+  }
+  .datos div { display: flex; flex-direction: column; gap: 5px; }
+  .datos .ancho { grid-column: 1 / -1; }
+  dt { margin: 0; }
+  dd { margin: 0; font-size: 15px; }
+
+  .aviso {
+    margin-top: 32px;
+    padding-left: 14px;
+    border-left: 2px solid var(--borde);
+    color: var(--grafito);
+  }
+
+  .cuerpo {
+    margin-top: var(--aire);
+    max-width: var(--medida);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cuerpo :global(h2) {
+    font-family: var(--serif);
+    font-size: clamp(23px, 3vw, 30px);
+    line-height: 1.14;
+    margin-top: 26px;
+  }
+  .cuerpo :global(p) { margin: 0; }
+  .cuerpo :global(strong) { font-weight: 600; }
+  .cuerpo :global(ul) {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cuerpo :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+  }
+  .cuerpo :global(th) {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--grafito);
+    padding: 0 12px 8px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .cuerpo :global(td) {
+    padding: 10px 12px 10px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .cuerpo :global(a) { color: var(--acento); }
+
+  .siguiente {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: var(--aire);
+    padding-top: 26px;
+    border-top: 1px solid var(--linea);
+  }
+  .siguiente a { text-decoration: none; }
+</style>

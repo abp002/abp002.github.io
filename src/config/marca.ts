@@ -24,32 +24,23 @@ export const marca = {
   // El correo del CV público, no el personal.
   correo: 'abp.0040@gmail.com',
 
-  // Es el cargo y nada más. Un titular que se justifica se lee peor que
-  // uno que se limita a nombrar; el detalle está dos pantallas más abajo.
-  declaracion: 'Desarrollador full-stack e IA aplicada.',
-
-  // `subtitulo` es la meta descripción por defecto (lo usa Base.astro).
-  subtitulo:
-    'Desarrollador full-stack e IA aplicada. ERP en producción, integraciones y productos propios con modelos corriendo en mi propia infraestructura.',
+  // El texto que cambia con el idioma (cargo, meta descripción, datos de
+  // perfil) vive en src/i18n/textos.ts; aquí solo lo que es igual en todos.
 
   // Las dos partes con contenido propio que crece, cada una en su página.
   // Sobre mí, stack, trayectoria y contacto viven en la portada con sus ids
   // y siguen siendo enlazables a mano; lo que no hacen es ocupar barra.
-  anclas: [
-    { texto: 'Proyectos', href: '/proyectos' },
-    { texto: 'Blog', href: '/blog' },
-  ],
+  // Los textos salen de `textos.nav`; las rutas, de i18n/rutas.ts.
+  anclas: ['proyectos', 'blog'],
 } as const;
 
-// Datos que un reclutador busca en los primeros veinte segundos.
+// Datos que un reclutador busca en los primeros veinte segundos. Los que
+// dependen del idioma (ubicación, idiomas, movilidad) están en textos.ts.
 // Confirmados contra el CV el 02-sep-2026; lo no confirmado va a null
 // y el componente lo omite: un dato ausente se nota y se arregla, un
 // dato de relleno se publica.
 export const perfil = {
   rol: 'Desarrollador full-stack',
-  ubicacion: 'Córdoba, España' as string | null,
-  idiomas: 'Español nativo · Inglés medio' as string | null,
-  movilidad: 'Carnet B · disponible para viajar' as string | null,
   disponibilidad: null as string | null,
   // Ruta dentro de /public. A null mientras el CV no esté en condiciones:
   // Contacto deja de pintar el botón de descarga.

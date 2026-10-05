@@ -1,9 +1,9 @@
 ---
-import FichaProyecto from '../../vistas/FichaProyecto.astro';
-import { cargarProyectos } from '../../i18n/proyectos';
+import FichaProyecto from '../../../vistas/FichaProyecto.astro';
+import { cargarProyectos } from '../../../i18n/proyectos';
 
 export async function getStaticPaths() {
-  const proyectos = await cargarProyectos('es');
+  const proyectos = await cargarProyectos('en');
   return proyectos.map((p, i) => ({
     params: { slug: p.proyecto.id },
     props: { actual: p, siguiente: proyectos[(i + 1) % proyectos.length] },
@@ -13,4 +13,4 @@ export async function getStaticPaths() {
 const { actual, siguiente } = Astro.props;
 ---
 
-<FichaProyecto lang="es" actual={actual} siguiente={siguiente} />
+<FichaProyecto lang="en" actual={actual} siguiente={siguiente} />

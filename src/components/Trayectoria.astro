@@ -1,11 +1,17 @@
 ---
 import { experiencia, formacion } from '../config/trayectoria';
+import { textos } from '../i18n/textos';
+import type { Idioma } from '../i18n/rutas';
+
+interface Props { lang: Idioma }
+const { lang } = Astro.props;
+const t = textos[lang].trayectoria;
 ---
 
 <div class="columnas">
   <div class="columna revela">
-    <span class="dato rotulo">Experiencia</span>
-    {experiencia.map((e) => (
+    <span class="dato rotulo">{t.experiencia}</span>
+    {experiencia[lang].map((e) => (
       <article class="puesto">
         <span class="periodo">{e.periodo}</span>
         <div class="cabeza">
@@ -22,9 +28,9 @@ import { experiencia, formacion } from '../config/trayectoria';
   </div>
 
   <div class="columna revela-tarde">
-    <span class="dato rotulo">Formación</span>
+    <span class="dato rotulo">{t.formacion}</span>
     <div class="lista">
-      {formacion.map((f) => (
+      {formacion[lang].map((f) => (
         <div class="entrada-f">
           <span class="periodo chico">{f.periodo}</span>
           <span class="titulo-f">{f.titulo}</span>

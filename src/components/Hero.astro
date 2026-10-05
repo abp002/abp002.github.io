@@ -1,23 +1,28 @@
 ---
-import { perfil } from '../config/marca';
 import Icono from './Icono.astro';
+import { textos } from '../i18n/textos';
+import type { Idioma } from '../i18n/rutas';
+
+interface Props { lang: Idioma }
+const { lang } = Astro.props;
+const t = textos[lang];
 ---
 
-<section class="hero contenedor entrada" aria-label="Presentación">
+<section class="hero contenedor entrada" aria-label={t.hero.etiqueta}>
   <p class="kicker">
     <span class="punto" aria-hidden="true"></span>
-    {perfil.ubicacion}
+    {t.hero.ubicacion}
   </p>
 
   <!-- El titular se parte donde se decide, no donde caiga: "full-stack"
        entero en la primera línea y la conjunción arrastrada a la segunda. -->
-  <h1 class="display">Desarrollador full-stack<br /><em>e IA aplicada.</em></h1>
+  <h1 class="display">{t.hero.linea1}<br /><em>{t.hero.linea2}</em></h1>
 
   <div class="acciones">
     <!-- El correo escrito vive solo en Contacto; aquí basta con llevar allí. -->
-    <a href="#contacto" class="btn btn-borde">
+    <a href={`#${t.secciones.contacto.id}`} class="btn btn-borde">
       <Icono nombre="correo" tamano={16} />
-      Escríbeme
+      {t.hero.escribeme}
     </a>
   </div>
 </section>
