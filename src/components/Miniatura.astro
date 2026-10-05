@@ -3,7 +3,7 @@
 // Son CSS, no imágenes: pesan cero y no hay que mantener assets que
 // van a sustituirse en cuanto Alejandro grabe el material.
 interface Props {
-  patron: 'spartan' | 'sello' | 'arkon' | 'kuro';
+  patron: 'spartan' | 'sello' | 'arkon' | 'kuro' | 'dental';
   nombre: string;
   transitionName?: string;
 }
@@ -59,6 +59,24 @@ const { patron, nombre, transitionName } = Astro.props;
       repeating-linear-gradient(0deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
       repeating-linear-gradient(90deg, rgba(255,255,255,.13) 0 1px, transparent 1px 22px),
       linear-gradient(150deg, #1D2340, #0B1020);
+  }
+  /* Dental Vision: las dos arcadas sobre el negro de la placa, 32 piezas
+     cortadas por una máscara cónica (11,25° cada una) y separadas por la
+     línea de oclusión. */
+  .p-dental {
+    position: relative;
+    background-image: radial-gradient(ellipse at 50% 50%, #2B2D33, #0C0D10 72%);
+  }
+  .p-dental::after {
+    content: '';
+    position: absolute;
+    inset: 16% 12%;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%,
+      transparent 0 64%, #DAD5C8 65% 82%, transparent 83%);
+    mask:
+      repeating-conic-gradient(from 1deg at 50% 50%, #000 0 9.25deg, transparent 9.25deg 11.25deg),
+      linear-gradient(#000 0 47%, transparent 47% 53%, #000 53%);
+    mask-composite: intersect;
   }
   .p-kuro {
     background-color: #08080A;
