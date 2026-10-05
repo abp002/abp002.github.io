@@ -1,5 +1,5 @@
 ---
-import { marca, perfil } from '../config/marca';
+import { perfil } from '../config/marca';
 import Icono from './Icono.astro';
 ---
 
@@ -14,9 +14,10 @@ import Icono from './Icono.astro';
   <h1 class="display">Desarrollador full-stack<br /><em>e IA aplicada.</em></h1>
 
   <div class="acciones">
-    <a href={`mailto:${marca.correo}`} class="btn btn-borde">
+    <!-- El correo escrito vive solo en Contacto; aquí basta con llevar allí. -->
+    <a href="#contacto" class="btn btn-borde">
       <Icono nombre="correo" tamano={16} />
-      {marca.correo}
+      Escríbeme
     </a>
   </div>
 </section>

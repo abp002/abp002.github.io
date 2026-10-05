@@ -8,7 +8,7 @@ import Trayectoria from '../components/Trayectoria.astro';
 import TarjetaProyecto from '../components/TarjetaProyecto.astro';
 import BlogLista from '../components/BlogLista.astro';
 import Contacto from '../components/Contacto.astro';
-import { marca, perfil, mostrarBlog } from '../config/marca';
+import { perfil, contacto, mostrarBlog } from '../config/marca';
 
 // La portada enseña cuatro tarjetas: las cuatro primeras por `orden`.
 // Bythos (orden 5) queda accesible por URL; una parrilla 2×2 completa
@@ -27,9 +27,12 @@ const posts = mostrarBlog
 // sin dejar un salto en el expediente.
 const nContacto = mostrarBlog ? '06' : '05';
 
-const datos = [
-  { etiqueta: 'Ubicación', valor: perfil.ubicacion },
-  { etiqueta: 'Web', valor: marca.dominio },
+// GitHub y LinkedIn salen de `contacto` para no duplicar las URL.
+const red = (etiqueta: string) => contacto.find((c) => c.etiqueta === etiqueta);
+
+const datos: { etiqueta: string; valor: string | null; href?: string }[] = [
+  { etiqueta: 'GitHub', valor: red('GitHub')?.valor ?? null, href: red('GitHub')?.href },
+  { etiqueta: 'LinkedIn', valor: red('LinkedIn')?.valor ?? null, href: red('LinkedIn')?.href },
   { etiqueta: 'Idiomas', valor: perfil.idiomas },
   { etiqueta: 'Movilidad', valor: perfil.movilidad },
 ].filter((d) => d.valor !== null);
@@ -43,9 +46,8 @@ const datos = [
     <div class="sobre">
       <div class="cuerpo prosa-serif revela">
         <p>
-          Trabajo en Win Innovación desarrollando software de gestión
-          empresarial, incluido software de contabilidad y de cumplimiento
-          fiscal. Además de su desarrollo, he liderado proyectos.
+          En Win Innovación desarrollo y lidero proyectos de software de
+          gestión empresarial, incluidos contabilidad y cumplimiento fiscal.
         </p>
         <p>
           También desarrollo software con inteligencia artificial integrada:
@@ -64,7 +66,9 @@ const datos = [
         {datos.map((d) => (
           <div class="ficha-dato">
             <dt class="dato">{d.etiqueta}</dt>
-            <dd class="valor">{d.valor}</dd>
+            <dd class="valor">
+              {d.href ? <a href={d.href} rel="me noopener" target="_blank">{d.valor}</a> : d.valor}
+            </dd>
           </div>
         ))}
       </dl>
@@ -132,6 +136,8 @@ const datos = [
   .ficha-dato:last-child { border-bottom: 1px solid var(--linea); }
   .ficha-dato .dato { color: var(--mute); }
   .valor { margin: 0; font-size: 14.5px; font-weight: 500; }
+  .valor a { color: inherit; text-decoration: underline; text-decoration-color: var(--borde, currentColor); text-underline-offset: 3px; }
+  .valor a:hover { text-decoration-color: currentColor; }
 
   .parrilla-proyectos {
     display: grid;

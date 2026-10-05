@@ -111,7 +111,7 @@ a:focus-visible, button:focus-visible {
 /* --- roles tipográficos --- */
 .display {
   font-family: var(--serif);
-  font-size: clamp(38px, 6.4vw, 76px);
+  font-size: clamp(32px, 4.4vw, 52px);
   line-height: 1.05;
   letter-spacing: -0.025em;
   font-weight: 500;
