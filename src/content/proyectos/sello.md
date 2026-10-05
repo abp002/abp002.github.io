@@ -8,9 +8,6 @@ rol: diseño del lenguaje, compilador y experimentos
 stack: [Python, Z3, SQLite, MCP, uv]
 patron: sello
 video: ZB9sI3euIo8
-metrica:
-  valor: 79 % → 0 %
-  que: errores silenciosos con un contrato fuerte
 visibilidad: publico
 enlaces:
   repo: https://github.com/abp002/sello

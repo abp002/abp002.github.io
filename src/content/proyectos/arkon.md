@@ -7,9 +7,6 @@ estado: en-curso
 rol: producto, arquitectura y código
 stack: [NestJS, React, Prisma, PostgreSQL, TypeScript]
 patron: arkon
-metrica:
-  valor: 20 módulos
-  que: sobre un mismo núcleo
 visibilidad: publico
 borrador: true
 ---
