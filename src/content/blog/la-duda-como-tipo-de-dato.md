@@ -3,6 +3,7 @@ titulo: La duda como tipo de dato
 resumen: "System One no es un modelo más rápido: es una IA que devuelve una creencia en vez de una respuesta. Sostengo que esa es la pieza que faltaba para automatizar, que la calibración no viaja de unos datos a otros y que, por eso, la incertidumbre no desaparece: se muda al esquema."
 fecha: 2026-09-24
 tags: [ensayo, incertidumbre, automatización]
+borrador: true
 ---
 
 El 15 de septiembre, TypeSafe AI presentó Jev y, con él, una categoría que

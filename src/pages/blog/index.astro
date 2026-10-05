@@ -8,7 +8,7 @@ import { mostrarBlog } from '../../config/marca';
 // Blog apagado: el índice redirige a la portada en vez de quedarse vacío.
 if (!mostrarBlog) return Astro.redirect('/');
 
-const posts = (await getCollection('blog', ({ data }) => !data.ejemplo)).sort(
+const posts = (await getCollection('blog', ({ data }) => !data.ejemplo && !data.borrador)).sort(
   (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
 );
 ---

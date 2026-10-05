@@ -6,7 +6,7 @@ import { mostrarBlog } from '../../config/marca';
 export async function getStaticPaths() {
   // Blog apagado: cero rutas en el build, aunque los .md sigan ahí.
   if (!mostrarBlog) return [];
-  const posts = (await getCollection('blog', ({ data }) => !data.ejemplo)).sort(
+  const posts = (await getCollection('blog', ({ data }) => !data.ejemplo && !data.borrador)).sort(
     (a, b) => b.data.fecha.getTime() - a.data.fecha.getTime(),
   );
   return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));

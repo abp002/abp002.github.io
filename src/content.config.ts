@@ -50,6 +50,9 @@ const blog = defineCollection({
     // Los posts de arranque son borradores de ejemplo; se marca en el dato
     // para poder filtrarlos de golpe cuando haya contenido real.
     ejemplo: z.boolean().default(false),
+    // Escrito pero sin publicar: no sale en el build aunque el blog esté
+    // encendido. Se quita cuando el post esté listo para leerse fuera.
+    borrador: z.boolean().default(false),
   }),
 });
 

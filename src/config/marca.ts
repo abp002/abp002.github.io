@@ -11,10 +11,10 @@ export const paleta:
   | 'nocturna'
   | 'archivo' = null;
 
-// El blog existe con contenido de ejemplo mientras se decide el definitivo.
-// Antes de subir al dominio sin posts reales: poner esto a false y la
-// sección, el índice y las rutas de post desaparecen del build.
-export const mostrarBlog = true;
+// Apagado hasta que haya un post listo para publicarse (05-oct): a false,
+// el enlace de la barra, el índice y las rutas de post desaparecen del
+// build. Los .md siguen en el repo; los no listos llevan `borrador: true`.
+export const mostrarBlog = false;
 
 export const marca = {
   nombre: 'Alejandro Borrego',
