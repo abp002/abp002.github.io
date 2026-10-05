@@ -18,7 +18,7 @@ const proyectos = defineCollection({
     estado: z.enum(['produccion', 'idea', 'en-curso', 'funcionando', 'congelado', 'concepto']),
     rol: z.string(),
     stack: z.array(z.string()),
-    patron: z.enum(['spartan', 'sello', 'arkon', 'kuro', 'bythos']),
+    patron: z.enum(['spartan', 'sello', 'arkon', 'kuro']),
     // Id de YouTube (lo que va tras `v=`). Si está, la ficha pinta el vídeo
     // en el hueco de la imagen.
     video: z.string().regex(/^[\w-]{11}$/).optional(),

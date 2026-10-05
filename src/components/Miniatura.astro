@@ -3,7 +3,7 @@
 // Son CSS, no imágenes: pesan cero y no hay que mantener assets que
 // van a sustituirse en cuanto Alejandro grabe el material.
 interface Props {
-  patron: 'spartan' | 'sello' | 'arkon' | 'kuro' | 'bythos';
+  patron: 'spartan' | 'sello' | 'arkon' | 'kuro';
   nombre: string;
   transitionName?: string;
 }
@@ -70,10 +70,5 @@ const { patron, nombre, transitionName } = Astro.props;
     color: #E8E8E8;
     font-size: clamp(38px, 7vw, 76px);
     line-height: 1;
-  }
-  .p-bythos {
-    background-image:
-      radial-gradient(ellipse at 50% 24%, #F3E3BE 0 13%, transparent 46%),
-      linear-gradient(#EFEADF 0 48%, #2C4E77 48% 74%, #0F2645 74% 100%);
   }
 </style>

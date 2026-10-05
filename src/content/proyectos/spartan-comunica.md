@@ -1,6 +1,6 @@
 ---
 nombre: Spartan Comunica
-tagline: El calendario que publica solo, a su hora, en todas las redes de cada cliente.
+tagline: "SaaS para agencias que programa y publica contenido en todas las redes de cada cliente, con un asistente de IA que redacta apoyándose en RAG y OCR."
 anio: 2026
 orden: 1
 estado: produccion

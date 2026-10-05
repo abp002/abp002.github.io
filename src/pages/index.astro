@@ -11,8 +11,7 @@ import Contacto from '../components/Contacto.astro';
 import { perfil, contacto, mostrarBlog } from '../config/marca';
 
 // La portada enseña cuatro tarjetas: las cuatro primeras por `orden`.
-// Bythos (orden 5) queda accesible por URL; una parrilla 2×2 completa
-// vale más que una de cinco con un hueco.
+// Una parrilla 2×2 completa vale más que una de cinco con un hueco.
 const proyectos = (await getCollection('proyectos'))
   .sort((a, b) => a.data.orden - b.data.orden)
   .slice(0, 4);

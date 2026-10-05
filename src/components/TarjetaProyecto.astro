@@ -19,7 +19,7 @@ const tono =
     <h3 class="nombre" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h3>
     <span class={`estado estado-${tono}`}>
       <span class="dot" aria-hidden="true"></span>
-      {etiquetaEstado(d.estado)}
+      {etiquetaEstado(d.estado)} · {d.anio}
     </span>
   </div>
 

@@ -1,6 +1,6 @@
 ---
 nombre: Arkon
-tagline: Un ERP modular donde cada área de negocio es un módulo que se enchufa.
+tagline: "ERP modular que cubre la gestión completa de una empresa, contabilidad incluida."
 anio: 2026
 orden: 3
 estado: en-curso

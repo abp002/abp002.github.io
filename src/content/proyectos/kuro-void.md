@@ -1,7 +1,7 @@
 ---
 nombre: Kuro Void
-tagline: Una marca de ropa que no existe, llevada hasta la última ficha de producto.
-anio: 2026
+tagline: "Ejercicio de dirección de arte: catálogo, lookbook y ficha de producto de una marca de ropa ficticia, con un mismo lenguaje visual en todas las pantallas."
+anio: 2025
 orden: 5
 estado: concepto
 rol: dirección de arte y desarrollo

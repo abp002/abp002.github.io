@@ -1,6 +1,6 @@
 ---
 nombre: Sello
-tagline: Un lenguaje de programación cuyo usuario es la IA, no una persona.
+tagline: "Lenguaje de programación pensado para que lo escriba una IA: cada función lleva un contrato que un probador (Z3) verifica antes de aceptarla."
 anio: 2026
 orden: 2
 estado: en-curso
