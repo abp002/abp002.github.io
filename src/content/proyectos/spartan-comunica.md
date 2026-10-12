@@ -4,9 +4,9 @@ tagline: "SaaS para agencias que programa y publica contenido en todas las redes
 anio: 2026
 orden: 1
 estado: produccion
-rol: full-stack, integraciones e IA — en Win Innovación
+rol: Full-stack, integraciones e IA — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
-patron: spartan
+detalle: Lo que construí, el problema real, qué decidí y qué haría distinto.
 visibilidad: publico
 enlaces:
   web: https://spartancomunica.es

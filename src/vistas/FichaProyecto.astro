@@ -1,10 +1,10 @@
 ---
-import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Miniatura from '../components/Miniatura.astro';
-import type { ProyectoLocal } from '../i18n/proyectos';
+import Icono from '../components/Icono.astro';
+import { numero, type ProyectoLocal } from '../i18n/proyectos';
 import { textos } from '../i18n/textos';
-import { rutaProyecto, type Idioma } from '../i18n/rutas';
+import { rutaProyecto, rutaProyectos, type Idioma } from '../i18n/rutas';
+import { partirFicha } from '../lib/partes';
 
 // La ficha en cualquier idioma. Las rutas (/proyectos/[slug] y
 // /en/projects/[slug]) generan los paths y le pasan el proyecto ya
@@ -15,185 +15,558 @@ interface Props {
   siguiente: ProyectoLocal;
 }
 const { lang, actual, siguiente } = Astro.props;
-const proyecto = actual.proyecto;
+const { proyecto } = actual;
 const d = actual.datos;
 const t = textos[lang].ficha;
-const { Content } = await render(actual.cuerpo);
+const n = textos[lang].proyectos.numero;
 
 // La barrera contra publicar trabajo del empleador: si la ficha está
-// marcada sin detalle, no se pintan imágenes ni enlaces. Lo decide el
+// marcada sin detalle, no se pintan ni vídeo ni enlaces. Lo decide el
 // dato, no que yo me acuerde al escribir el componente. Viene siempre de
 // la ficha española: la inglesa no puede abrirla.
 const conDetalle = d.visibilidad === 'publico';
+
+const partes = partirFicha(actual.cuerpo.rendered?.html ?? '');
+
+interface Accion { texto: string; href: string; fuera: boolean }
+// Las acciones de la cabecera, en este orden: la primera lleva el borde en
+// tinta y las demás, el suave.
+const acciones: Accion[] = conDetalle
+  ? [
+      d.enlaces?.repo ? { texto: t.verCodigo, href: d.enlaces.repo, fuera: true } : null,
+      d.enlaces?.web ? { texto: t.verWeb, href: d.enlaces.web, fuera: true } : null,
+      d.enlaces?.demo ? { texto: t.probarDemo, href: d.enlaces.demo, fuera: true } : null,
+      d.video ? { texto: t.verDemo, href: '#demo', fuera: false } : null,
+    ].filter((a): a is Accion => a !== null)
+  : [];
+
+// La URL a la vista, sin protocolo y en trozos por cada «/»: Chrome no
+// corta una URL por la barra, y en los 126 px de la ficha lateral
+// github.com/abp002/sello se partía a mitad de «abp002». Con un <wbr> tras
+// cada barra corta donde se lee bien.
+const trozosUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '').split('/');
 ---
 
 <Base titulo={d.nombre} descripcion={d.tagline}>
-  <article class="ficha contenedor">
-    <header class="cabecera">
-      <div class="rotulo">
-        <h1 class="display" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h1>
-        <p class="tagline">{d.tagline}</p>
-        {d.metrica && (
-          <p class="metrica">
-            <span class="cifra">{d.metrica.valor}</span>
-            <span class="dato">{d.metrica.que}</span>
-          </p>
-        )}
-        {conDetalle && d.enlaces && (
-          <p class="enlaces">
-            {d.enlaces.web && <a href={d.enlaces.web} rel="noopener" target="_blank">{t.web}</a>}
-            {d.enlaces.demo && <a href={d.enlaces.demo} rel="noopener" target="_blank">{t.demo}</a>}
-            {d.enlaces.repo && <a href={d.enlaces.repo} rel="noopener" target="_blank">{t.repo}</a>}
-          </p>
-        )}
-      </div>
+  <article>
+    <section class="cabecera contenedor">
+      <a class="volver dato" href={rutaProyectos(lang)}>← {t.volver}</a>
 
-      {conDetalle && (
-        <div class="imagen">
-          {d.video ? (
-            <iframe
-              class="video"
-              src={`https://www.youtube-nocookie.com/embed/${d.video}`}
-              title={`${t.video} ${d.nombre}`}
-              loading="lazy"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-            ></iframe>
-          ) : (
-            <Miniatura patron={d.patron} nombre={d.nombre} etiqueta={t.imagen} transitionName={`obra-${proyecto.id}`} />
+      <div class="fila">
+        <div class="rotulo">
+          <p class="dato meta">
+            <span class="acento">{t.proyecto}</span>
+            <span>{n} {numero(actual.numero)}</span>
+            <span>{d.anio}</span>
+          </p>
+          <h1 class="titulo" transition:name={`titulo-${proyecto.id}`}>{d.nombre}</h1>
+          <p class="tagline">{d.tagline}</p>
+          {acciones.length > 0 && (
+            <div class="acciones">
+              {acciones.map((a, i) => (
+                <a
+                  href={a.href}
+                  class:list={['boton', { 'boton-suave': i > 0 }]}
+                  rel={a.fuera ? 'noopener' : undefined}
+                  target={a.fuera ? '_blank' : undefined}
+                >
+                  {a.texto}
+                  {a.fuera && <Icono nombre="flecha" tamano={16} />}
+                </a>
+              ))}
+            </div>
           )}
         </div>
-      )}
-    </header>
 
-    <dl class="datos revela">
-      <div><dt class="dato">{t.anio}</dt><dd>{d.anio}</dd></div>
-      <div class="ancho"><dt class="dato">{t.herramientas}</dt><dd>{d.stack.join(' · ')}</dd></div>
-    </dl>
+        <aside class="ficha-lateral" aria-label={t.fichaEtiqueta}>
+          <p class="dato">{t.ficha}</p>
+          <dl>
+            <div>
+              <dt class="dato">{t.estado}</dt>
+              <dd class="estado">
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                  <circle cx="5" cy="5" r="4" fill="none" stroke="currentColor" stroke-width="1.6" />
+                  <circle cx="5" cy="5" r="1.6" fill="currentColor" />
+                </svg>
+                <span>{d.fase ?? textos[lang].estados[d.estado]}</span>
+              </dd>
+            </div>
+            <div>
+              <dt class="dato">{t.anio}</dt>
+              <dd class="mono">{d.anio}</dd>
+            </div>
+            <div>
+              <dt class="dato">{t.rol}</dt>
+              <dd>{d.rol}</dd>
+            </div>
+            <div>
+              <dt class="dato">{t.herramientas}</dt>
+              <dd class="mono">{d.stack.join(', ')}</dd>
+            </div>
+            {d.metrica && (
+              <div>
+                <dt class="dato">{t.dato}</dt>
+                <dd><span class="cifra">{d.metrica.valor}</span> {d.metrica.que}</dd>
+              </div>
+            )}
+            {conDetalle && d.enlaces?.repo && (
+              <div>
+                <dt class="dato">{t.codigo}</dt>
+                <dd class="mono prosa">
+                  <a href={d.enlaces.repo} rel="noopener" target="_blank">
+                    {trozosUrl(d.enlaces.repo).map((trozo, i) => (i === 0 ? trozo : <>/<wbr />{trozo}</>))}
+                  </a>
+                </dd>
+              </div>
+            )}
+            {conDetalle && d.enlaces?.web && (
+              <div>
+                <dt class="dato">{t.web}</dt>
+                <dd class="mono prosa">
+                  <a href={d.enlaces.web} rel="noopener" target="_blank">
+                    {trozosUrl(d.enlaces.web).map((trozo, i) => (i === 0 ? trozo : <>/<wbr />{trozo}</>))}
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+        </aside>
+      </div>
+    </section>
 
-    {d.borrador && (
-      <p class="aviso">
-        {t.borrador}
-      </p>
+    {conDetalle && d.video && (
+      <section class="figura contenedor">
+        <figure id="demo">
+          <iframe
+            class="video"
+            src={`https://www.youtube-nocookie.com/embed/${d.video}`}
+            title={`${t.video} ${d.nombre}`}
+            loading="lazy"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+          {d.pieVideo && (
+            <figcaption>
+              <span class="dato acento">{t.figura} 1</span>
+              {d.pieVideo}
+            </figcaption>
+          )}
+        </figure>
+      </section>
     )}
 
-    <div class="cuerpo revela">
-      <Content />
-    </div>
+    <section class="presentacion contenedor prosa revela">
+      <Fragment set:html={partes.presentacion} />
+      {d.borrador && <p class="aviso">{t.borrador}</p>}
+    </section>
 
-    <nav class="siguiente revela">
-      <span class="dato">{t.siguiente}</span>
-      <a href={rutaProyecto(lang, siguiente.proyecto.id)} class="titulo-obra">{siguiente.datos.nombre}</a>
+    {partes.detalle.length > 0 && (
+      <section class="detalle contenedor" aria-labelledby="detalle">
+        <header class="cabecera-detalle">
+          <h2 id="detalle" class="dato acento">{t.detalle}</h2>
+          {d.detalle && <p class="subtitulo">{d.detalle}</p>}
+        </header>
+        {partes.detalle.map((html) => (
+          <section class="parte prosa revela">
+            <Fragment set:html={html} />
+          </section>
+        ))}
+      </section>
+    )}
+
+    <nav class="mas contenedor" aria-label={t.masProyectos}>
+      <a class="enlace-fila indice" href={rutaProyectos(lang)}>
+        <span class="dato">← {t.indice}</span>
+        <span class="titulo-fila nombre">{t.todos}</span>
+      </a>
+      <a class="enlace-fila siguiente" href={rutaProyecto(lang, siguiente.proyecto.id)}>
+        <span class="dato acento">{t.siguiente} · {n} {numero(siguiente.numero)}</span>
+        <span class="titulo-fila nombre">{siguiente.datos.nombre}</span>
+        <span class="resumen">{siguiente.datos.tagline}</span>
+      </a>
     </nav>
   </article>
 </Base>
 
 <style>
-  .ficha { padding-block: clamp(40px, 8vw, 88px) 0; }
+  /* --- cabecera --- */
+  .cabecera { padding-top: clamp(40px, 6vw, 72px); }
 
-  .cabecera {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(24px, 4vw, 56px);
-    align-items: end;
+  .volver {
+    display: inline-flex;
+    padding-block: 12px;
+    margin-block: -12px;
+    text-decoration: none;
+    transition: color var(--t-micro) var(--ease-salida);
   }
-  @media (max-width: 760px) {
-    .cabecera { grid-template-columns: 1fr; align-items: start; }
-  }
-  .video {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 0;
-    border-radius: 2px;
-    background: var(--tinta);
-  }
-  .rotulo { display: flex; flex-direction: column; gap: 14px; }
-  .tagline { color: var(--grafito); max-width: 34ch; }
-  .metrica { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-  .metrica .cifra { font-size: clamp(26px, 4vw, 40px); }
-  .enlaces { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 6px; }
-  .enlaces a {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    color: var(--acento);
-    text-underline-offset: 4px;
-  }
+  .volver:hover { color: var(--tinta); }
 
-  .datos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 18px 28px;
-    margin: var(--aire) 0 0;
-    padding-block: 22px;
-    border-block: 1px solid var(--linea);
+  .fila {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 40px 56px;
   }
-  .datos div { display: flex; flex-direction: column; gap: 5px; }
-  .datos .ancho { grid-column: 1 / -1; }
-  dt { margin: 0; }
-  dd { margin: 0; font-size: 15px; }
-
-  .aviso {
-    margin-top: 32px;
-    padding-left: 14px;
-    border-left: 2px solid var(--borde);
-    color: var(--grafito);
-  }
-
-  .cuerpo {
-    margin-top: var(--aire);
-    max-width: var(--medida);
+  .rotulo {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 680px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
-  .cuerpo :global(h2) {
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  .titulo {
     font-family: var(--serif);
-    font-size: clamp(23px, 3vw, 30px);
-    line-height: 1.14;
-    margin-top: 26px;
+    font-size: clamp(40px, 5.4vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
   }
-  .cuerpo :global(p) { margin: 0; }
-  .cuerpo :global(strong) { font-weight: 600; }
-  .cuerpo :global(ul) {
-    margin: 0;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 26px);
+    line-height: 1.35;
+    color: var(--sec);
+    text-wrap: pretty;
   }
-  .cuerpo :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 15px;
-    font-variant-numeric: tabular-nums;
-  }
-  .cuerpo :global(th) {
-    text-align: left;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 400;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    color: var(--grafito);
-    padding: 0 12px 8px 0;
-    border-bottom: 1px solid var(--linea);
-  }
-  .cuerpo :global(td) {
-    padding: 10px 12px 10px 0;
-    border-bottom: 1px solid var(--linea);
-  }
-  .cuerpo :global(a) { color: var(--acento); }
+  .acciones { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 12px; }
 
-  .siguiente {
+  .ficha-lateral {
+    flex: 1 1 280px;
+    min-width: 0;
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    padding: 20px 22px 8px;
+  }
+  .ficha-lateral > .dato { margin-bottom: 8px; }
+  dl { margin: 0; }
+  dl > div {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: var(--aire);
-    padding-top: 26px;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    padding-block: 12px;
     border-top: 1px solid var(--linea);
   }
-  .siguiente a { text-decoration: none; }
+  dt { flex: 0 0 96px; padding-top: 2px; }
+  dd {
+    flex: 1 1 120px;
+    min-width: 0;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--tinta);
+  }
+  /* break-word solo como red: los cortes buenos de una URL los ponen los
+     <wbr> tras cada barra. */
+  dd.mono {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-wrap: break-word;
+  }
+  .estado { display: flex; align-items: baseline; gap: 8px; }
+  .estado svg { flex: 0 0 auto; color: var(--acento); }
+  .cifra {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--acento);
+  }
+
+  /* --- figura --- */
+  .figura { padding-top: clamp(48px, 6vw, 72px); }
+  figure { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+  .video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--tinta);
+  }
+  figcaption {
+    max-width: 760px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--sec);
+    text-wrap: pretty;
+  }
+  figcaption .dato { margin-right: 10px; }
+
+  /* --- presentación: el «Qué es» del Markdown --- */
+  .presentacion { padding-top: clamp(56px, 7vw, 88px); }
+  .presentacion :global(h2) {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--acento);
+  }
+  .presentacion :global(p) {
+    max-width: 680px;
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.78;
+    color: var(--prosa);
+    text-wrap: pretty;
+  }
+  /* El primer párrafo es la entradilla. */
+  .presentacion :global(h2 + p) {
+    margin-top: 22px;
+    font-size: clamp(20px, 1.7vw, 23px);
+    line-height: 1.6;
+  }
+  .presentacion :global(p + p) { margin-top: 22px; }
+
+  /* Una lista numerada en la presentación son los pilares: en fila, bajo
+     un filete de 2 px, con el rótulo en negrita del Markdown convertido en
+     «01 · Rótulo». */
+  .presentacion :global(ol) {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 40px;
+    border-top: 2px solid var(--tinta);
+    counter-reset: pilar;
+  }
+  .presentacion :global(ol > li) {
+    flex: 1 1 260px;
+    min-width: 0;
+    padding-top: 20px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--tinta);
+    text-wrap: pretty;
+    counter-increment: pilar;
+  }
+  .presentacion :global(ol > li > strong:first-child),
+  .presentacion :global(ol > li > p:first-child > strong:first-child) {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--acento);
+  }
+  .presentacion :global(ol > li > strong:first-child::before),
+  .presentacion :global(ol > li > p:first-child > strong:first-child::before) {
+    content: counter(pilar, decimal-leading-zero) ' · ';
+  }
+  .presentacion :global(ol + p) { margin-top: 36px; }
+
+  /* Con la clase de la sección delante: si no, la regla de los párrafos
+     del Markdown pesa más y el aviso saldría en serif. */
+  .presentacion .aviso {
+    margin-top: 36px;
+    max-width: 680px;
+    padding-top: 12px;
+    border-top: 1px solid var(--linea);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--sec);
+  }
+
+  /* --- el detalle --- */
+  .detalle {
+    padding-top: clamp(72px, 9vw, 120px);
+    counter-reset: parte;
+  }
+  .cabecera-detalle {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 24px;
+    border-top: 2px solid var(--tinta);
+    padding-top: 20px;
+  }
+  .cabecera-detalle .dato { font-size: 12px; }
+  .subtitulo {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--sec);
+  }
+
+  /* Cada parte va a una columna de lectura de 680 px. Una nota al margen
+     (una cita en el Markdown) se coloca a la derecha del párrafo que la
+     precede, y las tablas usan el ancho entero. */
+  .parte {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    column-gap: 56px;
+    padding-top: 52px;
+    counter-increment: parte;
+  }
+  .parte > :global(*) { grid-column: 1 / -1; max-width: 680px; }
+  .parte > :global(* + *) { margin-top: 22px; }
+  .parte > :global(p:has(+ aside.nota)) { grid-column: 1; }
+  .parte > :global(aside.nota) { grid-column: 2; align-self: start; }
+  .parte > :global(table) { max-width: none; margin-top: 36px; }
+  @media (max-width: 880px) {
+    .parte { display: block; }
+  }
+
+  .parte :global(h3) {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    font-family: var(--serif);
+    font-size: clamp(25px, 3.2vw, 30px);
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+  .parte :global(h3::before) {
+    content: counter(parte);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--acento);
+  }
+
+  .parte :global(p),
+  .parte :global(ul),
+  .parte :global(ol) {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.78;
+    color: var(--prosa);
+    text-wrap: pretty;
+  }
+
+  /* Una lista numerada en el detalle se lee como hallazgos: número en
+     óxido a la izquierda y filete entre uno y otro. */
+  .parte :global(ol) {
+    list-style: none;
+    padding: 0;
+    border-bottom: 1px solid var(--linea);
+    counter-reset: punto;
+  }
+  .parte :global(ol > li) {
+    position: relative;
+    padding: 16px 0 16px 40px;
+    border-top: 1px solid var(--linea);
+    line-height: 1.6;
+    counter-increment: punto;
+  }
+  /* Posicionado y no en flex: con el li en flex, cada <strong> o <code>
+     del Markdown sería un elemento suelto en fila. */
+  .parte :global(ol > li::before) {
+    content: counter(punto);
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 2;
+    color: var(--acento);
+  }
+  .parte :global(ul) {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .parte :global(ul > li) { position: relative; padding-left: 28px; line-height: 1.6; }
+  .parte :global(ul > li::before) {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--linea-fuerte);
+  }
+
+  .parte :global(aside.nota) {
+    border-top: 1px solid var(--linea);
+    padding-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--sec);
+  }
+  .parte :global(aside.nota p) {
+    font-family: var(--sans);
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+  .parte :global(aside.nota strong:first-child) {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--acento);
+  }
+
+  .parte :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15.5px;
+    line-height: 1.55;
+    font-variant-numeric: tabular-nums;
+  }
+  .parte :global(th) {
+    padding: 0 24px 10px 0;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--sec);
+    border-bottom: 1px solid var(--linea-fuerte);
+  }
+  .parte :global(td) {
+    padding: 14px 24px 14px 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--linea);
+    color: var(--prosa);
+  }
+  .parte :global(td:first-child) { width: 40%; font-weight: 500; color: var(--tinta); }
+  .parte :global(th:last-child),
+  .parte :global(td:last-child) { padding-right: 0; }
+
+  /* --- más proyectos --- */
+  .mas {
+    padding-top: clamp(72px, 9vw, 112px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 36px 56px;
+  }
+  .mas a { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; }
+  .indice { flex: 1 1 280px; min-width: 0; border-top: 1px solid var(--linea-fuerte); }
+  .siguiente { flex: 999 1 420px; min-width: 0; border-top: 2px solid var(--tinta); }
+  .nombre {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .resumen { font-size: 14.5px; line-height: 1.55; color: var(--sec); text-wrap: pretty; }
 </style>

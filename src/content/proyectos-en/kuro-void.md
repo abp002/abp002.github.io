@@ -1,6 +1,6 @@
 ---
 tagline: "Art direction exercise: catalogue, lookbook and product page for a fictional clothing brand, with one visual language across every screen."
-rol: art direction and development
+rol: Art direction and development
 ---
 
 ## What it is

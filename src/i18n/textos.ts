@@ -3,6 +3,11 @@ import type { Idioma } from './rutas';
 // Todo el texto de interfaz, en los dos idiomas. `en` se tipa contra `es`:
 // una cadena nueva en español sin su traducción no compila.
 // El contenido largo (fichas de proyecto) va en las colecciones, no aquí.
+
+// Un párrafo con enlaces: texto suelto y enlaces nombrados por su destino.
+// La URL la pone el componente, porque cambia con el idioma (rutas.ts).
+export type Trozo = string | { texto: string; a: 'proyectos' | 'openSource' };
+
 const es = {
   meta: {
     subtitulo:
@@ -15,47 +20,93 @@ const es = {
     correo: 'Correo',
   },
   nav: { proyectos: 'Proyectos', blog: 'Blog' },
-  hero: {
-    etiqueta: 'Presentación',
+  intro: {
+    // `unido` no se parte a final de línea: «full-stack» siempre entero.
+    titulo: { antes: 'Desarrollador ', unido: 'full-stack', despues: ' e IA aplicada.' },
     ubicacion: 'Córdoba, España',
-    linea1: 'Desarrollador full-stack',
-    linea2: 'e IA aplicada.',
-    escribeme: 'Escríbeme',
+    parrafos: [
+      [
+        'Trabajo en producto y en software de gestión empresarial: ERP, contabilidad y cumplimiento fiscal. Me especializo en IA aplicada: sistemas RAG que responden a partir de documentación propia y agentes que usan herramientas mediante function calling.',
+      ],
+      [
+        'Fuera del trabajo sigo construyendo: contribuyo a proyectos de ',
+        { texto: 'código abierto', a: 'openSource' },
+        ' y desarrollo ',
+        { texto: 'los míos', a: 'proyectos' },
+        '.',
+      ],
+    ] as Trozo[][],
   },
   secciones: {
-    sobre: { titulo: 'Sobre mí', id: 'sobre-mi' },
-    stack: { titulo: 'Stack', id: 'stack' },
     trayectoria: { titulo: 'Trayectoria', id: 'trayectoria' },
+    formacion: { titulo: 'Formación', id: 'formacion' },
+    openSource: { titulo: 'Open source', id: 'open-source' },
+    stack: { titulo: 'Stack', id: 'stack' },
     contacto: { titulo: 'Contacto', id: 'contacto' },
   },
-  sobre: [
-    'En Win Innovación desarrollo y lidero proyectos de software de gestión empresarial, incluidos contabilidad y cumplimiento fiscal.',
-    'También desarrollo software con inteligencia artificial integrada: sistemas RAG (generación aumentada por recuperación), que responden a partir de documentación propia, y servidores MCP (Model Context Protocol) a medida, que conectan los modelos con herramientas y datos reales.',
-    'Estudio el Grado en Ciencia de Datos Aplicada en la UOC. Mi objetivo es unir las tres piezas: el desarrollo, la IA y los datos.',
-  ],
-  perfil: {
-    idiomasEtiqueta: 'Idiomas',
-    idiomas: 'Español nativo · Inglés medio',
-    movilidadEtiqueta: 'Movilidad',
-    movilidad: 'Carnet B · disponible para viajar',
+  openSource: {
+    intro:
+      'También trabajo en comunidad: contribuyo a proyectos de código abierto con arreglos, mejoras de rendimiento y documentación.',
   },
-  trayectoria: { experiencia: 'Experiencia', formacion: 'Formación' },
-  stack: { iaAplicada: 'IA aplicada' },
-  contacto: { invitacion: '¿Hablamos?', invitacionEnfasis: 'Escríbeme.', cv: 'Descargar CV (PDF)' },
+  stack: {
+    filas: {
+      lenguajes: 'Lenguajes',
+      backend: 'Backend',
+      frontend: 'Frontend',
+      datos: 'Datos',
+      ia: 'IA',
+      herramientas: 'Herramientas',
+    },
+    iaAplicada: 'IA aplicada',
+    iaAplicadaTexto:
+      'RAG, function calling, servidores MCP, STT y TTS en streaming, machine learning, fine-tuning con QLoRA e integración de IA en procesos.',
+  },
+  contacto: {
+    pregunta: '¿Hablamos?',
+    escribeme: 'Escríbeme a',
+    perfil: 'Español nativo e inglés medio. Carnet B y disponible para viajar.',
+    cv: 'Descargar CV (PDF)',
+  },
   proyectos: {
     titulo: 'Proyectos',
     descripcion: 'Proyectos propios y de trabajo: ERP, integraciones e IA aplicada.',
+    indice: 'Índice',
+    cuantos: (n: number) => (n === 1 ? '1 proyecto' : `${n} proyectos`),
+    numero: 'N.º',
   },
   ficha: {
+    volver: 'Proyectos',
+    proyecto: 'Proyecto',
+    ficha: 'Ficha',
+    fichaEtiqueta: 'Ficha del proyecto',
+    estado: 'Estado',
     anio: 'Año',
+    rol: 'Rol',
     herramientas: 'Herramientas',
-    siguiente: 'Siguiente',
-    web: 'Ver en producción ↗',
-    demo: 'Ver la demo ↗',
-    repo: 'Código ↗',
-    borrador: 'El caso completo de este proyecto todavía no está escrito.',
+    dato: 'Dato',
+    codigo: 'Código',
+    web: 'Web',
+    verCodigo: 'Código en GitHub',
+    verWeb: 'Ver en producción',
+    verDemo: 'Ver la demo',
+    probarDemo: 'Probar la demo',
     video: 'Vídeo de',
-    imagen: 'Imagen de',
+    figura: 'Figura',
+    detalle: 'El detalle',
+    borrador: 'El caso completo de este proyecto todavía no está escrito.',
+    masProyectos: 'Más proyectos',
+    indice: 'Índice',
+    todos: 'Todos los proyectos',
+    siguiente: 'Siguiente',
+  },
+  // Las claves son las del enum `estado` de content.config.ts.
+  estados: {
+    produccion: 'En producción',
+    idea: 'Idea',
+    'en-curso': 'En curso',
+    funcionando: 'Funcionando',
+    congelado: 'Congelado',
+    concepto: 'Concepto',
   },
 };
 
@@ -73,47 +124,91 @@ const en: Textos = {
     correo: 'Email',
   },
   nav: { proyectos: 'Projects', blog: 'Blog' },
-  hero: {
-    etiqueta: 'Introduction',
+  intro: {
+    titulo: { antes: '', unido: 'Full-stack', despues: ' developer and applied AI.' },
     ubicacion: 'Córdoba, Spain',
-    linea1: 'Full-stack developer',
-    linea2: 'and applied AI.',
-    escribeme: 'Get in touch',
+    parrafos: [
+      [
+        'I work on product and on business management software: ERP, accounting and tax compliance. I specialise in applied AI: RAG systems that answer from in-house documentation and agents that use tools through function calling.',
+      ],
+      [
+        'Outside work I keep building: I contribute to ',
+        { texto: 'open-source', a: 'openSource' },
+        ' projects and develop ',
+        { texto: 'my own', a: 'proyectos' },
+        '.',
+      ],
+    ],
   },
   secciones: {
-    sobre: { titulo: 'About', id: 'about' },
-    stack: { titulo: 'Stack', id: 'stack' },
     trayectoria: { titulo: 'Experience', id: 'experience' },
+    formacion: { titulo: 'Education', id: 'education' },
+    openSource: { titulo: 'Open source', id: 'open-source' },
+    stack: { titulo: 'Stack', id: 'stack' },
     contacto: { titulo: 'Contact', id: 'contact' },
   },
-  sobre: [
-    'At Win Innovación I develop and lead business management software projects, including accounting and tax compliance.',
-    'I also build software with integrated artificial intelligence: RAG systems (retrieval-augmented generation), which answer from in-house documentation, and custom MCP (Model Context Protocol) servers, which connect models to real tools and data.',
-    "I'm studying for a degree in Applied Data Science at the UOC. My goal is to bring the three pieces together: development, AI and data.",
-  ],
-  perfil: {
-    idiomasEtiqueta: 'Languages',
-    idiomas: 'Spanish (native) · English (intermediate)',
-    movilidadEtiqueta: 'Mobility',
-    movilidad: "Driving licence · willing to travel",
+  openSource: {
+    intro:
+      'I also work in the community: I contribute fixes, performance improvements and documentation to open-source projects.',
   },
-  trayectoria: { experiencia: 'Experience', formacion: 'Education' },
-  stack: { iaAplicada: 'Applied AI' },
-  contacto: { invitacion: "Let's talk.", invitacionEnfasis: 'Drop me a line.', cv: 'Download CV (PDF)' },
+  stack: {
+    filas: {
+      lenguajes: 'Languages',
+      backend: 'Backend',
+      frontend: 'Frontend',
+      datos: 'Data',
+      ia: 'AI',
+      herramientas: 'Tools',
+    },
+    iaAplicada: 'Applied AI',
+    iaAplicadaTexto:
+      'RAG, function calling, MCP servers, streaming STT and TTS, machine learning, QLoRA fine-tuning and AI in business processes.',
+  },
+  contacto: {
+    pregunta: 'Shall we talk?',
+    escribeme: 'Email me at',
+    perfil: 'Native Spanish and intermediate English. Driving licence and willing to travel.',
+    cv: 'Download CV (PDF)',
+  },
   proyectos: {
     titulo: 'Projects',
     descripcion: 'Personal and work projects: ERP, integrations and applied AI.',
+    indice: 'Index',
+    cuantos: (n: number) => (n === 1 ? '1 project' : `${n} projects`),
+    numero: 'No.',
   },
   ficha: {
+    volver: 'Projects',
+    proyecto: 'Project',
+    ficha: 'At a glance',
+    fichaEtiqueta: 'The project at a glance',
+    estado: 'Status',
     anio: 'Year',
+    rol: 'Role',
     herramientas: 'Tools',
-    siguiente: 'Next',
-    web: 'See it live ↗',
-    demo: 'See the demo ↗',
-    repo: 'Code ↗',
-    borrador: "The full case study for this project isn't written yet.",
+    dato: 'Key figure',
+    codigo: 'Code',
+    web: 'Website',
+    verCodigo: 'Code on GitHub',
+    verWeb: 'See it live',
+    verDemo: 'Watch the demo',
+    probarDemo: 'Try the demo',
     video: 'Video of',
-    imagen: 'Image of',
+    figura: 'Figure',
+    detalle: 'In detail',
+    borrador: "The full case study for this project isn't written yet.",
+    masProyectos: 'More projects',
+    indice: 'Index',
+    todos: 'All projects',
+    siguiente: 'Next',
+  },
+  estados: {
+    produccion: 'In production',
+    idea: 'Idea',
+    'en-curso': 'In progress',
+    funcionando: 'Working',
+    congelado: 'Frozen',
+    concepto: 'Concept',
   },
 };
 

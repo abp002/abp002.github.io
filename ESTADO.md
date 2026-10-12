@@ -7,6 +7,33 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 ## Decisiones cerradas
 
+- **Estilo «cuaderno»** (11-oct, POR-2). Elegido el 10-oct en el lienzo
+  https://claude.ai/artifact/EmwRW9owfHAsdAGi5hPSAt (fila de abajo) frente a un
+  rediseño minimalista con Geist, que quedó descartado. Es la familia del
+  expediente (Newsreader, Instrument Sans, IBM Plex Mono, papel y óxido) en una
+  columna de 1040 px (antes 1160), con secciones numeradas y filete.
+  - Portada sin titular de cartel: el cargo a 30 px, «Córdoba, España» y dos
+    párrafos. Luego 01 trayectoria (las prácticas en Win como entrada propia) ·
+    02 formación · 03 open source (solo nombre, owner/repo y lenguaje: no se
+    cuentan PRs) · 04 stack en filas con iconos más «IA aplicada» · contacto.
+    Sale «Sobre mí» con su ficha de datos; idiomas y carnet pasan al contacto.
+  - Proyectos es un índice numerado (N.º, año, título, resumen y stack). La
+    ficha lleva una ficha lateral (estado o `fase`, año, rol, herramientas y
+    código) y el Markdown se lee en dos partes: el primer `##` es la
+    presentación y el resto, «El detalle» numerado. Una lista numerada en la
+    presentación son los pilares; una cita (`> **Método** …`) en el detalle es
+    una nota al margen. Se parte el HTML ya renderizado (`src/lib/partes.ts`)
+    porque Sätteri, el Markdown de Astro 7, no tiene plugin que envuelva
+    secciones.
+  - El vídeo sigue embebido (youtube-nocookie) como «Figura 1»: el lienzo lo
+    pintaba como tarjeta porque no admite iframes.
+  - Newsreader pasa a la variante con eje óptico (opsz): los titulares grandes
+    cogen el corte de display, como en el lienzo. Cuesta unos 150 KB más de
+    fuente.
+  - Fuera: las miniaturas CSS (y el campo `patron`), la parrilla de 21 logos y
+    los chips de IA aplicada. El blog sigue apagado y con el diseño anterior: su
+    cuaderno es POR-1.
+
 - **Versión inglesa en /en/** (05-oct). Español en la raíz, inglés en `/en/` con
   rutas propias (`/en/projects/<slug>`). Textos de interfaz en
   `src/i18n/textos.ts` (el inglés se tipa contra el español: sin traducción no
@@ -23,7 +50,8 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 - **Proyectos y blog, páginas aparte** (05-oct). Salen de la portada y viven en
   `/proyectos` (todas las fichas, sin el recorte 2×2) y `/blog`. La portada se
-  queda en 01 sobre mí · 02 stack · 03 trayectoria · 04 contacto. La barra
+  queda en 01 sobre mí · 02 stack · 03 trayectoria · 04 contacto (secciones que
+  rehízo el cuaderno el 11-oct). La barra
   enlaza a las dos páginas, marca la actual con `aria-current` y en móvil ya no
   se oculta: baja a una segunda fila. Revierte «Portada larga, una sola página»
   (26-jul) en lo que toca a proyectos y blog.
@@ -34,7 +62,8 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
   `ejemplo: true` se filtran en `getCollection`. `cv/` (fuentes, foto, teléfono)
   queda fuera del repo; el PDF servido vive en `public/`.
 
-- **Rediseño «expediente editorial»** (02-sep). Sale de un canvas de diseño con
+- **Rediseño «expediente editorial»** (02-sep; su maqueta la sustituye el
+  cuaderno del 11-oct, que conserva tipografía, paleta y movimiento). Sale de un canvas de diseño con
   tres direcciones; ganó esta: Newsreader para leer, Instrument Sans para la
   interfaz, IBM Plex Mono para los datos, papel cálido y un solo acento. La
   paleta completa vive como tokens en `global.css` y se conmuta con

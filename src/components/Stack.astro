@@ -1,0 +1,86 @@
+---
+import { filas } from '../config/logos';
+import { textos } from '../i18n/textos';
+import type { Idioma } from '../i18n/rutas';
+
+// El stack por filas, con el rótulo a la izquierda como en el CV y los
+// logos en monocromo. La última fila, «IA aplicada», no son marcas sino lo
+// que hago con ellas: va en texto y con el rótulo en óxido.
+interface Props { lang: Idioma }
+const { lang } = Astro.props;
+const t = textos[lang].stack;
+---
+
+<table class="stack revela">
+  <tbody>
+    {filas.map((f) => (
+      <tr>
+        <th scope="row" class="dato">{t.filas[f.clave]}</th>
+        <td>
+          <ul class="logos" role="list">
+            {f.logos.map((l) => (
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d={l.d} />
+                </svg>
+                <span>{l.nombre}</span>
+              </li>
+            ))}
+          </ul>
+        </td>
+      </tr>
+    ))}
+    <tr class="aplicada">
+      <th scope="row" class="dato acento">{t.iaAplicada}</th>
+      <td>{t.iaAplicadaTexto}</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+  .stack {
+    width: 100%;
+    margin-top: 26px;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  th, td { border-top: 1px solid var(--linea); vertical-align: top; }
+  th {
+    width: 160px;
+    padding: 14px 16px 14px 0;
+    text-align: left;
+    /* La altura de línea alinea el rótulo pequeño con la primera fila de
+       logos, que va a 15 px. */
+    line-height: 2.2;
+  }
+  td { padding-block: 14px; }
+
+  .logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+  }
+  .logos li { display: inline-flex; align-items: center; gap: 8px; }
+  .logos svg { flex: 0 0 auto; color: var(--sec); }
+
+  .aplicada th, .aplicada td { border-bottom: 1px solid var(--linea); }
+  .aplicada td {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--prosa);
+    text-wrap: pretty;
+  }
+
+  /* En el móvil, 160 px de rótulo dejan los logos en una columna de uno:
+     el rótulo pasa encima de su fila. */
+  @media (max-width: 560px) {
+    tr, th, td { display: block; }
+    th { width: auto; padding: 14px 0 0; line-height: 1.6; }
+    td { border-top: 0; padding-block: 8px 14px; }
+    .aplicada th { border-bottom: 0; }
+  }
+</style>

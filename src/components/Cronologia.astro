@@ -1,0 +1,94 @@
+---
+// Una lista fechada: quién y cuándo a la izquierda, en mono; qué a la
+// derecha, en serif. La usan Trayectoria y Formación, que en el cuaderno se
+// leen igual aunque la formación no lleve puntos.
+export interface Hito {
+  entidad: string;
+  periodo: string;
+  titulo: string;
+  puntos?: string[];
+}
+
+interface Props {
+  hitos: Hito[];
+  // La formación va más apretada: es una línea por entrada.
+  compacta?: boolean;
+}
+const { hitos, compacta = false } = Astro.props;
+---
+
+<ol class:list={['cronologia', 'revela', { compacta }]} role="list">
+  {hitos.map((h) => (
+    <li class="hito">
+      <p class="cuando">
+        <span class="acento">{h.entidad}</span>
+        <span>{h.periodo}</span>
+      </p>
+      <div class="que">
+        <h3 class="titulo">{h.titulo}</h3>
+        {h.puntos && h.puntos.length > 0 && (
+          <ul class="puntos" role="list">
+            {h.puntos.map((p) => (
+              <li><span class="guion" aria-hidden="true">—</span><span>{p}</span></li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .cronologia { list-style: none; margin: 8px 0 0; padding: 0; }
+
+  .hito {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 28px;
+    padding-block: 28px;
+    border-bottom: 1px solid var(--linea);
+  }
+  .compacta .hito { padding-block: 22px; }
+
+  .cuando {
+    flex: 0 0 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--sec);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .que {
+    flex: 999 1 460px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .titulo {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .puntos {
+    list-style: none;
+    margin: 2px 0 0;
+    padding: 0;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--sec);
+  }
+  .puntos li { display: flex; gap: 12px; text-wrap: pretty; }
+  .guion { flex: 0 0 auto; color: var(--linea-fuerte); }
+</style>

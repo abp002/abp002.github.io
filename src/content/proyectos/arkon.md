@@ -4,9 +4,8 @@ tagline: "ERP modular que cubre la gestión completa de una empresa, contabilida
 anio: 2026
 orden: 3
 estado: en-curso
-rol: producto, arquitectura y código
+rol: Producto, arquitectura y código
 stack: [NestJS, React, Prisma, PostgreSQL, TypeScript]
-patron: arkon
 visibilidad: publico
 borrador: true
 ---

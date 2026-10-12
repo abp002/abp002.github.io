@@ -1,0 +1,60 @@
+---
+import Icono from './Icono.astro';
+import { openSource, contribuciones } from '../config/opensource';
+---
+
+<ul class="repos revela" role="list">
+  {openSource.map((r) => (
+    <li>
+      <a class="enlace-fila repo" href={contribuciones(r.repo)} rel="noopener" target="_blank">
+        <span class="nombre">
+          <span class="titulo-fila">{r.nombre}</span>
+          <span class="ruta">{r.repo}</span>
+        </span>
+        <span class="dato acento lenguaje">
+          {r.lenguaje}
+          <span class="flecha"><Icono nombre="flecha" tamano={16} /></span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /* Dos columnas mientras quepan 420 px por repo; una en el móvil. El
+     filete de 2 px en tinta abre la lista como en un índice impreso. */
+  .repos {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+    gap: 0 48px;
+    border-top: 2px solid var(--tinta);
+  }
+  .repos li { min-width: 0; border-bottom: 1px solid var(--linea); }
+
+  .repo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 18px;
+  }
+  .nombre { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .titulo-fila {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .ruta {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--sec);
+    overflow-wrap: anywhere;
+  }
+  .lenguaje { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 10px; }
+</style>

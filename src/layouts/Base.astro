@@ -6,8 +6,11 @@ import Bandera from '../components/Bandera.astro';
 import { textos } from '../i18n/textos';
 import { idiomaDe, rutaEquivalente, rutaPortada, rutaProyectos } from '../i18n/rutas';
 
-import '@fontsource-variable/newsreader';
-import '@fontsource-variable/newsreader/wght-italic.css';
+// Newsreader con eje óptico (opsz 6–72): a 68 px coge el corte de titular y
+// a 19 px el de texto, que es como se ve en el lienzo. Pesa el doble que la
+// de solo peso (132 + 144 KB en latin), y la cursiva solo baja si se usa.
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@fontsource-variable/instrument-sans';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
@@ -202,13 +205,14 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
     gap: 24px;
   }
   .ancla {
+    padding-block: 12px;
     font-size: 13.5px;
     font-weight: 500;
     color: var(--sec);
     text-decoration: none;
     transition: color var(--t-micro) var(--ease-salida);
   }
-  .ancla:hover { color: var(--acento); }
+  .ancla:hover { color: var(--tinta); }
   .ancla[aria-current='page'] { color: var(--tinta); }
 
   /* El idioma queda a la izquierda del separador y los perfiles a la
@@ -234,12 +238,15 @@ const linkedin = 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-al
   }
   .lang:hover { filter: grayscale(0); opacity: 1; }
   .lang[aria-current='true'] { filter: none; opacity: 1; }
+  /* El padding agranda el área de toque a 38 px sin mover el dibujo. */
   .red {
     display: flex;
+    padding: 10px;
+    margin: -10px;
     color: var(--sec);
     transition: color var(--t-micro) var(--ease-salida);
   }
-  .red:hover { color: var(--acento); }
+  .red:hover { color: var(--tinta); }
 
   /* Proyectos y blog son páginas, no anclas: en móvil no pueden
      desaparecer. Bajan a una segunda fila bajo la firma y las redes, que ya

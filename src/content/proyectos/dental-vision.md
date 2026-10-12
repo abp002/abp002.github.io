@@ -4,9 +4,9 @@ tagline: "Odontograma automático desde radiografías panorámicas: detectar cad
 anio: 2026
 orden: 4
 estado: en-curso
-rol: datos, modelo y evaluación
+rol: Datos, modelo y evaluación
 stack: [Python, PyTorch, torchvision, Mask R-CNN, uv]
-patron: dental
+detalle: La auditoría de los datos, las decisiones medidas, cómo se medirá y en qué estado está.
 metrica:
   valor: "2,5 %"
   que: de las radiografías del dataset, con anotaciones imposibles detectadas

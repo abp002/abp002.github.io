@@ -1,6 +1,7 @@
 ---
 tagline: "Automatic dental chart from panoramic X-rays: detect every tooth, number it in FDI notation and record its visible state."
-rol: data, model and evaluation
+rol: Data, model and evaluation
+detalle: The data audit, the measured decisions, how it will be measured and where it stands.
 metrica:
   valor: "2.5%"
   que: of the dataset's X-rays, with impossible annotations detected

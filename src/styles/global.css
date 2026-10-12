@@ -1,7 +1,9 @@
 /* ============================================================
-   Expediente editorial
-   Papel cálido, serif de lectura, mono para los datos.
-   Un solo acento; la paleta entera se conmuta con data-paleta
+   Cuaderno
+   La familia del expediente editorial (02-sep) pasada a cuaderno
+   (11-oct): papel cálido, serif de lectura, mono para los datos y
+   un solo acento, en una columna de 1040 px con secciones
+   numeradas y filete. La paleta entera se conmuta con data-paleta
    en <html> (se elige en src/config/marca.ts).
    ============================================================ */
 
@@ -20,6 +22,9 @@
   --borde:        #cfc8ba;
   --acento:       #b04324;
   --acento-texto: #faf7f2;
+  /* El relleno de un botón de borde al pasar y el fondo del código. */
+  --relleno:      #f3ede3;
+  --codigo:       #f1ebe1;
 }
 :root[data-paleta='crema-cobalto'] {
   --fondo: #f6f6f3; --superficie: #fdfdfb; --tinta: #16181d; --prosa: #24262c;
@@ -44,21 +49,20 @@
   --sec: #504d49; --ter: #787470; --mute: #a3a09b; --linea: #e8e6e2;
   --linea-fuerte: #b5b2ac; --borde: #d0cdc7; --acento: #c92f1e; --acento-texto: #fbfaf8;
 }
+/* Las paletas alternativas no fijan relleno ni código a mano: salen de su
+   papel y su línea, así ninguna se queda con el crema de la de serie. */
+:root[data-paleta] {
+  --relleno: color-mix(in oklab, var(--linea) 50%, var(--fondo));
+  --codigo:  color-mix(in oklab, var(--linea) 60%, var(--fondo));
+}
 
 :root {
-  /* Alias del diseño anterior: la ficha de proyecto y las miniaturas
-     los siguen usando y no hay motivo para tocarlas una a una. */
-  --papel:   var(--fondo);
-  --lienzo:  var(--superficie);
-  --grafito: var(--sec);
-
   /* Curvas. Las palabras clave de CSS son demasiado suaves; ease-in está
      prohibido en interfaz porque arranca lento justo cuando se mira. */
   --ease-salida: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-mov:    cubic-bezier(0.77, 0, 0.175, 1);
 
   --t-micro: 160ms;  /* pulsación */
-  --t-hover: 550ms;  /* acercarse a la obra: decorativo, puede ser lento */
   --t-obra:  500ms;  /* aparición al hacer scroll */
   --t-sala:  380ms;  /* entrar en una ficha */
   --t-vuelta: 260ms; /* volver: el sistema responde, y lo que responde va rápido */
@@ -67,18 +71,18 @@
   --sans:  'Instrument Sans Variable', 'Helvetica Neue', system-ui, sans-serif;
   --mono:  'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
-  --medida: 66ch;
   --margen: clamp(20px, 5vw, 64px);
-  --aire:   clamp(72px, 11vw, 132px);
+  --hueco:  clamp(56px, 7vw, 96px);   /* entre secciones */
+  --aire:   clamp(72px, 11vw, 132px); /* antes del pie */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
 
-/* La portada es larga y se navega por anclas. Dos cosas hacen falta:
-   que el salto no sea un corte seco, y que el rótulo de destino no quede
-   pegado al borde superior de la ventana. */
+/* La portada se navega también por anclas (Open source, Contacto). Dos
+   cosas hacen falta: que el salto no sea un corte seco, y que el rótulo de
+   destino no quede pegado al borde superior de la ventana. */
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
@@ -101,87 +105,88 @@ img { max-width: 100%; display: block; }
 
 a { color: inherit; }
 a:focus-visible, button:focus-visible {
-  outline: 2px solid var(--tinta);
+  outline: 2px solid var(--acento);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 ::selection { background: color-mix(in oklab, var(--acento) 24%, transparent); }
 
-/* --- roles tipográficos --- */
-.display {
-  font-family: var(--serif);
-  font-size: clamp(32px, 4.4vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  font-weight: 500;
-  /* A este cuerpo un guion de división se ve como un error de composición.
-     `manual` deja partir solo donde haya un &shy; puesto a mano. */
-  hyphens: manual;
-}
-.display em { font-style: italic; }
+/* --- roles --- */
 
-.titulo-obra {
-  font-family: var(--serif);
-  font-size: clamp(24px, 3.2vw, 34px);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  font-weight: 500;
-}
+/* Metadata: mono en mayúsculas, el rótulo de todo el cuaderno. */
 .dato {
   font-family: var(--mono);
   font-size: 11px;
+  line-height: 1.6;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
+  font-weight: 400;
   color: var(--sec);
 }
-.cifra {
-  font-family: var(--mono);
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  color: var(--acento);
+.acento { color: var(--acento); }
+
+/* Prosa: enlaces subrayados con una línea suave que se calienta al pasar. */
+.prosa a {
+  color: var(--tinta);
+  text-decoration-line: underline;
+  text-decoration-color: var(--linea-fuerte);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--t-micro) var(--ease-salida);
 }
-.prosa-serif {
-  font-family: var(--serif);
-  font-size: 20px;
-  line-height: 1.7;
-  color: var(--prosa);
+.prosa a:hover { text-decoration-color: var(--acento); }
+.prosa strong { font-weight: 600; color: var(--tinta); }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  background: var(--codigo);
+  padding: 0.1em 0.36em;
+  border-radius: 3px;
 }
 
-/* --- botones del expediente --- */
-.btn {
+/* Botón de borde: en tinta el principal, con borde suave el resto. Nada de
+   botones rellenos de óxido: el acento es para leer, no para empujar. */
+.boton {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 13px 21px;
+  border: 1px solid var(--tinta);
   border-radius: 3px;
+  color: var(--tinta);
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
-  transition: opacity var(--t-micro) var(--ease-salida),
+  transition: background-color var(--t-micro) var(--ease-salida),
               transform var(--t-micro) var(--ease-salida);
 }
-.btn:hover { opacity: 0.85; }
-.btn:active { transform: translateY(1px); }
-.btn-primario { background: var(--acento); color: var(--acento-texto); }
-.btn-borde { border: 1px solid var(--borde); color: var(--tinta); }
+.boton:hover { background-color: var(--relleno); }
+.boton:active { transform: translateY(1px); }
+.boton-suave { border-color: var(--borde); }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--mono);
-  font-size: 13px;
-  padding: 8px 15px;
-  border: 1px solid var(--borde);
-  border-radius: 3px;
-  color: var(--tinta);
+/* Fila enlazada de los índices: el título se subraya y la flecha se enciende. */
+.enlace-fila { color: var(--tinta); text-decoration: none; }
+.enlace-fila .titulo-fila {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--t-micro) var(--ease-salida);
 }
+.enlace-fila:hover .titulo-fila { text-decoration-color: var(--linea-fuerte); }
+.enlace-fila .flecha {
+  display: flex;
+  color: var(--linea-fuerte);
+  transition: color var(--t-micro) var(--ease-salida);
+}
+.enlace-fila:hover .flecha { color: var(--acento); }
 
 .contenedor {
   width: 100%;
-  max-width: 1160px;
+  max-width: 1040px;
   margin-inline: auto;
   padding-inline: var(--margen);
 }
@@ -220,11 +225,6 @@ a:focus-visible, button:focus-visible {
       animation: aparecer linear both;
       animation-timeline: view();
       animation-range: entry 4% cover 26%;
-    }
-    .revela-tarde {
-      animation: aparecer linear both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 32%;
     }
   }
 }

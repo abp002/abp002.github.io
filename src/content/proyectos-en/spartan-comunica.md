@@ -1,6 +1,7 @@
 ---
 tagline: "SaaS for agencies that schedules and publishes content across every client's social networks, with an AI assistant that writes drafts backed by RAG and OCR."
-rol: full-stack, integrations and AI — at Win Innovación
+rol: Full-stack, integrations and AI — at Win Innovación
+detalle: What I built, the real problem, what I decided and what I'd do differently.
 ---
 
 ## What it is

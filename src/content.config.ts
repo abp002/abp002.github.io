@@ -16,12 +16,17 @@ const proyectos = defineCollection({
     anio: z.number(),
     orden: z.number(),
     estado: z.enum(['produccion', 'idea', 'en-curso', 'funcionando', 'congelado', 'concepto']),
+    // Cómo lo dice la ficha cuando el estado del enum se queda corto
+    // («v0.1 cerrada» en vez de «en curso»).
+    fase: z.string().optional(),
     rol: z.string(),
     stack: z.array(z.string()),
-    patron: z.enum(['spartan', 'sello', 'arkon', 'kuro', 'dental']),
-    // Id de YouTube (lo que va tras `v=`). Si está, la ficha pinta el vídeo
-    // en el hueco de la imagen.
+    // Id de YouTube (lo que va tras `v=`). Si está, la ficha lo pinta como
+    // figura, con `pieVideo` de pie.
     video: z.string().regex(/^[\w-]{11}$/).optional(),
+    pieVideo: z.string().optional(),
+    // Subtítulo de «El detalle»: qué se va a leer debajo de la presentación.
+    detalle: z.string().optional(),
     metrica: z
       .object({ valor: z.string(), que: z.string() })
       .optional(),
@@ -49,6 +54,9 @@ const proyectosEn = defineCollection({
     tagline: z.string(),
     rol: z.string(),
     metrica: z.object({ valor: z.string(), que: z.string() }).optional(),
+    fase: z.string().optional(),
+    pieVideo: z.string().optional(),
+    detalle: z.string().optional(),
   }),
 });
 

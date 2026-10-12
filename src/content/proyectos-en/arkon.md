@@ -1,6 +1,6 @@
 ---
 tagline: "Modular ERP covering the full management of a company, accounting included."
-rol: product, architecture and code
+rol: Product, architecture and code
 ---
 
 ## What it is

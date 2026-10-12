@@ -1,77 +1,80 @@
 ---
-import { marca, perfil, contacto } from '../config/marca';
+import { marca, perfil } from '../config/marca';
 import Icono from './Icono.astro';
 import { textos } from '../i18n/textos';
 import type { Idioma } from '../i18n/rutas';
 
+// El cierre de la portada: sin número, con filete de 2 px en tinta. La
+// pregunta a la izquierda y la vía a la derecha; el correo escrito entero,
+// que es lo que se copia.
 interface Props { lang: Idioma }
 const { lang } = Astro.props;
-const t = textos[lang].contacto;
-
-const github = contacto.find((c) => c.etiqueta === 'GitHub');
-const linkedin = contacto.find((c) => c.etiqueta === 'LinkedIn');
+const t = textos[lang];
 ---
 
-<div class="cierre revela">
-  <p class="invitacion">{t.invitacion} <em>{t.invitacionEnfasis}</em></p>
-
-  <a href={`mailto:${marca.correo}`} class="correo">{marca.correo}</a>
-
-  <div class="acciones">
-    {perfil.cv && (
-      <a href={perfil.cv} class="btn btn-primario" download>
-        <Icono nombre="descarga" tamano={15} />
-        {t.cv}
-      </a>
-    )}
-    {github?.href && (
-      <a href={github.href} class="btn btn-borde">
-        <Icono nombre="github" tamano={15} />
-        GitHub — {github.valor}
-      </a>
-    )}
-    {linkedin?.href && (
-      <a href={linkedin.href} class="btn btn-borde">
-        <Icono nombre="linkedin" tamano={15} />
-        LinkedIn
-      </a>
-    )}
+<section id={t.secciones.contacto.id} class="contacto contenedor" aria-labelledby="contacto-titulo">
+  <div class="marco revela">
+    <div class="rotulo">
+      <p class="dato acento">{t.secciones.contacto.titulo}</p>
+      <h2 id="contacto-titulo" class="pregunta">{t.contacto.pregunta}</h2>
+    </div>
+    <div class="vias">
+      <p class="prosa correo">
+        {t.contacto.escribeme} <a href={`mailto:${marca.correo}`}>{marca.correo}</a>.
+      </p>
+      <p class="perfil">{t.contacto.perfil}</p>
+      {perfil.cv && (
+        <a href={perfil.cv} class="boton cv" download>
+          <Icono nombre="descarga" tamano={15} />
+          {t.contacto.cv}
+        </a>
+      )}
+    </div>
   </div>
-</div>
+</section>
 
 <style>
-  .cierre {
+  .contacto { padding-top: clamp(72px, 9vw, 112px); }
+
+  .marco {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px 56px;
+    border-top: 2px solid var(--tinta);
+    padding-top: 22px;
+  }
+
+  .rotulo {
+    flex: 1 1 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pregunta {
+    font-family: var(--serif);
+    font-size: clamp(34px, 3.6vw, 48px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+
+  .vias {
+    flex: 999 1 480px;
+    min-width: 0;
+    max-width: 620px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 34px;
-    margin-top: 48px;
+    gap: 8px;
   }
-
-  .invitacion {
-    font-family: var(--serif);
-    font-size: clamp(30px, 4.4vw, 44px);
-    line-height: 1.2;
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    max-width: 760px;
-  }
-  .invitacion em { font-style: italic; }
-
   .correo {
-    font-family: var(--mono);
-    font-size: clamp(17px, 3vw, 28px);
-    font-weight: 500;
-    text-decoration: none;
-    border-bottom: 2px solid var(--acento);
-    padding-bottom: 8px;
+    font-family: var(--serif);
+    font-size: clamp(19px, 1.6vw, 22px);
+    line-height: 1.5;
+    color: var(--prosa);
     overflow-wrap: anywhere;
   }
-
-  .acciones { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
-
-  @media (max-width: 680px) {
-    .acciones { width: 100%; }
-    .acciones .btn { width: 100%; justify-content: center; }
-  }
+  .perfil { font-size: 15.5px; line-height: 1.55; color: var(--sec); }
+  .cv { margin-top: 12px; }
 </style>

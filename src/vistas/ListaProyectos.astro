@@ -1,38 +1,153 @@
 ---
 import Base from '../layouts/Base.astro';
-import Seccion from '../components/Seccion.astro';
-import TarjetaProyecto from '../components/TarjetaProyecto.astro';
-import { cargarProyectos } from '../i18n/proyectos';
+import Icono from '../components/Icono.astro';
+import { cargarProyectos, numero } from '../i18n/proyectos';
 import { textos } from '../i18n/textos';
-import type { Idioma } from '../i18n/rutas';
+import { rutaProyecto, type Idioma } from '../i18n/rutas';
 
-// Todos, por `orden`. Con página propia ya no hace falta recortar a la
-// parrilla 2×2 que imponía la portada.
+// El índice de proyectos: todos, por `orden`, numerados como las entradas
+// de un cuaderno. Cada fila es un enlace entero a su ficha.
 interface Props { lang: Idioma }
 const { lang } = Astro.props;
 const t = textos[lang].proyectos;
 const proyectos = await cargarProyectos(lang);
+
+const anios = proyectos.map((p) => p.datos.anio);
+const desde = Math.min(...anios);
+const hasta = Math.max(...anios);
+const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
 ---
 
 <Base titulo={t.titulo} descripcion={t.descripcion}>
-  <section class="bloque contenedor">
-    <Seccion titulo={t.titulo} id="proyectos" nivel={1} />
-    <div class="parrilla-proyectos">
-      {proyectos.map((p) => <TarjetaProyecto proyecto={p.proyecto} datos={p.datos} lang={lang} />)}
-    </div>
+  <section class="indice contenedor" aria-labelledby="proyectos-titulo">
+    <header class="cabecera">
+      <div class="rotulo">
+        <p class="dato meta">
+          <span class="acento">{t.indice}</span>
+          <span>{t.cuantos(proyectos.length)}</span>
+          <span>{periodo}</span>
+        </p>
+        <h1 id="proyectos-titulo" class="titulo">{t.titulo}</h1>
+      </div>
+      <p class="descripcion">{t.descripcion}</p>
+    </header>
+
+    <ol class="lista" role="list">
+      {proyectos.map((p) => (
+        <li class="revela">
+          <a class="enlace-fila fila" href={rutaProyecto(lang, p.proyecto.id)}>
+            <div class="cuando">
+              <span class="acento">{t.numero} {numero(p.numero)}</span>
+              <span>{p.datos.anio}</span>
+            </div>
+            <div class="que">
+              <div class="cabeza">
+                <h2 class="nombre titulo-fila" transition:name={`titulo-${p.proyecto.id}`}>{p.datos.nombre}</h2>
+                <span class="flecha"><Icono nombre="flecha" tamano={20} /></span>
+              </div>
+              <p class="tagline">{p.datos.tagline}</p>
+              <p class="stack">{p.datos.stack.join(' · ')}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ol>
   </section>
 </Base>
 
 <style>
-  .bloque { padding-block: clamp(48px, 7vw, 88px) var(--aire); }
+  .indice { padding-top: clamp(48px, 7vw, 88px); }
 
-  .parrilla-proyectos {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
-    margin-top: 40px;
+  .cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 22px 72px;
+    border-top: 1px solid var(--linea-fuerte);
+    padding-top: 22px;
   }
-  @media (max-width: 780px) {
-    .parrilla-proyectos { grid-template-columns: 1fr; gap: 16px; }
+  .rotulo {
+    flex: 1 1 360px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .titulo {
+    font-family: var(--serif);
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+  }
+  .descripcion {
+    flex: 1 1 460px;
+    min-width: 0;
+    max-width: 560px;
+    font-family: var(--serif);
+    font-size: clamp(18px, 1.5vw, 21px);
+    line-height: 1.6;
+    color: var(--prosa);
+    text-wrap: pretty;
+  }
+
+  .lista {
+    list-style: none;
+    margin: clamp(40px, 5vw, 64px) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--linea);
+  }
+
+  .fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 28px;
+    padding-block: 30px;
+    border-bottom: 1px solid var(--linea);
+  }
+  .cuando {
+    flex: 0 0 170px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--sec);
+    font-variant-numeric: tabular-nums;
+  }
+  .que {
+    flex: 999 1 460px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cabeza {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .nombre {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.4vw, 31px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  .flecha { flex: 0 0 auto; margin-top: 6px; }
+  .tagline {
+    max-width: 680px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--sec);
+    text-wrap: pretty;
+  }
+  .stack {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--sec);
   }
 </style>

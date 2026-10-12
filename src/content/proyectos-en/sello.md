@@ -1,6 +1,9 @@
 ---
 tagline: "A programming language designed to be written by an AI: every function carries a contract that a prover (Z3) checks before accepting it."
-rol: language design, compiler and experiments
+fase: v0.1 closed
+rol: Language design, compiler and experiments
+pieVideo: An agent writes a function by reusing another one from the store and certifies it, using only Sello's MCP.
+detalle: How it's measured, what I learned, what doesn't work and where it stands.
 ---
 
 ## What it is
@@ -9,13 +12,16 @@ AI generates code fast and cheap; the bottleneck is knowing whether it's right.
 Sello starts from there: **the language has to be the reviewer**. It isn't text
 in files but a store of functions with certificates:
 
-- **Mandatory contract.** Every function declares what it assumes (`requires`),
-  what it promises (`ensures`), its effects and examples.
-- **Prover.** Z3 tries to prove the promise for every valid input, and only
-  reports a counterexample when the interpreter reproduces it.
-- **Content-addressed store.** Each function is stored by the hash of its
-  syntax tree, alongside the certificate of what happened. Verified once,
-  verified forever. Hence the name: *sello* is Spanish for seal.
+1. **Mandatory contract**
+   Every function declares what it assumes (`requires`), what it promises
+   (`ensures`), its effects and examples.
+2. **Prover**
+   Z3 tries to prove the promise for every valid input, and only reports a
+   counterexample when the interpreter reproduces it.
+3. **Content-addressed store**
+   Each function is stored by the hash of its syntax tree, alongside the
+   certificate of what happened. Verified once, verified forever. Hence the
+   name: *sello* is Spanish for seal.
 
 An agent doesn't read files: it queries the store over MCP (*give me the
 signature and contract of X*, *who uses Y*, *verify Z*).
@@ -26,8 +32,11 @@ The first metric was "attempts until it compiles", and it was the wrong one: a
 language that rejects more can cost more attempts and still be better. The
 right metric is what **reaches production**: accept whatever passes a weak
 judge, like a reviewer in a hurry, and count how many of those programs later
-fail against an oracle. Every change to the language is preregistered before
-running the experiment and not touched afterwards.
+fail against an oracle.
+
+> **Method**
+> Every change to the language is preregistered before running the experiment
+> and not touched afterwards.
 
 | Experiment | Result |
 |---|---|
@@ -38,13 +47,12 @@ running the experiment and not touched afterwards.
 
 ## What I learned
 
-**The reviewer that works is the contract, as long as it says something.** An
-`ensures` that only bounds a number certifies nothing, and a trivial contract is
-now a compile error.
-
-**A contract written by someone else is the strongest lever.** Haiku doesn't
-learn to write strong contracts from instructions, but with a strong contract
-in front of it, it writes correct bodies.
+1. **The reviewer that works is the contract, as long as it says something.**
+   An `ensures` that only bounds a number certifies nothing, and a trivial
+   contract is now a compile error.
+2. **A contract written by someone else is the strongest lever.** Haiku doesn't
+   learn to write strong contracts from instructions, but with a strong
+   contract in front of it, it writes correct bodies.
 
 ## What doesn't work
 

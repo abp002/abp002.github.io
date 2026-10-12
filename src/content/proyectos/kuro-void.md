@@ -4,9 +4,8 @@ tagline: "Ejercicio de dirección de arte: catálogo, lookbook y ficha de produc
 anio: 2025
 orden: 5
 estado: concepto
-rol: dirección de arte y desarrollo
+rol: Dirección de arte y desarrollo
 stack: [Next.js, React, TypeScript, Tailwind, Motion]
-patron: kuro
 visibilidad: publico
 borrador: true
 ---
