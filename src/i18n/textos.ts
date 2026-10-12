@@ -69,7 +69,6 @@ const es = {
   },
   proyectos: {
     titulo: 'Proyectos',
-    descripcion: 'Proyectos propios y de trabajo: ERP, integraciones e IA aplicada.',
     indice: 'Índice',
     cuantos: (n: number) => (n === 1 ? '1 proyecto' : `${n} proyectos`),
     numero: 'N.º',
@@ -172,7 +171,6 @@ const en: Textos = {
   },
   proyectos: {
     titulo: 'Projects',
-    descripcion: 'Personal and work projects: ERP, integrations and applied AI.',
     indice: 'Index',
     cuantos: (n: number) => (n === 1 ? '1 project' : `${n} projects`),
     numero: 'No.',

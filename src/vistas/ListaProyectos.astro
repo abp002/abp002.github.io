@@ -18,7 +18,7 @@ const hasta = Math.max(...anios);
 const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
 ---
 
-<Base titulo={t.titulo} descripcion={t.descripcion}>
+<Base titulo={t.titulo}>
   <section class="indice contenedor" aria-labelledby="proyectos-titulo">
     <header class="cabecera">
       <div class="rotulo">
@@ -29,7 +29,6 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
         </p>
         <h1 id="proyectos-titulo" class="titulo">{t.titulo}</h1>
       </div>
-      <p class="descripcion">{t.descripcion}</p>
     </header>
 
     <ol class="lista" role="list">
@@ -80,17 +79,6 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
     line-height: 1.02;
     letter-spacing: -0.028em;
   }
-  .descripcion {
-    flex: 1 1 460px;
-    min-width: 0;
-    max-width: 560px;
-    font-family: var(--serif);
-    font-size: clamp(18px, 1.5vw, 21px);
-    line-height: 1.6;
-    color: var(--prosa);
-    text-wrap: pretty;
-  }
-
   .lista {
     list-style: none;
     margin: clamp(40px, 5vw, 64px) 0 0;
