@@ -27,7 +27,10 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       puntos: [
         'Desarrollo de ERP y CRM, incluido software contable.',
         'Modernización del flujo de trabajo con CI/CD y Docker.',
-        'Integración de IA en el ERP: RAG, OCR y un agente de voz para prospección comercial.',
+        'Asistente de IA en el ERP que responde a preguntas sobre los datos de la empresa y genera informes y documentos, mediante function calling.',
+        'OCR para dar de alta en el ERP las facturas de compra.',
+        'Asistente de redacción con RAG y OCR en Spartan Comunica, una plataforma de redes sociales.',
+        'Agente comercial de voz que llama a leads para cualificarlos.',
       ],
     },
     {
@@ -45,7 +48,10 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       puntos: [
         'ERP and CRM development, including accounting software.',
         'Modernised the development workflow with CI/CD and Docker.',
-        'AI integration in the ERP: RAG, OCR and a voice agent for sales prospecting.',
+        'AI assistant in the ERP that answers questions about the company’s data and generates reports and documents, using function calling.',
+        'OCR for entering purchase invoices into the ERP.',
+        'Writing assistant with RAG and OCR in Spartan Comunica, a social media platform.',
+        'Sales voice agent that calls leads to qualify them.',
       ],
     },
     {
