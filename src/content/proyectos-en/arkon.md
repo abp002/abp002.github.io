@@ -1,5 +1,5 @@
 ---
-tagline: "Modular ERP covering the full management of a company, accounting included."
+tagline: "Modular business management software covering the whole company, accounting included."
 rol: Product, architecture and code
 ---
 

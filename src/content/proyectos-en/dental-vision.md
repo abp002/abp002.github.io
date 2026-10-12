@@ -1,5 +1,5 @@
 ---
-tagline: "Automatic dental chart from panoramic X-rays: detect every tooth, number it in FDI notation and record its visible state."
+tagline: "Automatic dental chart from panoramic X-rays: numbers every tooth in FDI notation and flags caries, periapical lesions and impacted teeth, with two trained and evaluated models."
 rol: Data, model and evaluation
 detalle: The data audit, the measured decisions, how it will be measured and where it stands.
 metrica:

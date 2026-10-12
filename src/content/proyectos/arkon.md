@@ -1,6 +1,6 @@
 ---
 nombre: Arkon
-tagline: "ERP modular que cubre la gestión completa de una empresa, contabilidad incluida."
+tagline: "Software de gestión empresarial modular: cubre la empresa entera, contabilidad incluida."
 anio: 2026
 orden: 3
 estado: en-curso

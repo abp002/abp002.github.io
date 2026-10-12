@@ -1,6 +1,6 @@
 ---
 nombre: Dental Vision
-tagline: "Odontograma automático desde radiografías panorámicas: detectar cada pieza dental, numerarla en notación FDI y registrar su estado visible."
+tagline: "Odontograma automático desde radiografías panorámicas: numera cada pieza en notación FDI y señala caries, lesiones periapicales y dientes impactados, con dos modelos entrenados y evaluados."
 anio: 2026
 orden: 4
 estado: en-curso
