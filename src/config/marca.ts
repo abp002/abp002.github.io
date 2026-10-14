@@ -20,7 +20,7 @@ export const marca = {
   nombre: 'Alejandro Borrego',
   firma: 'Alejandro Borrego',
   iniciales: 'ABP',
-  dominio: 'abp002.github.io',
+  dominio: 'alejandroborrego.dev',
   // El correo del CV público, no el personal.
   correo: 'abp.0040@gmail.com',
 

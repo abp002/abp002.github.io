@@ -38,7 +38,7 @@ const anclas = marca.anclas
 const ruta = Astro.url.pathname.replace(/\/$/, '');
 const actual = (href: string) => ruta === href || ruta.startsWith(`${href}/`);
 
-const site = Astro.site ?? new URL('https://abp002.github.io');
+const site = Astro.site ?? new URL('https://alejandroborrego.dev');
 const versiones = {
   es: rutaEquivalente(Astro.url.pathname, 'es'),
   en: rutaEquivalente(Astro.url.pathname, 'en'),
