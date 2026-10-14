@@ -22,7 +22,7 @@ export const marca = {
   iniciales: 'ABP',
   dominio: 'alejandroborrego.dev',
   // El correo del CV público, no el personal.
-  correo: 'abp.0040@gmail.com',
+  correo: 'alejandro@alejandroborrego.dev',
 
   // El texto que cambia con el idioma (cargo, meta descripción, datos de
   // perfil) vive en src/i18n/textos.ts; aquí solo lo que es igual en todos.
