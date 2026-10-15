@@ -2,7 +2,7 @@
 nombre: Kuro Void
 tagline: "Ejercicio de dirección de arte: catálogo, lookbook y ficha de producto de una marca de ropa ficticia, con un mismo lenguaje visual en todas las pantallas."
 anio: 2025
-orden: 5
+orden: 7
 estado: concepto
 rol: Dirección de arte y desarrollo
 stack: [Next.js, React, TypeScript, Tailwind, Motion]
