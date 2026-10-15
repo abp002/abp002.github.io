@@ -3,9 +3,9 @@ import { filas } from '../config/logos';
 import { textos } from '../i18n/textos';
 import type { Idioma } from '../i18n/rutas';
 
-// El stack por filas, con el rótulo a la izquierda como en el CV y los
-// logos en monocromo. La última fila, «IA aplicada», no son marcas sino lo
-// que hago con ellas: va en texto y con el rótulo en óxido.
+// El stack por filas, como en el CV, con los logos en monocromo. La fila
+// «IA aplicada» no son marcas sino lo que hago con ellas: va en texto y con
+// el rótulo en óxido. Las negritas son las del CV.
 interface Props { lang: Idioma }
 const { lang } = Astro.props;
 const t = textos[lang].stack;
@@ -13,27 +13,28 @@ const t = textos[lang].stack;
 
 <table class="stack revela">
   <tbody>
-    {filas.map((f) => (
+    {filas.map((f) => f.clave === 'aplicada' ? (
+      <tr class="aplicada">
+        <th scope="row" class="dato acento">{t.filas.aplicada}</th>
+        <td set:html={t.iaAplicadaTexto} />
+      </tr>
+    ) : (
       <tr>
         <th scope="row" class="dato">{t.filas[f.clave]}</th>
         <td>
           <ul class="logos" role="list">
-            {f.logos.map((l) => (
-              <li>
+            {f.elementos.map((el) => (
+              <li class:list={{ fuerte: el.fuerte }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d={l.d} />
+                  <path d={el.logo.d} />
                 </svg>
-                <span>{l.nombre}</span>
+                <span>{el.texto}</span>
               </li>
             ))}
           </ul>
         </td>
       </tr>
     ))}
-    <tr class="aplicada">
-      <th scope="row" class="dato acento">{t.iaAplicada}</th>
-      <td>{t.iaAplicadaTexto}</td>
-    </tr>
   </tbody>
 </table>
 
@@ -67,7 +68,8 @@ const t = textos[lang].stack;
   .logos li { display: inline-flex; align-items: center; gap: 8px; }
   .logos svg { flex: 0 0 auto; color: var(--sec); }
 
-  .aplicada th, .aplicada td { border-bottom: 1px solid var(--linea); }
+  tr:last-child th, tr:last-child td { border-bottom: 1px solid var(--linea); }
+  .fuerte span, .aplicada strong { font-weight: 600; color: var(--tinta); }
   .aplicada td {
     font-size: 15.5px;
     line-height: 1.55;
@@ -81,6 +83,6 @@ const t = textos[lang].stack;
     tr, th, td { display: block; }
     th { width: auto; padding: 14px 0 0; line-height: 1.6; }
     td { border-top: 0; padding-block: 8px 14px; }
-    .aplicada th { border-bottom: 0; }
+    tr:last-child th { border-bottom: 0; }
   }
 </style>

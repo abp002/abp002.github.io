@@ -6,7 +6,7 @@ import { openSource, contribuciones } from '../config/opensource';
 <ul class="repos revela" role="list">
   {openSource.map((r) => (
     <li>
-      <a class="enlace-fila repo" href={contribuciones(r.repo)} rel="noopener" target="_blank">
+      <a class="enlace-fila repo" href={contribuciones(r)} rel="noopener" target="_blank">
         <span class="nombre">
           <span class="titulo-fila">{r.nombre}</span>
           <span class="ruta">{r.repo}</span>

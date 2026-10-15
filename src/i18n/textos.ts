@@ -54,12 +54,13 @@ const es = {
       backend: 'Backend',
       frontend: 'Frontend',
       datos: 'Datos',
-      ia: 'IA',
+      ml: 'Machine learning',
+      aplicada: 'IA aplicada',
       herramientas: 'Herramientas',
     },
-    iaAplicada: 'IA aplicada',
+    // Texto propio, no de terceros: va como HTML para la negrita del CV.
     iaAplicadaTexto:
-      'RAG, function calling, servidores MCP, STT y TTS en streaming, machine learning, fine-tuning con QLoRA e integración de IA en procesos.',
+      '<strong>RAG</strong>, function calling / tool use, structured outputs, MCP, STT/TTS, OCR y evals.',
   },
   contacto: {
     pregunta: '¿Hablamos?',
@@ -156,12 +157,12 @@ const en: Textos = {
       backend: 'Backend',
       frontend: 'Frontend',
       datos: 'Data',
-      ia: 'AI',
+      ml: 'Machine learning',
+      aplicada: 'Applied AI',
       herramientas: 'Tools',
     },
-    iaAplicada: 'Applied AI',
     iaAplicadaTexto:
-      'RAG, function calling, MCP servers, streaming STT and TTS, machine learning, QLoRA fine-tuning and AI in business processes.',
+      '<strong>RAG</strong>, function calling / tool use, structured outputs, MCP, STT/TTS, OCR and evals.',
   },
   contacto: {
     pregunta: 'Shall we talk?',
