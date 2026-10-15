@@ -7,6 +7,9 @@ estado: produccion
 rol: Full-stack, integraciones e IA — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
 detalle: Lo que construí, el problema real, qué decidí y qué haría distinto.
+portada:
+  imagen: /proyectos/spartan-comunica/poster.webp
+  clip: /proyectos/spartan-comunica/clip.mp4
 visibilidad: publico
 enlaces:
   web: https://spartancomunica.es

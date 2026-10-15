@@ -8,6 +8,18 @@ import { glob } from 'astro/loaders';
 // `visibilidad: 'sin-detalle'` es la barrera contra publicar trabajo del
 // empleador. La ficha no renderiza imágenes ni enlaces cuando está puesto:
 // lo impide el tipo, no que yo me acuerde.
+
+// Lo que enseña el índice de cada proyecto antes de abrirlo: una imagen
+// 16:9 y, si lo hay, un clip corto sin sonido que corre en bucle sobre
+// ella. Rutas dentro de public/. La imagen nunca falta: es el póster del
+// clip y lo que se queda quieto con «reducir movimiento».
+const portada = z
+  .object({
+    imagen: z.string().startsWith('/'),
+    clip: z.string().startsWith('/').optional(),
+  })
+  .optional();
+
 const proyectos = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/proyectos' }),
   schema: z.object({
@@ -25,8 +37,10 @@ const proyectos = defineCollection({
     // figura, con `pieVideo` de pie.
     video: z.string().regex(/^[\w-]{11}$/).optional(),
     pieVideo: z.string().optional(),
+    portada,
     // Subtítulo de «El detalle»: qué se va a leer debajo de la presentación.
     detalle: z.string().optional(),
+    // Si no hay portada, el índice enseña esta cifra en su lugar.
     metrica: z
       .object({ valor: z.string(), que: z.string() })
       .optional(),
@@ -44,8 +58,10 @@ const proyectos = defineCollection({
 });
 
 // La versión inglesa de cada ficha: solo lo que se traduce, más el cuerpo.
-// Stack, orden, vídeo, enlaces y sobre todo `visibilidad` viven únicamente
+// Stack, orden, enlaces y sobre todo `visibilidad` viven únicamente
 // en la española, así que la barrera no puede quedarse abierta en un idioma.
+// La portada y el vídeo son la excepción: si el vídeo tiene versión inglesa,
+// la ficha inglesa los pone y sustituyen a los españoles; si no, se heredan.
 // El id (nombre del fichero) tiene que coincidir con el de la española.
 const proyectosEn = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/proyectos-en' }),
@@ -55,7 +71,9 @@ const proyectosEn = defineCollection({
     rol: z.string(),
     metrica: z.object({ valor: z.string(), que: z.string() }).optional(),
     fase: z.string().optional(),
+    video: z.string().regex(/^[\w-]{11}$/).optional(),
     pieVideo: z.string().optional(),
+    portada,
     detalle: z.string().optional(),
   }),
 });

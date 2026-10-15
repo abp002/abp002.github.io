@@ -1,0 +1,116 @@
+---
+import type { ProyectoLocal } from '../i18n/proyectos';
+
+// Lo que se ve de un proyecto antes de abrirlo: su clip en bucle, su
+// imagen o, si aún no tiene ninguna, su cifra. Va dentro del enlace de la
+// tarjeta y el clip repite lo que ya dice el texto, así que para un lector
+// de pantalla es decoración; la cifra no, porque es un dato que no está
+// en otro sitio.
+interface Props {
+  datos: ProyectoLocal['datos'];
+}
+const { datos } = Astro.props;
+
+// La barrera del empleador también cierra el índice: una ficha sin
+// detalle no enseña ni imagen ni clip, aunque los tenga puestos.
+const portada = datos.visibilidad === 'publico' ? datos.portada : undefined;
+const { metrica } = datos;
+---
+
+{portada ? (
+  <div class="muestra" aria-hidden="true">
+    {portada.clip ? (
+      <video
+        class="clip"
+        src={portada.clip}
+        poster={portada.imagen}
+        width="1280"
+        height="720"
+        muted
+        loop
+        playsinline
+        preload="none"
+      />
+    ) : (
+      <img src={portada.imagen} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+    )}
+  </div>
+) : metrica ? (
+  <div class="muestra cifra">
+    <span class="valor">{metrica.valor}</span>
+    <span class="que">{metrica.que}</span>
+  </div>
+) : null}
+
+<script>
+  // Los clips solo corren mientras se ven y nunca con «reducir
+  // movimiento»: entonces se queda el póster, que ya enseña el proyecto.
+  // Sin JavaScript pasa lo mismo. Con el router de transiciones este
+  // script corre una sola vez, así que cada página se vigila al cargar.
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)');
+  let vigia: IntersectionObserver | undefined;
+
+  document.addEventListener('astro:page-load', () => {
+    vigia?.disconnect();
+    const clips = document.querySelectorAll<HTMLVideoElement>('video.clip');
+    if (clips.length === 0) return;
+    vigia = new IntersectionObserver(
+      (entradas) => {
+        for (const { target, isIntersecting } of entradas) {
+          const clip = target as HTMLVideoElement;
+          if (isIntersecting && !quieto.matches) clip.play().catch(() => {});
+          else clip.pause();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    clips.forEach((clip) => vigia?.observe(clip));
+  });
+
+  quieto.addEventListener('change', () => {
+    if (quieto.matches) document.querySelectorAll<HTMLVideoElement>('video.clip').forEach((clip) => clip.pause());
+  });
+</script>
+
+<style>
+  .muestra {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--relleno);
+    transition: border-color var(--t-micro) var(--ease-salida);
+  }
+  :global(.enlace-fila:hover) .muestra { border-color: var(--linea-fuerte); }
+  video,
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cifra {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+  .valor {
+    font-family: var(--serif);
+    font-size: clamp(44px, 5vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--acento);
+  }
+  .que {
+    max-width: 32ch;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--sec);
+    text-wrap: balance;
+  }
+</style>

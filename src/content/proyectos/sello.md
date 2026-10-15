@@ -9,6 +9,9 @@ rol: Diseño del lenguaje, compilador y experimentos
 stack: [Python, Z3, SQLite, MCP, uv]
 video: ZB9sI3euIo8
 pieVideo: Un agente escribe una función reutilizando otra del almacén y la certifica, solo con el MCP de Sello.
+portada:
+  imagen: /proyectos/sello/poster.webp
+  clip: /proyectos/sello/clip.mp4
 detalle: Cómo se mide, qué aprendí, lo que no funciona y en qué estado está.
 visibilidad: publico
 enlaces:

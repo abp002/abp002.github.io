@@ -1,12 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icono from '../components/Icono.astro';
-import { cargarProyectos, numero } from '../i18n/proyectos';
+import Muestra from '../components/Muestra.astro';
+import { cargarProyectos } from '../i18n/proyectos';
 import { textos } from '../i18n/textos';
 import { rutaProyecto, type Idioma } from '../i18n/rutas';
 
-// El índice de proyectos: todos, por `orden`, numerados como las entradas
-// de un cuaderno. Cada fila es un enlace entero a su ficha.
+// El índice de proyectos: todos al mismo nivel, sin número ni estado que
+// los ponga en fila; `orden` solo decide dónde cae cada uno. Cada proyecto
+// se ve antes de leerse, con su muestra encima, y cada tarjeta es un
+// enlace entero a su ficha.
 interface Props { lang: Idioma }
 const { lang } = Astro.props;
 const t = textos[lang].proyectos;
@@ -31,15 +34,12 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
       </div>
     </header>
 
-    <ol class="lista" role="list">
+    <ul class="lista" role="list">
       {proyectos.map((p) => (
         <li class="revela">
-          <a class="enlace-fila fila" href={rutaProyecto(lang, p.proyecto.id)}>
-            <div class="cuando">
-              <span class="acento">{t.numero} {numero(p.numero)}</span>
-              <span>{p.datos.anio}</span>
-            </div>
-            <div class="que">
+          <a class="enlace-fila tarjeta" href={rutaProyecto(lang, p.proyecto.id)}>
+            <Muestra datos={p.datos} />
+            <div class="texto">
               <div class="cabeza">
                 <h2 class="nombre titulo-fila" transition:name={`titulo-${p.proyecto.id}`}>{p.datos.nombre}</h2>
                 <span class="flecha"><Icono nombre="flecha" tamano={20} /></span>
@@ -50,7 +50,7 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
           </a>
         </li>
       ))}
-    </ol>
+    </ul>
   </section>
 </Base>
 
@@ -79,34 +79,26 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
     line-height: 1.02;
     letter-spacing: -0.028em;
   }
+  /* Dos columnas en cuanto caben dos tarjetas de 340 px; una en móvil. */
   .lista {
     list-style: none;
     margin: clamp(40px, 5vw, 64px) 0 0;
     padding: 0;
-    border-top: 1px solid var(--linea);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: clamp(44px, 6vw, 64px) clamp(28px, 4vw, 44px);
   }
 
-  .fila {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 10px 28px;
-    padding-block: 30px;
-    border-bottom: 1px solid var(--linea);
-  }
-  .cuando {
-    flex: 0 0 170px;
+  /* Cada entrada abre con su filete, como las secciones del cuaderno. */
+  .tarjeta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    font-family: var(--mono);
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--sec);
-    font-variant-numeric: tabular-nums;
+    gap: 22px;
+    height: 100%;
+    padding-top: 22px;
+    border-top: 1px solid var(--linea);
   }
-  .que {
-    flex: 999 1 460px;
+  .texto {
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -120,7 +112,7 @@ const periodo = desde === hasta ? `${desde}` : `${desde} — ${hasta}`;
   }
   .nombre {
     font-family: var(--serif);
-    font-size: clamp(24px, 2.4vw, 31px);
+    font-size: clamp(24px, 2.4vw, 30px);
     line-height: 1.15;
     letter-spacing: -0.015em;
   }
