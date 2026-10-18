@@ -5,7 +5,7 @@ import type { Idioma } from '../i18n/rutas';
 
 // El stack por filas, como en el CV, con los logos en monocromo. La fila
 // «IA aplicada» no son marcas sino lo que hago con ellas: va en texto y con
-// el rótulo en óxido. Las negritas son las del CV.
+// el rótulo en óxido.
 interface Props { lang: Idioma }
 const { lang } = Astro.props;
 const t = textos[lang].stack;
@@ -24,7 +24,7 @@ const t = textos[lang].stack;
         <td>
           <ul class="logos" role="list">
             {f.elementos.map((el) => (
-              <li class:list={{ fuerte: el.fuerte }}>
+              <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d={el.logo.d} />
                 </svg>
@@ -69,7 +69,6 @@ const t = textos[lang].stack;
   .logos svg { flex: 0 0 auto; color: var(--sec); }
 
   tr:last-child th, tr:last-child td { border-bottom: 1px solid var(--linea); }
-  .fuerte span, .aplicada strong { font-weight: 600; color: var(--tinta); }
   .aplicada td {
     font-size: 15.5px;
     line-height: 1.55;

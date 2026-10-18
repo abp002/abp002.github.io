@@ -47,7 +47,7 @@ const estudios = formacion[lang].map((f) => ({
   <section class="bloque contenedor" aria-label={s.openSource.titulo}>
     <Seccion numero="03" titulo={s.openSource.titulo} id={s.openSource.id} />
     <p class="entradilla revela">{t.openSource.intro}</p>
-    <OpenSource />
+    <OpenSource lang={lang} />
   </section>
 
   <section class="bloque contenedor" aria-label={s.stack.titulo}>

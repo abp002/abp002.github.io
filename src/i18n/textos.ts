@@ -58,9 +58,8 @@ const es = {
       aplicada: 'IA aplicada',
       herramientas: 'Herramientas',
     },
-    // Texto propio, no de terceros: va como HTML para la negrita del CV.
     iaAplicadaTexto:
-      '<strong>RAG</strong>, function calling / tool use, structured outputs, MCP, STT/TTS, OCR y evals.',
+      'RAG, function calling / tool use, structured outputs, MCP, STT/TTS, OCR y evals.',
   },
   contacto: {
     pregunta: '¿Hablamos?',
@@ -162,7 +161,7 @@ const en: Textos = {
       herramientas: 'Tools',
     },
     iaAplicadaTexto:
-      '<strong>RAG</strong>, function calling / tool use, structured outputs, MCP, STT/TTS, OCR and evals.',
+      'RAG, function calling / tool use, structured outputs, MCP, STT/TTS, OCR and evals.',
   },
   contacto: {
     pregunta: 'Shall we talk?',

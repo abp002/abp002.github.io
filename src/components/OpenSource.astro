@@ -1,6 +1,10 @@
 ---
 import Icono from './Icono.astro';
 import { openSource, contribuciones } from '../config/opensource';
+import type { Idioma } from '../i18n/rutas';
+
+interface Props { lang: Idioma }
+const { lang } = Astro.props;
 ---
 
 <ul class="repos revela" role="list">
@@ -10,6 +14,7 @@ import { openSource, contribuciones } from '../config/opensource';
         <span class="nombre">
           <span class="titulo-fila">{r.nombre}</span>
           <span class="ruta">{r.repo}</span>
+          <span class="frase">{r.frase[lang]}</span>
         </span>
         <span class="dato acento lenguaje">
           {r.lenguaje}
@@ -55,6 +60,13 @@ import { openSource, contribuciones } from '../config/opensource';
     line-height: 1.5;
     color: var(--sec);
     overflow-wrap: anywhere;
+  }
+  .frase {
+    margin-top: 4px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--prosa);
+    text-wrap: pretty;
   }
   .lenguaje { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 10px; }
 </style>
