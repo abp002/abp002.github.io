@@ -54,6 +54,6 @@ export const contacto = [
   {
     etiqueta: 'LinkedIn',
     valor: 'Alejandro Borrego',
-    href: 'https://www.linkedin.com/in/alejandro-borrego-p%C3%A9rez-de-algaba-b1652b388',
+    href: 'https://www.linkedin.com/in/aborregop',
   },
 ] as const;
