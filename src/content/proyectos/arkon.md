@@ -6,6 +6,9 @@ orden: 6
 estado: en-curso
 rol: Producto, arquitectura y código
 stack: [NestJS, React, Prisma, PostgreSQL, TypeScript]
+portada:
+  imagen: /proyectos/arkon/poster.webp
+  clip: /proyectos/arkon/clip.mp4
 visibilidad: publico
 borrador: true
 ---

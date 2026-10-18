@@ -6,6 +6,9 @@ orden: 5
 estado: en-curso
 rol: Datos, modelo y evaluación
 stack: [Python, PyTorch, torchvision, Mask R-CNN, uv]
+portada:
+  imagen: /proyectos/dental-vision/poster.webp
+  clip: /proyectos/dental-vision/clip.mp4
 detalle: Qué hace cada modelo, cómo rinde en radiografías que no vio, dónde falla y qué falta.
 metrica:
   valor: "1,6"
