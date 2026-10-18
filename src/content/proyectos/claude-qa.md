@@ -9,7 +9,7 @@ stack: [Bash, Python, Claude Code, jq]
 metrica:
   valor: "823"
   que: verificaciones al cerrar turno en 26 proyectos desde agosto; 35 bloquearon por rojo
-detalle: Cómo funciona el contrato, qué encontró sobre sí mismo, qué dicen los números y qué no sé todavía.
+detalle: Cómo funciona el contrato, qué encontró sobre sí mismo y qué dicen los números.
 visibilidad: publico
 borrador: false
 ---
@@ -86,14 +86,6 @@ Cada verificación deja una línea en un log. Desde el 2 de agosto de 2026:
 | Pasadas de tiempo (avisan, no bloquean) | 43 |
 | Rendiciones tras tres intentos | 5 |
 | Tiempo por verificación | mediana **3 s**, p90 26 s |
-
-## 4. Lo que no sé todavía
-
-El log dice cuántas veces bloqueó, no cuántas de esas eran un bug que habría
-llegado a producción. Esa es la medida que importa, y no la tengo. Las 43
-pasadas de tiempo también dicen algo: en los proyectos con suites lentas el
-hook no llega a mirar, y la respuesta es un verbo `rapido` más fino, no subir
-el tope.
 
 ## Estado
 

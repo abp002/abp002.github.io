@@ -4,7 +4,7 @@ rol: Design, hooks and evaluation
 metrica:
   valor: "823"
   que: end-of-turn checks across 26 projects since August; 35 blocked on red
-detalle: How the contract works, what it found in itself, what the numbers say and what I don't know yet.
+detalle: How the contract works, what it found in itself and what the numbers say.
 ---
 
 ## What it is
@@ -77,14 +77,6 @@ Every check writes a line to a log. Since 2 August 2026:
 | Timed out (warn, don't block) | 43 |
 | Gave up after three attempts | 5 |
 | Time per check | median **3 s**, p90 26 s |
-
-## 4. What I don't know yet
-
-The log says how many times it blocked, not how many of those were a bug that
-would have reached production. That's the measure that matters, and I don't
-have it. The 43 timeouts say something too: on projects with slow suites the
-hook never gets to look, and the answer is a finer `rapido` verb, not a higher
-limit.
 
 ## Status
 
