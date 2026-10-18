@@ -13,6 +13,12 @@ import { glob } from 'astro/loaders';
 // 16:9 y, si lo hay, un clip corto sin sonido que corre en bucle sobre
 // ella. Rutas dentro de public/. La imagen nunca falta: es el póster del
 // clip y lo que se queda quieto con «reducir movimiento».
+// El vídeo de la ficha: un id de YouTube (lo que va tras `v=`) o la ruta
+// de un .mp4 propio dentro de public/, que se sirve desde la web.
+const video = z
+  .union([z.string().regex(/^[\w-]{11}$/), z.string().regex(/^\/.+\.mp4$/)])
+  .optional();
+
 const portada = z
   .object({
     imagen: z.string().startsWith('/'),
@@ -33,9 +39,8 @@ const proyectos = defineCollection({
     fase: z.string().optional(),
     rol: z.string(),
     stack: z.array(z.string()),
-    // Id de YouTube (lo que va tras `v=`). Si está, la ficha lo pinta como
-    // figura, con `pieVideo` de pie.
-    video: z.string().regex(/^[\w-]{11}$/).optional(),
+    // Si está, la ficha lo pinta como figura, con `pieVideo` de pie.
+    video,
     pieVideo: z.string().optional(),
     portada,
     // Subtítulo de «El detalle»: qué se va a leer debajo de la presentación.
@@ -71,7 +76,7 @@ const proyectosEn = defineCollection({
     rol: z.string(),
     metrica: z.object({ valor: z.string(), que: z.string() }).optional(),
     fase: z.string().optional(),
-    video: z.string().regex(/^[\w-]{11}$/).optional(),
+    video,
     pieVideo: z.string().optional(),
     portada,
     detalle: z.string().optional(),

@@ -6,6 +6,8 @@ orden: 4
 estado: funcionando
 rol: Método, evaluación y visualización
 stack: [Python, Kev-4B, MLX, PyTorch, matplotlib, uv]
+video: /proyectos/story-shapes/video.mp4
+pieVideo: "El vídeo, en inglés, sale por código de las mismas lecturas: cada curva es dato real y se regenera si cambian."
 portada:
   imagen: /proyectos/story-shapes/poster.webp
   clip: /proyectos/story-shapes/clip.mp4
@@ -74,5 +76,5 @@ pasajes suficientes para afirmarlo con confianza.
 ## Estado
 
 Leídos 29 clásicos, 9.912 pasajes. La web enseña cada libro pasaje a pasaje,
-con capítulos, tensión y lo que respondió Kev en cada punto. Hay un vídeo de
-83 segundos generado desde las mismas lecturas, pendiente de publicar.
+con capítulos, tensión y lo que respondió Kev en cada punto. El vídeo de 83
+segundos sale de las mismas lecturas.

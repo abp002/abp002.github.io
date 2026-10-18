@@ -203,7 +203,7 @@ ubicación, años de experiencia, disponibilidad, ruta del CV, GitHub y LinkedIn
 - **talos.md** — único caso escrito de verdad, con los seis bloques (qué es /
   problema real / qué decidí y descarté / evidencia / estado / qué haría
   distinto).
-- arkon, atenea, kuro-void, bythos — `borrador: true`: ficha visible en portada,
+- arkon, atenea, bythos — `borrador: true`: ficha visible en portada,
   la página avisa de que el caso no está escrito.
 
 **Regla dura**: el trabajo hecho para el empleador (Win Innovación) no lleva

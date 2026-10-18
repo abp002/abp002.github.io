@@ -137,6 +137,17 @@ const trozosUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/
     {conDetalle && d.video && (
       <section class="figura contenedor">
         <figure id="demo">
+          {d.video.startsWith('/') ? (
+            <video
+              class="video"
+              src={d.video}
+              poster={d.portada?.imagen}
+              controls
+              preload="none"
+              playsinline
+              title={`${t.video} ${d.nombre}`}
+            />
+          ) : (
           <iframe
             class="video"
             src={`https://www.youtube-nocookie.com/embed/${d.video}`}
@@ -146,6 +157,7 @@ const trozosUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/
             referrerpolicy="strict-origin-when-cross-origin"
             allowfullscreen
           ></iframe>
+          )}
           {d.pieVideo && (
             <figcaption>
               <span class="dato acento">{t.figura} 1</span>
