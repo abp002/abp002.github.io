@@ -1,0 +1,128 @@
+---
+import { diaMes, numero, type Progreso } from '../lib/cuaderno';
+
+// Los pasos de una investigación. En el índice van en `lista`, un punto
+// por paso junto a la tarjeta; en la entrada, en `linea`, una barra por
+// paso a lo ancho de la columna. El estado se dice en texto en las dos: el
+// color del punto o de la barra solo lo repite.
+interface Props {
+  progreso: Progreso;
+  forma: 'lista' | 'linea';
+  abandonada?: boolean;
+}
+const { progreso, forma, abandonada = false } = Astro.props;
+
+const etiqueta = (fase: string, hecho?: Date) => {
+  if (fase === 'hecho') return forma === 'lista' ? (hecho ? diaMes(hecho) : 'Hecho') : `Hecho · ${diaMes(hecho!)}`;
+  if (fase === 'actual') return abandonada ? 'Parada' : 'Siguiente';
+  return forma === 'lista' ? '' : 'Pendiente';
+};
+---
+
+<ol class:list={['pasos', forma]}>
+  {progreso.pasos.map((p, i) => (
+    <li class={p.fase}>
+      {forma === 'lista' ? (
+        <>
+          <span class="punto" aria-hidden="true" />
+          <span class="titulo">{p.titulo}</span>
+          <span class="estado dato">{etiqueta(p.fase, p.hecho)}</span>
+          {p.fase === 'pendiente' && <span class="solo-lector">pendiente</span>}
+        </>
+      ) : (
+        <>
+          <span class="marca">
+            <span class="n">{numero(i + 1)}</span>
+            <span class="barra" aria-hidden="true" />
+          </span>
+          <span class="estado">{etiqueta(p.fase, p.hecho)}</span>
+          <span class="titulo">{p.titulo}</span>
+          {p.detalle && <span class="detalle">{p.detalle}</span>}
+        </>
+      )}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .pasos { list-style: none; margin: 0; padding: 0; }
+
+  /* --- lista: la tarjeta del índice --- */
+  .lista li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-block: 10px;
+    border-top: 1px solid var(--linea);
+  }
+  .punto {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid var(--linea-fuerte);
+  }
+  .lista .hecho .punto { background: var(--tinta); border-color: var(--tinta); }
+  .lista .actual .punto { border-color: var(--acento); }
+  .lista .titulo {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: var(--tinta);
+  }
+  .lista .pendiente .titulo { color: var(--sec); }
+  .lista .estado { flex: 0 0 auto; }
+  .lista .actual .estado { color: var(--acento); }
+  .solo-lector {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* --- línea: la entrada --- */
+  /* En rejilla y no en flex: los ocho caben en una fila en escritorio y, al
+     estrecharse, bajan a filas con las columnas alineadas. */
+  .linea {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 28px 16px;
+  }
+  .linea li {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .marca { display: flex; align-items: center; gap: 8px; }
+  .n {
+    flex: 0 0 auto;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+    color: var(--sec);
+  }
+  .barra { flex: 1 1 auto; height: 3px; border-radius: 2px; background: var(--linea); }
+  .linea .hecho .n { color: var(--tinta); }
+  .linea .hecho .barra { background: var(--tinta); }
+  .linea .actual .n { color: var(--acento); }
+  .linea .actual .barra { background: var(--acento); }
+  .linea .estado {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sec);
+  }
+  .linea .actual .estado { color: var(--acento); }
+  .linea .titulo { font-size: 15px; line-height: 1.35; font-weight: 500; color: var(--tinta); }
+  .linea .pendiente .titulo { color: var(--sec); }
+  .linea .detalle { font-size: 13.5px; line-height: 1.45; color: var(--sec); }
+</style>

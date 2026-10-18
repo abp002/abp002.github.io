@@ -1,0 +1,91 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+// Las predicciones de un ensayo: qué predice, qué la refutaría y en qué
+// quedó. Va donde el Markdown pone `<div data-predicciones></div>` o, sin
+// esa marca, al final del detalle.
+interface Props {
+  predicciones: NonNullable<CollectionEntry<'blog'>['data']['predicciones']>;
+  linea: string;
+}
+const { predicciones, linea } = Astro.props;
+const nombre = { abierta: 'Abierta', acertada: 'Acertada', fallada: 'Fallada' } as const;
+---
+
+<div class="predicciones" id="predicciones">
+  <p class="dato cabecera">
+    <span>Predicciones</span>
+    <span class="acento">{linea}</span>
+  </p>
+  <ol>
+    {predicciones.map((p, i) => (
+      <li>
+        <span class="n">P{i + 1}</span>
+        <span class="cuerpo">
+          <span class="texto">
+            {p.texto}
+            {p.nota && <span class="nota"> {p.nota}</span>}
+          </span>
+          <span class="refuta"><em>Me equivoco si</em> {p.refuta}</span>
+        </span>
+        <span class:list={['estado', 'dato', p.estado]}>
+          <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <circle cx="5" cy="5" r="4" fill="none" stroke="currentColor" stroke-width="1.6" />
+            {p.estado !== 'abierta' && <circle cx="5" cy="5" r="1.8" fill="currentColor" />}
+          </svg>
+          {nombre[p.estado]}
+        </span>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .predicciones { margin-top: 36px; grid-column: 1 / -1; }
+  .cabecera {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+  }
+  ol { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--linea); }
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding-block: 18px;
+    border-top: 1px solid var(--linea);
+  }
+  .n {
+    flex: 0 0 30px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.9;
+    color: var(--acento);
+  }
+  .cuerpo { flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .texto {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--tinta);
+  }
+  .nota { font-weight: 400; font-style: italic; color: var(--sec); }
+  .refuta { font-size: 15px; line-height: 1.55; color: var(--sec); }
+  .estado {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border: 1px solid var(--borde);
+    border-radius: 3px;
+    color: var(--tinta);
+  }
+  .estado svg { color: var(--acento); }
+  .estado.acertada svg { color: var(--tinta); }
+</style>

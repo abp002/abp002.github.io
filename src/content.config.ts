@@ -78,22 +78,110 @@ const proyectosEn = defineCollection({
   }),
 });
 
-// El blog. Mientras `mostrarBlog` (src/config/marca.ts) esté a false,
-// nada de esto llega al build aunque los ficheros existan.
+// El blog es un cuaderno de investigación (POR-1): cada entrada es una
+// investigación con sus pasos o un ensayo con sus predicciones, y se lee en
+// dos capas, «en corto» arriba y «el detalle» debajo. Cómo se escribe el
+// cuerpo para que se parta bien está en ESTADO.md.
+// Mientras `mostrarBlog` (src/config/marca.ts) esté a false, nada de esto
+// llega al build de producción aunque los ficheros existan.
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    titulo: z.string(),
-    resumen: z.string(),
-    fecha: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
-    // Los posts de arranque son borradores de ejemplo; se marca en el dato
-    // para poder filtrarlos de golpe cuando haya contenido real.
-    ejemplo: z.boolean().default(false),
-    // Escrito pero sin publicar: no sale en el build aunque el blog esté
-    // encendido. Se quita cuando el post esté listo para leerse fuera.
-    borrador: z.boolean().default(false),
-  }),
+  schema: z
+    .object({
+      titulo: z.string(),
+      // Solo las investigaciones: la línea en cursiva bajo el título. En un
+      // ensayo el `resumen` hace de entradilla.
+      subtitulo: z.string().optional(),
+      resumen: z.string(),
+      // La de publicación en un ensayo; en una investigación, la de inicio.
+      fecha: z.coerce.date(),
+      actualizado: z.coerce.date().optional(),
+      tags: z.array(z.string()).default([]),
+      tipo: z.enum(['ensayo', 'investigacion']).default('ensayo'),
+      // `en-curso` va al bloque «En curso» del índice; el resto, a
+      // «Publicado». Un resultado negativo o una investigación parada se
+      // publican igual: lo dicen las normas del cuaderno.
+      estado: z.enum(['en-curso', 'publicada', 'abandonada']).default('publicada'),
+      // Los tres puntos de «en corto», en lenguaje llano.
+      enCorto: z
+        .array(z.object({ rotulo: z.string(), texto: z.string() }))
+        .length(3)
+        .optional(),
+      // Una o dos cifras grandes en «en corto» (con dos, la flecha va de
+      // la primera a la segunda) y la frase que las explica.
+      cifra: z
+        .object({
+          rotulo: z.string().default('La cifra'),
+          valores: z.array(z.object({ valor: z.string(), que: z.string() })).min(1).max(2),
+          nota: z.string(),
+        })
+        .optional(),
+      // Investigaciones: un paso está hecho si tiene fecha.
+      pasos: z
+        .array(
+          z.object({
+            titulo: z.string(),
+            detalle: z.string().optional(),
+            hecho: z.coerce.date().optional(),
+          }),
+        )
+        .optional(),
+      // Ensayos: qué predice la tesis, cuándo se comprueba y qué la refuta.
+      predicciones: z
+        .array(
+          z.object({
+            texto: z.string(),
+            // Lo que sigue a «Me equivoco si…».
+            refuta: z.string(),
+            fecha: z.coerce.date(),
+            estado: z.enum(['abierta', 'acertada', 'fallada']).default('abierta'),
+            nota: z.string().optional(),
+          }),
+        )
+        .optional(),
+      protocolo: z
+        .object({ version: z.string(), url: z.string().url().optional() })
+        .optional(),
+      // Preguntas, datos y código de una investigación.
+      datos: z.string().url().optional(),
+      // Filas de más para la ficha lateral (modelos, registro, evidencia…).
+      ficha: z.array(z.object({ dato: z.string(), valor: z.string() })).default([]),
+      cambios: z
+        .array(
+          z.object({
+            fecha: z.coerce.date(),
+            version: z.string().optional(),
+            texto: z.string(),
+          }),
+        )
+        .default([]),
+      // El cierre «Responder»: qué crítica se busca. Sin él va una genérica.
+      responder: z.object({ pregunta: z.string(), texto: z.string() }).optional(),
+      // El id (nombre del fichero) de otra entrada del cuaderno.
+      relacionado: z.string().optional(),
+      // Los posts de arranque son borradores de ejemplo; se marca en el dato
+      // para poder filtrarlos de golpe cuando haya contenido real.
+      ejemplo: z.boolean().default(false),
+      // Escrito pero sin publicar: no sale en el build aunque el blog esté
+      // encendido (en `npm run dev` sí, para poder leerlo antes).
+      borrador: z.boolean().default(false),
+    })
+    .superRefine((d, ctx) => {
+      const mal = (message: string, path: string) =>
+        ctx.addIssue({ code: 'custom', message, path: [path] });
+      if (d.tipo === 'investigacion' && !d.pasos?.length)
+        mal('Una investigación necesita sus pasos.', 'pasos');
+      if (d.tipo === 'ensayo' && d.pasos) mal('Los pasos son de las investigaciones.', 'pasos');
+      if (d.tipo === 'ensayo' && d.estado === 'en-curso')
+        mal('Un ensayo se publica entero: «en curso» es de las investigaciones.', 'estado');
+      // Un paso hecho detrás de uno pendiente rompe la línea de pasos.
+      const pasos = d.pasos ?? [];
+      const primeroPendiente = pasos.findIndex((p) => !p.hecho);
+      if (primeroPendiente !== -1 && pasos.slice(primeroPendiente).some((p) => p.hecho))
+        mal('Los pasos hechos van todos antes del primero pendiente.', 'pasos');
+      if (d.estado === 'en-curso' && primeroPendiente === -1)
+        mal('Con todos los pasos hechos, la investigación ya no está en curso.', 'estado');
+    }),
 });
 
 export const collections = { proyectos, proyectosEn, blog };

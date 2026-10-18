@@ -3,6 +3,36 @@ titulo: La duda como tipo de dato
 resumen: "System One no es un modelo más rápido: es una IA que devuelve una creencia en vez de una respuesta. Sostengo que esa es la pieza que faltaba para automatizar, que la calibración no viaja de unos datos a otros y que, por eso, la incertidumbre no desaparece: se muda al esquema."
 fecha: 2026-09-24
 tags: [ensayo, incertidumbre, automatización]
+tipo: ensayo
+enCorto:
+  - rotulo: Lo nuevo
+    texto: "La IA ya no solo responde: dice cuánto se fía de su respuesta. Es lo que hacía falta para automatizar decisiones."
+  - rotulo: La trampa
+    texto: Ese número solo vale si es honesto con tus datos, y eso no lo puede garantizar quien vende el modelo.
+  - rotulo: Lo que cambia
+    texto: "El trabajo de dudar no desaparece: pasa a quien diseña las preguntas y a quien lo mide en casa."
+cifra:
+  valores:
+    - { valor: "0,74", que: Confianza declarada }
+    - { valor: "44,7 %", que: Acierto real }
+  nota: "En preguntas cuya respuesta no estaba en el texto, el modelo declaró de media 0,74 y acertó el 44,7 % (Sacco, 2026). Si revisar un caso a mano cuesta 3 € y equivocarse 10 €, automatizarlo sale a 5,53 € de media: casi el doble. Es una cuenta con medias sobre datos sintéticos, no una medición."
+predicciones:
+  - texto: La recalibración con datos del cliente se venderá como producto.
+    refuta: el 30 de septiembre de 2027 ni TypeSafe ni ninguno de sus competidores directos lo ofrece.
+    fecha: 2027-09-30
+  - texto: Los modelos abiertos tendrán ventaja en este terreno.
+    refuta: dentro de un año las comparativas independientes en tareas cerradas muestran que un modelo cerrado sin recalibrar supera de forma sistemática a uno abierto recalibrado con unos cientos de ejemplos.
+    fecha: 2027-09-30
+  - texto: Los grandes proveedores añadirán probabilidades calibradas a sus salidas estructuradas.
+    refuta: el 30 de septiembre de 2027 ni OpenAI, ni Anthropic, ni Google ofrecen, como función documentada, una probabilidad calibrada por opción.
+    fecha: 2027-09-30
+  - texto: NVIDIA respaldará un modelo abierto de decisión.
+    nota: La más arriesgada.
+    refuta: en esa fecha NVIDIA no ha publicado ni respaldado un modelo de este tipo.
+    fecha: 2027-09-30
+ficha:
+  - { dato: Evidencia, valor: "De terceros: dos análisis, de 60 y 900 casos" }
+relacionado: sabe-una-ia-cuando-no-sabe
 borrador: true
 ---
 
@@ -12,7 +42,7 @@ cifras: entre 40 y 200 veces más rápido que un modelo frontera, a un precio
 casi simbólico. Este ensayo no va de Jev. Va de la idea que lo sostiene, que es
 más antigua que la empresa y, creo, más importante que el modelo.
 
-Mi tesis tiene tres partes:
+## Tesis
 
 1. Lo nuevo de System One no es la velocidad ni el tipo de la salida, sino su
    firma: la IA deja de devolver una respuesta y devuelve una creencia, una
@@ -184,27 +214,7 @@ donde enumerarlas es precisamente el problema.
 Si la tesis es correcta, deberían pasar cosas concretas. Las escribo con fecha
 y con la condición que las refutaría, para volver a ellas dentro de un año.
 
-- **P1. La recalibración con datos del cliente se venderá como producto.** Si
-  la calibración depende de los datos, lo siguiente es ofrecer que subas un
-  conjunto etiquetado y recibas el modelo recalibrado. *Me equivoco si* el 30
-  de septiembre de 2027 ni TypeSafe ni ninguno de sus competidores directos lo
-  ofrece.
-- **P2. Los modelos abiertos tendrán ventaja en este terreno.** Recalibrar
-  exige acceso a las probabilidades y, mejor aún, al modelo. En la primera
-  semana tras Jev ya se publicaron alternativas abiertas, como Laya. *Me
-  equivoco si* dentro de un año las comparativas independientes en tareas
-  cerradas muestran que un modelo cerrado sin recalibrar supera de forma
-  sistemática a uno abierto recalibrado con unos cientos de ejemplos.
-- **P3. Los grandes proveedores añadirán probabilidades calibradas a sus
-  salidas estructuradas.** Ya garantizan el tipo; les falta la distribución.
-  *Me equivoco si* el 30 de septiembre de 2027 ni OpenAI, ni Anthropic, ni
-  Google ofrecen, como función documentada, una probabilidad calibrada por
-  opción.
-- **P4, la más arriesgada. NVIDIA respaldará un modelo abierto de decisión.**
-  Si decidir se abarata y los modelos caben en un portátil, parte de la
-  inferencia sale del centro de datos y se va al dispositivo. Al fabricante de
-  chips le interesa que esa capa corra sobre su hardware. *Me equivoco si* en
-  esa fecha NVIDIA no ha publicado ni respaldado un modelo de este tipo.
+<div data-predicciones></div>
 
 ## 7. Cómo lo comprobaría
 

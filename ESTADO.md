@@ -7,6 +7,36 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
 
 ## Decisiones cerradas
 
+- **El blog es un cuaderno de investigación** (18-oct, POR-1). Pasado a Astro el
+  lienzo https://claude.ai/artifact/X3E3MXnXCgBVdRRzm2gSDn. El índice tiene
+  normas, «En curso» (cada investigación con sus pasos) y «Publicado» (ensayos
+  e investigaciones cerradas o paradas, con su línea de estado). Cada entrada
+  se lee en dos capas, «en corto» y «el detalle», con ficha lateral, minutos
+  por capa, registro de cambios, referencias, «Cómo citar» (se genera solo),
+  «Responder» y «Relacionado». El blog sigue apagado (`mostrarBlog`), pero en
+  `npm run dev` existe y enseña los borradores: así se lee una entrada antes de
+  publicarla. Los textos fijos (entradilla, normas, «Responder» por defecto)
+  viven en `src/config/cuaderno.ts` y siguen siendo los del lienzo: falta
+  reescribirlos con su voz.
+  - **Cómo se escribe una entrada** (`src/content/blog/*.md`; el esquema, con
+    sus reglas, en `src/content.config.ts`):
+    - `tipo: investigacion` exige `pasos` (hecho = con fecha; los hechos van
+      todos delante) y puede estar `en-curso`; `tipo: ensayo` lleva
+      `predicciones` (texto, `refuta`, fecha y estado) y se publica entero.
+    - `enCorto` son los tres puntos en llano; la prosa antes del primer `##`
+      es el texto de «en corto»; `cifra`, una o dos cifras grandes con su nota.
+    - Cada `##` es una sección del detalle. El número va escrito
+      (`## 4. Resultados`) porque el texto cita secciones por número; sin
+      número sale sin él (`## Tesis`). `## Referencias` va al cierre.
+    - `> **Rótulo** texto` es una nota al margen del párrafo anterior; una
+      cita sin negrita delante es una frase destacada.
+      `![alt](src "pie")` es una figura numerada.
+    - `<div data-predicciones></div>` coloca las predicciones dentro de su
+      sección; sin la marca van al final del detalle.
+  - Hay dos entradas, las dos `borrador: true`: «¿Sabe una IA cuándo no
+    sabe?» (con lo que había en el lienzo y en el protocolo 0.1-piloto) y «La
+    duda como tipo de dato», ya en el esquema nuevo.
+
 - **Estilo «cuaderno»** (11-oct, POR-2). Elegido el 10-oct en el lienzo
   https://claude.ai/artifact/EmwRW9owfHAsdAGi5hPSAt (fila de abajo) frente a un
   rediseño minimalista con Geist, que quedó descartado. Es la familia del
