@@ -4,9 +4,9 @@ tagline: "SaaS para agencias que programa y publica contenido en todas las redes
 anio: 2026
 orden: 1
 estado: produccion
-rol: Full-stack, integraciones e IA — en Win Innovación
+rol: Todo el desarrollo, en solitario — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
-detalle: Lo que construí, el problema real, qué decidí y qué haría distinto.
+detalle: Lo que construí, la IA que conoce a cada cliente, el problema real, qué decidí y qué haría distinto.
 portada:
   imagen: /proyectos/spartan-comunica/poster.webp
   clip: /proyectos/spartan-comunica/clip.mp4
@@ -23,7 +23,7 @@ de cuentas. Se arrastra una publicación a una fecha del calendario y un motor
 de workflows la publica a su hora en Instagram, Facebook, TikTok, LinkedIn, X
 y canales de chat, aunque nadie tenga el portátil abierto. Está en producción
 en [spartancomunica.es](https://spartancomunica.es) y es un producto comercial
-de Win Innovación, con planes de pago.
+de Win Innovación, con planes de pago, y lo he desarrollado yo solo.
 
 ## Lo que construí
 
@@ -39,8 +39,8 @@ la convertí en una herramienta para quien gestiona **muchas**:
   aprueba o la rechaza sin crearse una cuenta. Si no contesta, sale igual a su
   hora: la regla la decide la agencia, no el silencio.
 - **Un agente de IA que actúa, no solo contesta.** Redacta, propone ideas y
-  trabaja con los documentos de cada cliente. El chat enseña en cada momento qué
-  está haciendo, y cuando no puede responder dice por qué.
+  trabaja con los documentos de cada cliente (ver abajo). El chat enseña en cada
+  momento qué está haciendo, y cuando no puede responder dice por qué.
 - **Bandeja unificada.** Comentarios, menciones y reacciones de todas las redes
   en un solo sitio, sincronizada en segundo plano y con el tiempo de respuesta
   (SLA) a la vista.
@@ -49,6 +49,18 @@ la convertí en una herramienta para quien gestiona **muchas**:
 - **Diseño de la aplicación y web pública**: navegación nueva, versión móvil,
   landing, blog, sitemap e IndexNow para que los buscadores se enteren al
   momento.
+
+## Una IA que conoce al cliente
+
+Un asistente que redacta posts genéricos no sirve a nadie: lo que vale es que
+escriba sobre **ese** negocio. Cada cliente tiene su propia base de documentos
+(textos de marca, de la empresa, de sus productos) y la IA los consulta con RAG
+antes de redactar.
+
+Los documentos no tienen que estar en limpio. El dueño de un restaurante hace
+una foto a la carta y la sube; el OCR la convierte en texto, entra en su base y
+desde ese momento la IA sabe qué platos hay y a qué precio. Ya puede proponer el
+post del menú del día sin que nadie se lo copie a mano.
 
 ## El problema real
 

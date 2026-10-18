@@ -1,7 +1,7 @@
 ---
 tagline: "SaaS for agencies that schedules and publishes content across every client's social networks, with an AI assistant that writes drafts backed by RAG and OCR."
-rol: Full-stack, integrations and AI — at Win Innovación
-detalle: What I built, the real problem, what I decided and what I'd do differently.
+rol: All development, on my own — at Win Innovación
+detalle: What I built, the AI that knows each client, the real problem, what I decided and what I'd do differently.
 ---
 
 ## What it is
@@ -11,7 +11,7 @@ drag a post onto a date in the calendar and a workflow engine publishes it on
 time to Instagram, Facebook, TikTok, LinkedIn, X and chat channels, even if
 nobody has a laptop open. It is in production at
 [spartancomunica.es](https://spartancomunica.es) and is a commercial product
-of Win Innovación, with paid plans.
+of Win Innovación, with paid plans, and I built it on my own.
 
 ## What I built
 
@@ -27,7 +27,7 @@ into a tool for people who manage **many**:
   rejects it without creating an account. If they don't answer, it still goes
   out on time: the agency sets the rule, not the silence.
 - **An AI agent that acts, not just answers.** It drafts, suggests ideas and
-  works with each client's documents. The chat shows what it is doing at every
+  works with each client's documents (see below). The chat shows what it is doing at every
   moment, and when it can't answer it says why.
 - **Unified inbox.** Comments, mentions and reactions from every network in
   one place, synced in the background with the response time (SLA) in view.
@@ -35,6 +35,18 @@ into a tool for people who manage **many**:
   and audience, and each network declaring which metrics it actually provides.
 - **App design and public website**: new navigation, mobile version, landing
   page, blog, sitemap and IndexNow so search engines find out right away.
+
+## An AI that knows the client
+
+An assistant that writes generic posts is no use to anyone: what matters is
+that it writes about **this** business. Each client has its own document base
+(brand texts, company information, products) and the AI looks them up with RAG
+before writing.
+
+The documents don't need to be tidy. A restaurant owner takes a photo of the
+menu and uploads it; OCR turns it into text, it goes into their base, and from
+then on the AI knows which dishes there are and what they cost. It can suggest
+the post for today's set menu without anyone typing it in by hand.
 
 ## The real problem
 
