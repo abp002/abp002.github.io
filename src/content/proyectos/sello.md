@@ -2,7 +2,7 @@
 nombre: Sello
 tagline: "Lenguaje de programación pensado para que lo escriba una IA: cada función lleva un contrato que un probador (Z3) verifica antes de aceptarla."
 anio: 2026
-orden: 2
+orden: 4
 estado: en-curso
 fase: v0.1 cerrada
 rol: Diseño del lenguaje, compilador y experimentos

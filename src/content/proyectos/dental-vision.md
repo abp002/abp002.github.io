@@ -2,7 +2,7 @@
 nombre: Dental Vision
 tagline: "Odontograma automático desde radiografías panorámicas: un modelo numera cada pieza en notación FDI y otro sitúa en su diente caries, lesiones periapicales y dientes impactados."
 anio: 2026
-orden: 5
+orden: 6
 estado: en-curso
 rol: Datos, modelo y evaluación
 stack: [Python, PyTorch, torchvision, Mask R-CNN, uv]

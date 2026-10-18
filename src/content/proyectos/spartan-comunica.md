@@ -2,7 +2,7 @@
 nombre: Spartan Comunica
 tagline: "SaaS para agencias que programa y publica contenido en todas las redes de cada cliente, con un asistente de IA que redacta apoyándose en RAG y OCR."
 anio: 2026
-orden: 1
+orden: 2
 estado: produccion
 rol: Todo el desarrollo, en solitario — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]

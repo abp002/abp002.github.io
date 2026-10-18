@@ -2,7 +2,7 @@
 nombre: story-shapes
 tagline: "La forma de una novela, al estilo de Vonnegut, leída pasaje a pasaje por un modelo que responde con probabilidades en vez de escribir."
 anio: 2026
-orden: 4
+orden: 5
 estado: funcionando
 rol: Método, evaluación y visualización
 stack: [Python, Kev-4B, MLX, PyTorch, matplotlib, uv]
