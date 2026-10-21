@@ -4,9 +4,11 @@ tagline: "Preguntas de filosofía respondidas solo con la Stanford Encyclopedia 
 anio: 2026
 orden: 3
 estado: funcionando
-fase: v1 cerrada
-rol: Búsqueda, comprobación de citas y evaluación
-stack: [Python, DuckDB, bge-m3, Ollama, uv]
+fase: Terminado (v1) · oct 2026
+stack: [Python, DuckDB, bge-m3, qwen3:14b (Ollama), Codex]
+metrica:
+  valor: "59 % → 96 %"
+  que: frases respaldadas por la SEP, con qwen3:14b en local
 video: t7K-U_euYOo
 pieVideo: Una pregunta de principio a fin, con cada frase atada al pasaje que cita.
 portada:

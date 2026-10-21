@@ -1,7 +1,9 @@
 ---
 tagline: "Philosophy questions answered only from the Stanford Encyclopedia of Philosophy: every sentence with a checked citation and, if the SEP doesn’t cover it, “I don’t know.”"
-rol: Retrieval, citation checking and evaluation
-fase: v1 closed
+fase: Finished (v1) · Oct 2026
+metrica:
+  valor: "59% → 96%"
+  que: sentences backed by the SEP, with qwen3:14b running locally
 video: RxYeBnZ7P-0
 pieVideo: One question from start to finish, every sentence tied to the passage it cites.
 portada:

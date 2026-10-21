@@ -48,8 +48,8 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
     cuentan PRs) · 04 stack en filas con iconos más «IA aplicada» · contacto.
     Sale «Sobre mí» con su ficha de datos; idiomas y carnet pasan al contacto.
   - Proyectos es un índice numerado (N.º, año, título, resumen y stack). La
-    ficha lleva una ficha lateral (estado o `fase`, año, rol, herramientas y
-    código) y el Markdown se lee en dos partes: el primer `##` es la
+    ficha lleva una ficha lateral (estado o `fase`, resultado, stack y código;
+    sin año ni rol desde el 21-oct: todo es de 2026 y es trabajo en solitario) y el Markdown se lee en dos partes: el primer `##` es la
     presentación y el resto, «El detalle» numerado. Una lista numerada en la
     presentación son los pilares; una cita (`> **Método** …`) en el detalle es
     una nota al margen. Se parte el HTML ya renderizado (`src/lib/partes.ts`)

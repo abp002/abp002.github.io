@@ -1,6 +1,8 @@
 ---
 tagline: "SaaS for agencies that schedules and publishes content across every client's social networks, with an AI assistant that writes drafts backed by RAG and OCR."
-rol: All development, on my own — at Win Innovación
+metrica:
+  valor: "6"
+  que: networks with scheduled publishing in production; the TikTok app passed its Direct Post audit
 detalle: What I built, the AI that knows each client, the real problem, what I decided and what I'd do differently.
 ---
 

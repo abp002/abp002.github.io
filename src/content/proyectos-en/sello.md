@@ -1,7 +1,9 @@
 ---
 tagline: "A programming language designed to be written by an AI: every function carries a contract that a prover (Z3) checks before accepting it."
-fase: v0.1 closed
-rol: Language design, compiler and experiments
+fase: v0.1 finished · Sep 2026
+metrica:
+  valor: "79% → 0%"
+  que: silent errors when haiku writes the body against sonnet's contract
 pieVideo: An agent writes a function by reusing another one from the store and certifies it, using only Sello's MCP.
 detalle: How it's measured, what I learned, what doesn't work and where it stands.
 ---

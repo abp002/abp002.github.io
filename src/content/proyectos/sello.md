@@ -4,9 +4,11 @@ tagline: "Lenguaje de programación pensado para que lo escriba una IA: cada fun
 anio: 2026
 orden: 4
 estado: en-curso
-fase: v0.1 cerrada
-rol: Diseño del lenguaje, compilador y experimentos
-stack: [Python, Z3, SQLite, MCP, uv]
+fase: v0.1 terminada · sep 2026
+stack: [Python, Z3, SQLite, MCP, Claude Haiku, Claude Sonnet]
+metrica:
+  valor: "79 % → 0 %"
+  que: errores silenciosos cuando haiku escribe el cuerpo contra el contrato de sonnet
 video: ZB9sI3euIo8
 pieVideo: Un agente escribe una función reutilizando otra del almacén y la certifica, solo con el MCP de Sello.
 portada:

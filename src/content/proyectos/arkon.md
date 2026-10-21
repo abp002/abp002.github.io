@@ -4,8 +4,11 @@ tagline: "Software de gestión empresarial modular: cubre la empresa entera, con
 anio: 2026
 orden: 1
 estado: en-curso
-rol: Producto, arquitectura y código
+fase: En curso · desde mar 2026
 stack: [NestJS, React, TypeScript, Prisma, PostgreSQL, Redis, three.js]
+metrica:
+  valor: "4"
+  que: fallos reales con los tests en verde, destapados por las pruebas de mutación
 portada:
   imagen: /proyectos/arkon/poster.webp
   clip: /proyectos/arkon/clip.mp4

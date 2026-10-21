@@ -91,24 +91,16 @@ const trozosUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/
                 <span>{d.fase ?? textos[lang].estados[d.estado]}</span>
               </dd>
             </div>
-            <div>
-              <dt class="dato">{t.anio}</dt>
-              <dd class="mono">{d.anio}</dd>
-            </div>
-            <div>
-              <dt class="dato">{t.rol}</dt>
-              <dd>{d.rol}</dd>
-            </div>
-            <div>
-              <dt class="dato">{t.herramientas}</dt>
-              <dd class="mono">{d.stack.join(', ')}</dd>
-            </div>
             {d.metrica && (
               <div>
-                <dt class="dato">{t.dato}</dt>
+                <dt class="dato">{t.resultado}</dt>
                 <dd><span class="cifra">{d.metrica.valor}</span> {d.metrica.que}</dd>
               </div>
             )}
+            <div>
+              <dt class="dato">{t.stack}</dt>
+              <dd class="mono">{d.stack.join(', ')}</dd>
+            </div>
             {conDetalle && d.enlaces?.repo && (
               <div>
                 <dt class="dato">{t.codigo}</dt>

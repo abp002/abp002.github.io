@@ -1,6 +1,5 @@
 ---
 tagline: "Automatic dental chart from panoramic X-rays: one model numbers every tooth in FDI notation and another places caries, periapical lesions and impacted teeth on their tooth."
-rol: Data, model and evaluation
 detalle: What each model does, how it performs on X-rays it never saw, where it fails and what's left.
 metrica:
   valor: "1.6"

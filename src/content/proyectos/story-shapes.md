@@ -4,8 +4,10 @@ tagline: "La forma de una novela, al estilo de Vonnegut, leída pasaje a pasaje 
 anio: 2026
 orden: 5
 estado: funcionando
-rol: Método, evaluación y visualización
-stack: [Python, Kev-4B, MLX, PyTorch, matplotlib, uv]
+stack: [Python, Kev-4B, MLX, PyTorch, matplotlib]
+metrica:
+  valor: "90 %"
+  que: de los pasajes donde tono y suerte no coinciden, bien leídos; VADER acierta el 18 %
 video: /proyectos/story-shapes/video.mp4
 pieVideo: "El vídeo, en inglés, sale por código de las mismas lecturas: cada curva es dato real y se regenera si cambian."
 portada:

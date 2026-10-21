@@ -4,8 +4,7 @@ tagline: "Odontograma automático desde radiografías panorámicas: un modelo nu
 anio: 2026
 orden: 6
 estado: en-curso
-rol: Datos, modelo y evaluación
-stack: [Python, PyTorch, torchvision, Mask R-CNN, uv]
+stack: [Python, PyTorch, torchvision, Mask R-CNN]
 portada:
   imagen: /proyectos/dental-vision/poster.webp
   clip: /proyectos/dental-vision/clip.mp4

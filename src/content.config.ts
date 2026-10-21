@@ -35,9 +35,8 @@ const proyectos = defineCollection({
     orden: z.number(),
     estado: z.enum(['produccion', 'idea', 'en-curso', 'funcionando', 'congelado', 'concepto']),
     // Cómo lo dice la ficha cuando el estado del enum se queda corto
-    // («v0.1 cerrada» en vez de «en curso»).
+    // («Terminado (v1) · oct 2026» en vez de «funcionando»).
     fase: z.string().optional(),
-    rol: z.string(),
     stack: z.array(z.string()),
     // Si está, la ficha lo pinta como figura, con `pieVideo` de pie.
     video,
@@ -45,7 +44,8 @@ const proyectos = defineCollection({
     portada,
     // Subtítulo de «El detalle»: qué se va a leer debajo de la presentación.
     detalle: z.string().optional(),
-    // Si no hay portada, el índice enseña esta cifra en su lugar.
+    // El resultado comprobable: la ficha lo pinta como «Resultado» y, si no
+    // hay portada, el índice enseña esta cifra en su lugar.
     metrica: z
       .object({ valor: z.string(), que: z.string() })
       .optional(),
@@ -73,7 +73,6 @@ const proyectosEn = defineCollection({
   schema: z.object({
     nombre: z.string().optional(),
     tagline: z.string(),
-    rol: z.string(),
     metrica: z.object({ valor: z.string(), que: z.string() }).optional(),
     fase: z.string().optional(),
     video,

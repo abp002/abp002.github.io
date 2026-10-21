@@ -52,7 +52,6 @@ export async function cargarProyectos(lang: Idioma): Promise<ProyectoLocal[]> {
         ...p.data,
         nombre: t.data.nombre ?? p.data.nombre,
         tagline: t.data.tagline,
-        rol: t.data.rol,
         metrica: t.data.metrica,
         fase: t.data.fase,
         video: t.data.video ?? p.data.video,

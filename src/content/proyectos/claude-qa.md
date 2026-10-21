@@ -4,7 +4,6 @@ tagline: "Plugin de Claude Code que no deja al agente dar un turno por terminado
 anio: 2026
 orden: 7
 estado: funcionando
-rol: Diseño, hooks y evaluación
 stack: [Bash, Python, Claude Code, jq]
 metrica:
   valor: "823"

@@ -4,9 +4,11 @@ tagline: "SaaS para agencias que programa y publica contenido en todas las redes
 anio: 2026
 orden: 2
 estado: produccion
-rol: Todo el desarrollo, en solitario — en Win Innovación
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
 detalle: Lo que construí, la IA que conoce a cada cliente, el problema real, qué decidí y qué haría distinto.
+metrica:
+  valor: "6"
+  que: redes con publicación programada en producción; la app de TikTok pasó su auditoría de Direct Post
 portada:
   imagen: /proyectos/spartan-comunica/poster.webp
   clip: /proyectos/spartan-comunica/clip.mp4

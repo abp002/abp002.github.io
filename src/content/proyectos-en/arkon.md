@@ -1,6 +1,9 @@
 ---
 tagline: "Modular business management software covering the whole company, accounting included."
-rol: Product, architecture and code
+fase: In progress · since Mar 2026
+metrica:
+  valor: "4"
+  que: real bugs behind green tests, uncovered by mutation testing
 detalle: The modules, how it's built, how it's verified, what I decided and what's missing.
 ---
 

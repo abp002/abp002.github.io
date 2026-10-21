@@ -1,6 +1,5 @@
 ---
 tagline: "A Claude Code plugin that won't let the agent end a turn with failing tests, and that decides what deserves a test and what doesn't."
-rol: Design, hooks and evaluation
 metrica:
   valor: "823"
   que: end-of-turn checks across 26 projects since August; 35 blocked on red
