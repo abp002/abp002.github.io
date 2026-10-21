@@ -25,7 +25,7 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       cargo: 'Desarrollador de software',
       periodo: 'MAY 2026 — HOY',
       puntos: [
-        'Lidero un equipo de 6 personas en el desarrollo de software de gestión empresarial (ERP/CRM) a medida con PHP y MariaDB.',
+        'Lidero proyectos de software de gestión empresarial (ERP/CRM) a medida con PHP y MariaDB.',
         'Desarrollo los módulos de contabilidad: facturación electrónica (FACe, Verifactu), SII y modelos de la AEAT.',
         'Modernicé el desarrollo y el despliegue de más de 200 ERP: CI/CD con GitHub Actions, Docker y monitorización con Prometheus y Grafana. Rediseñé la arquitectura de los nuevos: personalización sobre un núcleo común.',
         'Creé Spartan Comunica, una plataforma de gestión de redes sociales en producción con IA, incluidos RAG y OCR.',
@@ -45,7 +45,7 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       cargo: 'Software developer',
       periodo: 'MAY 2026 — PRESENT',
       puntos: [
-        'I lead a team of 6 building custom business management software (ERP/CRM) with PHP and MariaDB.',
+        'I lead custom business management software (ERP/CRM) projects with PHP and MariaDB.',
         'I build the accounting modules: e-invoicing (FACe, Verifactu), SII and Spanish Tax Agency (AEAT) forms.',
         'I modernised development and deployment for more than 200 ERPs: CI/CD with GitHub Actions, Docker, and monitoring with Prometheus and Grafana. I redesigned the architecture of the new ones: customisation on top of a shared core.',
         'I built Spartan Comunica, a social media management platform in production with AI, including RAG and OCR.',
