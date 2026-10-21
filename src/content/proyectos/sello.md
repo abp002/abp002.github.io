@@ -14,71 +14,43 @@ pieVideo: Un agente escribe una función reutilizando otra del almacén y la cer
 portada:
   imagen: /proyectos/sello/poster.webp
   clip: /proyectos/sello/clip.mp4
-detalle: Cómo se mide, qué aprendí, lo que no funciona y en qué estado está.
 visibilidad: publico
 enlaces:
   repo: https://github.com/abp002/sello
 borrador: false
 ---
 
-## Qué es
+## Resumen
 
-La IA genera código rápido y barato; el cuello de botella es saber si está bien.
-Sello parte de ahí: **el lenguaje tiene que hacer de revisor**. No es texto en
-ficheros, sino un almacén de funciones con certificados:
+Un lenguaje de programación pensado para que lo escriba una IA. La IA genera
+código rápido; lo difícil es saber si está bien, así que en Sello el lenguaje
+hace de revisor: cada función lleva un contrato y un probador lo verifica antes
+de aceptarla. Un agente no lee ficheros: trabaja por MCP con un almacén de
+funciones certificadas.
 
-1. **Contrato obligatorio**
-   Cada función declara lo que supone (`requires`), lo que promete (`ensures`),
-   sus efectos y ejemplos.
-2. **Probador**
-   Z3 intenta demostrar la promesa para toda entrada válida, y solo informa de
-   un contraejemplo cuando el intérprete lo reproduce.
-3. **Almacén direccionado por contenido**
-   Cada función se guarda por el hash de su árbol sintáctico, junto al
-   certificado de lo que pasó. Verificada una vez, verificada para siempre. De
-   ahí el nombre.
+## Stack
 
-Un agente no lee ficheros: consulta el almacén por MCP (*dame la firma y el
-contrato de X*, *quién usa Y*, *verifica Z*).
+- **Python**: compilador, intérprete y experimentos.
+- **Z3**: el probador, que intenta demostrar el contrato para toda entrada válida.
+- **SQLite**: el almacén de funciones, cada una guardada por el hash de su árbol sintáctico.
+- **MCP**: la interfaz del agente con el almacén.
+- **Claude Haiku y Sonnet**: los modelos que escriben código en los experimentos.
 
-## Cómo se mide
+## Arquitectura
 
-La primera métrica fue «intentos hasta que compila», y era la equivocada: un
-lenguaje que rechaza más puede costar más intentos y aun así ser mejor. La
-métrica buena es lo que **llega a producción**: se acepta lo que pasa un juez
-débil, como un revisor con prisa, y se cuenta cuántos de esos programas fallan
-después contra un oráculo.
+1. **Contrato obligatorio.** Cada función declara qué supone (`requires`), qué
+   promete (`ensures`), sus efectos y ejemplos.
+2. **Probador.** Z3 intenta demostrar la promesa y solo informa de un
+   contraejemplo si el intérprete lo reproduce.
+3. **Almacén por contenido.** La función se guarda por su hash junto a su
+   certificado: verificada una vez, verificada para siempre.
+4. **MCP.** El agente pide firmas, contratos y usos, y manda verificar.
 
-> **Método**
-> Cada cambio al lenguaje se prerregistra antes de correr el experimento y no
-> se toca después.
+## Observaciones
 
-| Experimento | Resultado |
-|---|---|
-| Errores silenciosos (haiku / sonnet) | Python 16 / 12; Sello, de 7 / 5 a **1 / 0** tras tres cambios medidos por separado |
-| Haiku escribe el cuerpo contra el contrato de sonnet | Silenciosos, de 79 % a **0 %** |
-| 50 specs de Dafny traducidas (vericoding) | Probadas: sonnet **46 / 50**, haiku **43 / 50** |
-| El probador sobre código ya aceptado | **Tres bugs reales** que habían pasado el juez, los ejemplos y cientos de llamadas al oráculo |
-
-## Qué aprendí
-
-1. **El revisor que funciona es el contrato, siempre que diga algo.** Un
-   `ensures` que solo acota un número no certifica nada, y un contrato trivial
-   ahora es un error de compilación.
-2. **El contrato escrito por otro es la palanca más fuerte.** Haiku no aprende a
-   escribir contratos fuertes con instrucciones, pero con un contrato fuerte
-   delante escribe cuerpos correctos.
-
-## Lo que no funciona
-
-La segunda tanda de vericoding (sonnet 29 / 50) **no cumplió** el criterio que
-fijé antes de correrla. Doce de los fallos son aritmética no lineal que Z3 no
-decide. Y el certificado de una función probada sobre el contrato de otra más
-débil todavía no dice que hereda esa debilidad. Está escrito y con issue propio.
-
-## Estado
-
-v0.1 cerrada: compilador, probador, almacén y una demo en la que un agente de
-Claude Code, sin ficheros ni shell y solo con el MCP de Sello, escribe una
-función reutilizando otra del almacén y la certifica. El código, los resultados
-y los fallos están en [el repositorio](https://github.com/abp002/sello).
+- Con un contrato escrito por sonnet delante, los errores silenciosos de haiku
+  bajan del 79 % al 0 %. El revisor que funciona es el contrato, siempre que
+  diga algo: un contrato trivial ya es un error de compilación.
+- La segunda tanda de vericoding (sonnet, 29 de 50) no cumplió el criterio
+  fijado antes de correrla: doce de los fallos son aritmética no lineal, que Z3
+  no decide.

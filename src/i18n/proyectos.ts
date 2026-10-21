@@ -17,7 +17,7 @@ export interface ProyectoLocal {
 
 // Lo traducible que puede faltar: si está en un idioma tiene que estar en
 // el otro, o la ficha inglesa perdería un dato sin que nadie se entere.
-const opcionales = ['metrica', 'fase', 'pieVideo', 'detalle'] as const;
+const opcionales = ['metrica', 'fase', 'pieVideo'] as const;
 
 // Una portada que apunta a un fichero que no está sería un hueco en el
 // índice: igual que una ficha sin traducir, rompe el build y dice cuál.
@@ -57,7 +57,6 @@ export async function cargarProyectos(lang: Idioma): Promise<ProyectoLocal[]> {
         video: t.data.video ?? p.data.video,
         pieVideo: t.data.pieVideo,
         portada: t.data.portada ?? p.data.portada,
-        detalle: t.data.detalle,
       },
       cuerpo: t,
       numero: i + 1,

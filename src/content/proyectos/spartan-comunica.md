@@ -5,7 +5,6 @@ anio: 2026
 orden: 2
 estado: produccion
 stack: [Next.js, NestJS, TypeScript, Prisma, PostgreSQL, Temporal, Redis]
-detalle: Lo que construí, la IA que conoce a cada cliente, el problema real, qué decidí y qué haría distinto.
 metrica:
   valor: "6"
   que: redes con publicación programada en producción; la app de TikTok pasó su auditoría de Direct Post
@@ -18,92 +17,38 @@ enlaces:
 borrador: false
 ---
 
-## Qué es
+## Resumen
 
-Una plataforma SaaS de publicación en redes sociales para agencias y gestores
-de cuentas. Se arrastra una publicación a una fecha del calendario y un motor
-de workflows la publica a su hora en Instagram, Facebook, TikTok, LinkedIn, X
-y canales de chat, aunque nadie tenga el portátil abierto. Está en producción
-en [spartancomunica.es](https://spartancomunica.es) y es un producto comercial
-de Win Innovación, con planes de pago, y lo he desarrollado yo solo.
+SaaS para agencias y gestores de redes: se arrastra una publicación al
+calendario y sale a su hora en Instagram, Facebook, TikTok, LinkedIn, X y
+canales de chat. Es un producto comercial de Win Innovación, en producción y
+con planes de pago, y lo he desarrollado yo solo. Partí de una herramienta
+pensada para una sola marca y la convertí en una para quien gestiona muchas.
 
-## Lo que construí
+## Stack
 
-Llegué a una herramienta de programación de posts pensada para una sola marca y
-la convertí en una herramienta para quien gestiona **muchas**:
+- **Next.js**: la aplicación y la web pública.
+- **NestJS y TypeScript**: la API y la integración con cada red.
+- **Prisma y PostgreSQL**: clientes, canales, publicaciones y documentos.
+- **Temporal**: los workflows que publican a su hora aunque nadie tenga la aplicación abierta.
+- **Redis**: caché y colas.
 
-- **Clientes**, que no existían: cada cliente agrupa sus canales, su logo y las
-  instrucciones con las que la IA escribe por él. El editor elige cliente en un
-  combobox con buscador y la selección se acumula entre clientes sin borrar lo
-  ya marcado.
-- **Aprobación por enlace.** El cliente recibe un enlace, ve la publicación tal
-  como saldrá (vídeo, reel y descripción completa, también en el móvil) y la
-  aprueba o la rechaza sin crearse una cuenta. Si no contesta, sale igual a su
-  hora: la regla la decide la agencia, no el silencio.
-- **Un agente de IA que actúa, no solo contesta.** Redacta, propone ideas y
-  trabaja con los documentos de cada cliente (ver abajo). El chat enseña en cada
-  momento qué está haciendo, y cuando no puede responder dice por qué.
-- **Bandeja unificada.** Comentarios, menciones y reacciones de todas las redes
-  en un solo sitio, sincronizada en segundo plano y con el tiempo de respuesta
-  (SLA) a la vista.
-- **Analíticas rehechas.** Por cliente y por rango de fechas, con pestañas de
-  publicaciones y audiencia, y cada red declarando qué métricas da de verdad.
-- **Diseño de la aplicación y web pública**: navegación nueva, versión móvil,
-  landing, blog, sitemap e IndexNow para que los buscadores se enteren al
-  momento.
+## Arquitectura
 
-## Una IA que conoce al cliente
+1. **El cliente como unidad.** Agrupa sus canales, su logo, sus documentos y
+   las instrucciones con las que la IA escribe por él.
+2. **Del calendario a un workflow.** Cada publicación programada es un
+   workflow de Temporal que la publica en cada red a su hora.
+3. **Aprobación por enlace.** El cliente ve la publicación tal como saldrá y la
+   aprueba sin crearse una cuenta; si no contesta, sale igual.
+4. **IA con RAG y OCR.** Cada cliente tiene su base de documentos: una foto de
+   la carta pasa por OCR, entra en la base y el asistente la consulta antes de
+   redactar.
 
-Un asistente que redacta posts genéricos no sirve a nadie: lo que vale es que
-escriba sobre **ese** negocio. Cada cliente tiene su propia base de documentos
-(textos de marca, de la empresa, de sus productos) y la IA los consulta con RAG
-antes de redactar.
+## Observaciones
 
-Los documentos no tienen que estar en limpio. El dueño de un restaurante hace
-una foto a la carta y la sube; el OCR la convierte en texto, entra en su base y
-desde ese momento la IA sabe qué platos hay y a qué precio. Ya puede proponer el
-post del menú del día sin que nadie se lo copie a mano.
-
-## El problema real
-
-Publicar en seis redes no es difícil. Lo difícil es que **el sistema sabe qué
-ha fallado y la pantalla no lo cuenta**. Al recorrer la aplicación como un
-gestor de cuentas, todos los fallos serios eran del mismo tipo: un 400 del
-agente que la librería del chat tragaba en silencio, un aviso de validación que
-salía a 640 px del botón y se desvanecía en tres segundos, una métrica de
-Facebook que Meta había retirado y se pintaba como «sin datos».
-
-Así que la mitad del trabajo no se ve en una captura: es que cada fallo llegue
-a la pantalla con su motivo y en castellano.
-
-## Qué decidí, y qué descarté
-
-**Pasar las auditorías de las plataformas, no esquivarlas.** Publicar en TikTok
-en nombre de un usuario exige superar su revisión de *Direct Post*. El primer
-rechazo tenía tres motivos; el compositor pasó a leer la configuración real de
-la cuenta (privacidad, duetos, stitch) en vez de suponer «público», y se
-corrigió un componente compartido que ofrecía opciones que la cuenta tenía
-bloqueadas. La app de TikTok está en *Live* y LinkedIn aprobada.
-
-**Una sola constante para la API de Meta.** Cada proveedor de Meta hablaba con
-su propia versión de Graph API; ahora todos leen de un solo sitio, y subir de
-versión es cambiar una línea.
-
-**Descartado:** revalidar a lo bruto para arreglar miniaturas viejas de Canva.
-Enseñaba primero la imagen caducada y multiplicaba las peticiones hasta rozar
-el límite de Canva. Se arregló con una clave de caché por apertura del modal y
-un test de regresión que reproduce el montar-desmontar-montar.
-
-## Estado
-
-En producción y en uso comercial en
-[spartancomunica.es](https://spartancomunica.es).
-
-## Qué haría distinto
-
-**Trataría cada API de red social como un contrato que se rompe solo.** Meta
-retira métricas, LinkedIn exige parámetros que antes eran opcionales y TikTok
-cambia lo que devuelve según el estado de tu auditoría. Varios fallos de este
-año fueron eso: la integración no había cambiado, la plataforma sí. Hoy
-empezaría por tests contra respuestas grabadas de cada API y un aviso cuando la
-respuesta real deja de parecerse a la grabada.
+- La app de TikTok pasó su auditoría de Direct Post tras un primer rechazo, y
+  LinkedIn está aprobada.
+- Cada API de red social es un contrato que se rompe solo: Meta retira
+  métricas y LinkedIn cambia parámetros. Hoy empezaría por tests contra
+  respuestas grabadas de cada API.

@@ -42,8 +42,6 @@ const proyectos = defineCollection({
     video,
     pieVideo: z.string().optional(),
     portada,
-    // Subtítulo de «El detalle»: qué se va a leer debajo de la presentación.
-    detalle: z.string().optional(),
     // El resultado comprobable: la ficha lo pinta como «Resultado» y, si no
     // hay portada, el índice enseña esta cifra en su lugar.
     metrica: z
@@ -78,7 +76,6 @@ const proyectosEn = defineCollection({
     video,
     pieVideo: z.string().optional(),
     portada,
-    detalle: z.string().optional(),
   }),
 });
 

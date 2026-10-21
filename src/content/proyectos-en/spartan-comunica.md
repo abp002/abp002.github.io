@@ -3,93 +3,41 @@ tagline: "SaaS for agencies that schedules and publishes content across every cl
 metrica:
   valor: "6"
   que: networks with scheduled publishing in production; the TikTok app passed its Direct Post audit
-detalle: What I built, the AI that knows each client, the real problem, what I decided and what I'd do differently.
 ---
 
-## What it is
+## Summary
 
-A SaaS social media publishing platform for agencies and account managers. You
-drag a post onto a date in the calendar and a workflow engine publishes it on
-time to Instagram, Facebook, TikTok, LinkedIn, X and chat channels, even if
-nobody has a laptop open. It is in production at
-[spartancomunica.es](https://spartancomunica.es) and is a commercial product
-of Win Innovación, with paid plans, and I built it on my own.
+SaaS for agencies and social media managers: drag a post onto the calendar and
+it goes out on time on Instagram, Facebook, TikTok, LinkedIn, X and chat
+channels. It's a commercial product of Win Innovación, in production with paid
+plans, and I built it on my own. I started from a tool designed for a single
+brand and turned it into one for people who manage many.
 
-## What I built
+## Stack
 
-I took over a post-scheduling tool designed for a single brand and turned it
-into a tool for people who manage **many**:
+- **Next.js**: the app and the public website.
+- **NestJS and TypeScript**: the API and the integration with each network.
+- **Prisma and PostgreSQL**: clients, channels, posts and documents.
+- **Temporal**: the workflows that publish on time even when nobody has the app open.
+- **Redis**: caching and queues.
 
-- **Clients**, which didn't exist: each client groups its channels, its logo
-  and the instructions the AI follows when writing on its behalf. The editor
-  picks a client from a searchable combobox, and the selection accumulates
-  across clients without clearing what was already ticked.
-- **Approval by link.** The client gets a link, sees the post exactly as it
-  will go out (video, reel and full caption, on mobile too) and approves or
-  rejects it without creating an account. If they don't answer, it still goes
-  out on time: the agency sets the rule, not the silence.
-- **An AI agent that acts, not just answers.** It drafts, suggests ideas and
-  works with each client's documents (see below). The chat shows what it is doing at every
-  moment, and when it can't answer it says why.
-- **Unified inbox.** Comments, mentions and reactions from every network in
-  one place, synced in the background with the response time (SLA) in view.
-- **Rebuilt analytics.** Per client and per date range, with tabs for posts
-  and audience, and each network declaring which metrics it actually provides.
-- **App design and public website**: new navigation, mobile version, landing
-  page, blog, sitemap and IndexNow so search engines find out right away.
+## Architecture
 
-## An AI that knows the client
+1. **The client as the unit.** It groups its channels, logo, documents and the
+   instructions the AI follows when writing for it.
+2. **From calendar to workflow.** Every scheduled post is a Temporal workflow
+   that publishes it on each network on time.
+3. **Approval by link.** The client sees the post exactly as it will go out and
+   approves it without creating an account; if they don't reply, it goes out
+   anyway.
+4. **AI with RAG and OCR.** Each client has its own document base: a photo of
+   the menu goes through OCR, enters the base, and the assistant consults it
+   before writing.
 
-An assistant that writes generic posts is no use to anyone: what matters is
-that it writes about **this** business. Each client has its own document base
-(brand texts, company information, products) and the AI looks them up with RAG
-before writing.
+## Notes
 
-The documents don't need to be tidy. A restaurant owner takes a photo of the
-menu and uploads it; OCR turns it into text, it goes into their base, and from
-then on the AI knows which dishes there are and what they cost. It can suggest
-the post for today's set menu without anyone typing it in by hand.
-
-## The real problem
-
-Publishing to six networks isn't hard. What's hard is that **the system knows
-what failed and the screen doesn't say**. Walking through the app as an account
-manager, every serious bug was of the same kind: a 400 from the agent that the
-chat library swallowed silently, a validation warning that appeared 640 px away
-from the button and faded out after three seconds, a Facebook metric Meta had
-retired being shown as "no data".
-
-So half the work doesn't show up in a screenshot: it's making sure every
-failure reaches the screen with its reason, in plain language.
-
-## What I decided, and what I ruled out
-
-**Pass the platforms' audits instead of working around them.** Publishing to
-TikTok on a user's behalf requires passing its *Direct Post* review. The first
-rejection had three reasons; the composer now reads the account's real settings
-(privacy, duets, stitch) instead of assuming "public", and a shared component
-that offered options the account had blocked was fixed. The TikTok app is
-*Live* and LinkedIn is approved.
-
-**A single constant for Meta's API.** Each Meta provider was talking to its own
-Graph API version; now they all read from one place, and upgrading is a
-one-line change.
-
-**Ruled out:** brute-force revalidation to fix stale Canva thumbnails. It showed
-the expired image first and multiplied requests until they brushed against
-Canva's rate limit. It was fixed with a cache key per modal opening and a
-regression test that reproduces mount-unmount-mount.
-
-## Status
-
-In production and in commercial use at
-[spartancomunica.es](https://spartancomunica.es).
-
-## What I would do differently
-
-**I'd treat every social network API as a contract that breaks on its own.**
-Meta retires metrics, LinkedIn requires parameters that used to be optional and
-TikTok changes what it returns depending on your audit status. Several bugs this
-year were exactly that: the integration hadn't changed, the platform had. Today
-I'd start with tests against recorded responses from each API, plus an alert
-when the real response stops looking like the recorded one.
+- The TikTok app passed its Direct Post audit after a first rejection, and
+  LinkedIn is approved.
+- Every social network API is a contract that breaks on its own: Meta retires
+  metrics and LinkedIn changes parameters. Today I would start with tests
+  against recorded responses from each API.

@@ -48,11 +48,12 @@ Arrancar: `npm run dev` (puerto 4322, fijado en astro.config.mjs para no chocar 
     cuentan PRs) · 04 stack en filas con iconos más «IA aplicada» · contacto.
     Sale «Sobre mí» con su ficha de datos; idiomas y carnet pasan al contacto.
   - Proyectos es un índice numerado (N.º, año, título, resumen y stack). La
-    ficha lleva una ficha lateral (estado o `fase`, resultado, stack y código;
-    sin año ni rol desde el 21-oct: todo es de 2026 y es trabajo en solitario) y el Markdown se lee en dos partes: el primer `##` es la
-    presentación y el resto, «El detalle» numerado. Una lista numerada en la
-    presentación son los pilares; una cita (`> **Método** …`) en el detalle es
-    una nota al margen. Se parte el HTML ya renderizado (`src/lib/partes.ts`)
+    ficha lleva una franja bajo el rótulo (estado o `fase`, resultado y
+    código) y el Markdown son cuatro `##` cortos desde el 21-oct: Resumen,
+    Stack (una pieza y su papel por línea), Arquitectura (lista numerada) y
+    Observaciones; cada uno se pinta en fila con su rótulo a la izquierda. El
+    detalle largo vive en el README de cada repo. Se parte el HTML ya
+    renderizado (`src/lib/partes.ts`)
     porque Sätteri, el Markdown de Astro 7, no tiene plugin que envuelva
     secciones.
   - El vídeo sigue embebido (youtube-nocookie) como «Figura 1»: el lienzo lo
