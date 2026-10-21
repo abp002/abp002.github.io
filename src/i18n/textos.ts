@@ -76,7 +76,6 @@ const es = {
   ficha: {
     volver: 'Proyectos',
     proyecto: 'Proyecto',
-    ficha: 'Ficha',
     fichaEtiqueta: 'Ficha del proyecto',
     estado: 'Estado',
     stack: 'Stack',
@@ -176,7 +175,6 @@ const en: Textos = {
   ficha: {
     volver: 'Projects',
     proyecto: 'Project',
-    ficha: 'At a glance',
     fichaEtiqueta: 'The project at a glance',
     estado: 'Status',
     stack: 'Stack',
