@@ -47,10 +47,12 @@ const { metrica } = datos;
   // movimiento»: entonces se queda el póster, que ya enseña el proyecto.
   // Sin JavaScript pasa lo mismo. Con el router de transiciones este
   // script corre una sola vez, así que cada página se vigila al cargar.
+  // Si se llega aquí navegando desde otra página, el script se carga
+  // después de que salte astro:page-load: por eso también arranca solo.
   const quieto = matchMedia('(prefers-reduced-motion: reduce)');
   let vigia: IntersectionObserver | undefined;
 
-  document.addEventListener('astro:page-load', () => {
+  function vigilar() {
     vigia?.disconnect();
     const clips = document.querySelectorAll<HTMLVideoElement>('video.clip');
     if (clips.length === 0) return;
@@ -65,7 +67,10 @@ const { metrica } = datos;
       { threshold: 0.5 },
     );
     clips.forEach((clip) => vigia?.observe(clip));
-  });
+  }
+
+  vigilar();
+  document.addEventListener('astro:page-load', vigilar);
 
   quieto.addEventListener('change', () => {
     if (quieto.matches) document.querySelectorAll<HTMLVideoElement>('video.clip').forEach((clip) => clip.pause());
