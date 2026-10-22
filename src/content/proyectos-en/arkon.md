@@ -34,11 +34,3 @@ person asking can see.
    numbering and the stock in each bin.
 4. **AI behind two locks.** The tool catalogue arrives already filtered by the
    asker's permissions, and every call is checked again before it runs.
-
-## Notes
-
-- Over 3,700 tests, plus mutation testing on tax and accounting. Mutation
-  uncovered four real bugs behind green tests; in two, the test data had been
-  written by whoever wrote the code and shared its mistake.
-- Still missing: end-to-end tests for the interface, some screens and other
-  languages.

@@ -43,11 +43,3 @@ y SEPA) y un asistente de IA que solo ve lo que puede ver quien pregunta.
 4. **La IA, con dos cerrojos.** El catálogo de herramientas llega filtrado por
    los permisos de quien pregunta, y cada llamada se vuelve a comprobar antes
    de ejecutarse.
-
-## Observaciones
-
-- Más de 3.700 tests y pruebas de mutación en lo fiscal y lo contable. La
-  mutación destapó cuatro fallos reales con los tests en verde; en dos, el
-  dato de prueba lo había escrito quien escribió el código y compartía su error.
-- Falta: pruebas de extremo a extremo de la interfaz, algunas pantallas y
-  otros idiomas.
