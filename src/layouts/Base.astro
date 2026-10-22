@@ -93,7 +93,40 @@ const linkedin = 'https://www.linkedin.com/in/aborregop';
             <a href={a.href} class="ancla" aria-current={actual(a.href) ? 'page' : undefined}>{a.texto}</a>
           ))}
         </nav>
-        <div class="controles">
+        <div class="controles plegados">
+          <details class="desplegable" name="barra">
+            <summary class="disparador" aria-label={t.base.grupoIdioma}>
+              <Bandera pais={lang === 'es' ? 'es' : 'gb'} />
+              <span class="chevron"><Icono nombre="chevron" tamano={14} /></span>
+            </summary>
+            <div class="panel">
+              <a
+                href={alternativa}
+                hreflang={lang === 'es' ? 'en' : 'es'}
+                lang={lang === 'es' ? 'en' : 'es'}
+                class="opcion"
+                data-idioma={lang === 'es' ? 'en' : 'es'}
+              >
+                <Bandera pais={lang === 'es' ? 'gb' : 'es'} />
+                {lang === 'es' ? 'English' : 'Español'}
+              </a>
+            </div>
+          </details>
+          <details class="desplegable" name="barra">
+            <summary class="disparador" aria-label={t.base.perfiles}>
+              <Icono nombre="arroba" />
+              <span class="chevron"><Icono nombre="chevron" tamano={14} /></span>
+            </summary>
+            <div class="panel">
+              <a href={github} class="opcion"><Icono nombre="github" /> GitHub</a>
+              <a href={linkedin} class="opcion"><Icono nombre="linkedin" /> LinkedIn</a>
+              <a href={`mailto:${marca.correo}`} class="opcion" data-copiar={marca.correo} data-aviso={t.base.copiado}>
+                <Icono nombre="correo" /> {marca.correo}
+              </a>
+            </div>
+          </details>
+        </div>
+        <div class="controles en-linea">
           <div class="idioma" role="group" aria-label={t.base.grupoIdioma}>
             <a
               href={versiones.es}
@@ -122,7 +155,7 @@ const linkedin = 'https://www.linkedin.com/in/aborregop';
           <div class="redes">
             <a href={github} aria-label="GitHub" class="red"><Icono nombre="github" /></a>
             <a href={linkedin} aria-label="LinkedIn" class="red"><Icono nombre="linkedin" /></a>
-            <a href={`mailto:${marca.correo}`} aria-label={t.base.correo} class="red"><Icono nombre="correo" /></a>
+            <a href={`mailto:${marca.correo}`} aria-label={t.base.correo} class="red" data-copiar={marca.correo} data-aviso={t.base.copiado}><Icono nombre="correo" /></a>
           </div>
         </div>
       </div>
@@ -154,6 +187,29 @@ const linkedin = 'https://www.linkedin.com/in/aborregop';
         },
         true,
       );
+
+      // mailto: no hace nada si el navegador no tiene cliente de correo
+      // (lo normal con Gmail web), así que el clic además copia la
+      // dirección y lo avisa. El enlace sigue abriendo el cliente si lo hay.
+      document.addEventListener('click', (event) => {
+        const enlace = (event.target as Element | null)?.closest<HTMLElement>('[data-copiar]');
+        if (!enlace) return;
+        navigator.clipboard?.writeText(enlace.dataset.copiar ?? '').then(() => {
+          enlace.dataset.copiado = '';
+          setTimeout(() => delete enlace.dataset.copiado, 1600);
+        }, () => {});
+      });
+
+      // Los desplegables de la barra en móvil son <details>: abren sin JS.
+      // Esto solo los cierra al tocar fuera o con Escape.
+      const cerrar = (salvo?: Element | null) =>
+        document.querySelectorAll<HTMLDetailsElement>('details.desplegable[open]').forEach((d) => {
+          if (!salvo || !d.contains(salvo)) d.open = false;
+        });
+      document.addEventListener('click', (event) => cerrar(event.target as Element | null));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') cerrar();
+      });
 
       // Volver debe ir más rápido que entrar. Astro dice en qué dirección
       // navega antes de preparar la transición; el CSS lee este atributo.
@@ -248,19 +304,90 @@ const linkedin = 'https://www.linkedin.com/in/aborregop';
   }
   .red:hover { color: var(--tinta); }
 
-  /* Proyectos y blog son páginas, no anclas: en móvil no pueden
-     desaparecer. Bajan a una segunda fila bajo la firma y las redes, que ya
-     llenan los 390 px de un iPhone. Sin menú hamburguesa, sin JavaScript. */
+  /* En móvil idioma y perfiles se pliegan en dos desplegables (bandera
+     actual y arroba) para que Proyectos quepa en la misma fila que la
+     firma: una sola línea de barra, sin hamburguesa. */
+  .plegados { display: none; gap: 6px; }
+  .desplegable { position: relative; }
+  .disparador {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 6px;
+    list-style: none;
+    cursor: pointer;
+    color: var(--sec);
+    border-radius: 3px;
+    transition: color var(--t-micro) var(--ease-salida);
+  }
+  .disparador::-webkit-details-marker { display: none; }
+  .disparador:hover, [open] > .disparador { color: var(--tinta); }
+  .chevron { display: flex; transition: transform var(--t-micro) var(--ease-salida); }
+  [open] .chevron { transform: rotate(180deg); }
+
+  .panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    min-width: 168px;
+    padding: 6px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px -12px color-mix(in srgb, var(--tinta) 30%, transparent);
+    transform-origin: top right;
+    animation: abrir var(--t-micro) var(--ease-salida);
+  }
+  @keyframes abrir {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .panel { animation: none; }
+  }
+  .opcion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    color: var(--sec);
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 3px;
+  }
+  .opcion:hover { color: var(--tinta); background: var(--relleno); }
+
+  /* Aviso de "copiado" al pulsar el correo, encima o al lado del enlace. */
+  [data-copiar] { position: relative; }
+  [data-copiar][data-copiado]::after {
+    content: attr(data-aviso);
+    position: absolute;
+    right: 0;
+    top: calc(100% + 4px);
+    padding: 4px 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fondo);
+    background: var(--tinta);
+    border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .opcion[data-copiado]::after { top: 50%; right: 8px; transform: translateY(-50%); }
+
   @media (max-width: 780px) {
-    .barra { flex-wrap: wrap; row-gap: 14px; }
-    .anclas { order: 3; width: 100%; }
+    .barra { gap: 14px; }
+    .anclas { margin-left: auto; }
+    .en-linea { display: none; }
+    .plegados { display: flex; }
   }
 
-  /* Medido, no estimado: firma entera + idioma + tres iconos piden 407 px y
-     un iPhone da 390. Por debajo de eso la firma pasa a iniciales (297 px,
-     entra hasta en 320). El nombre completo sigue siendo el nombre accesible
-     del enlace vía aria-label, así que el lector de pantalla no pierde nada. */
-  @media (max-width: 430px) {
+  /* Por debajo de 360 px la firma pasa a iniciales. El nombre completo
+     sigue siendo el nombre accesible del enlace vía aria-label. */
+  @media (max-width: 360px) {
     .firma-larga { display: none; }
     .firma-corta { display: inline; }
   }

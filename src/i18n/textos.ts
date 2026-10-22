@@ -18,6 +18,8 @@ const es = {
     navPrincipal: 'Principal',
     grupoIdioma: 'Idioma',
     correo: 'Correo',
+    perfiles: 'Perfiles y correo',
+    copiado: 'Copiado',
   },
   nav: { proyectos: 'Proyectos', blog: 'Blog' },
   intro: {
@@ -116,6 +118,8 @@ const en: Textos = {
     navPrincipal: 'Main',
     grupoIdioma: 'Language',
     correo: 'Email',
+    perfiles: 'Profiles and email',
+    copiado: 'Copied',
   },
   nav: { proyectos: 'Projects', blog: 'Blog' },
   intro: {

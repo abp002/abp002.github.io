@@ -2,7 +2,7 @@
 // Iconos de trazo (paths de Lucide, ISC), en monocromo con currentColor.
 // Nunca emoji: escalan mal, no recoloran y desentonan con el expediente.
 interface Props {
-  nombre: 'github' | 'linkedin' | 'correo' | 'descarga' | 'flecha';
+  nombre: 'github' | 'linkedin' | 'correo' | 'descarga' | 'flecha' | 'arroba' | 'chevron';
   tamano?: number;
 }
 const { nombre, tamano = 18 } = Astro.props;
@@ -27,6 +27,8 @@ const paths: Record<Props['nombre'], string[]> = {
     'M12 15V3',
   ],
   flecha: ['M7 7h10v10', 'M7 17 17 7'],
+  arroba: ['M8 12a4 4 0 1 0 8 0 4 4 0 1 0-8 0', 'M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8'],
+  chevron: ['m6 9 6 6 6-6'],
 };
 ---
 
