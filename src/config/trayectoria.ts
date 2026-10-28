@@ -27,7 +27,7 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       puntos: [
         'Lidero proyectos de software de gestión empresarial (ERP/CRM) a medida con PHP y MariaDB.',
         'Desarrollo los módulos de contabilidad: facturación electrónica (FACe, Verifactu), SII y modelos de la AEAT.',
-        'Modernicé el desarrollo y el despliegue de más de 200 ERP: CI/CD con GitHub Actions, Docker y monitorización con Prometheus y Grafana. Rediseñé la arquitectura de los nuevos: personalización sobre un núcleo común.',
+        'Desarrollo y despliegue de software de gestión empresarial: CI/CD con GitHub Actions, Docker y monitorización con Prometheus y Grafana. Rediseñé la arquitectura de los nuevos proyectos: personalización sobre un núcleo común.',
         'Creé Spartan Comunica, una plataforma de gestión de redes sociales en producción con IA, incluidos RAG y OCR.',
         'Desarrollo IA aplicada: soporte 24/7 con RAG, agente de voz para prospección comercial, IA consultiva (mantenida con evals) y OCR en el ERP, y una base de conocimiento común.',
       ],
@@ -47,7 +47,7 @@ export const experiencia: Record<Idioma, Experiencia[]> = {
       puntos: [
         'I lead custom business management software (ERP/CRM) projects with PHP and MariaDB.',
         'I build the accounting modules: e-invoicing (FACe, Verifactu), SII and Spanish Tax Agency (AEAT) forms.',
-        'I modernised development and deployment for more than 200 ERPs: CI/CD with GitHub Actions, Docker, and monitoring with Prometheus and Grafana. I redesigned the architecture of the new ones: customisation on top of a shared core.',
+        'Development and deployment of business management software: CI/CD with GitHub Actions, Docker, and monitoring with Prometheus and Grafana. I redesigned the architecture of new projects: customisation on top of a shared core.',
         'I built Spartan Comunica, a social media management platform in production with AI, including RAG and OCR.',
         'I build applied AI: 24/7 support with RAG, a voice agent for sales prospecting, consultative AI (maintained with evals) and OCR in the ERP, and a shared knowledge base.',
       ],
