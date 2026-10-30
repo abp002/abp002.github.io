@@ -17,7 +17,7 @@ passage, and draws the curve of 29 classics with its uncertainty band.
 
 - **Python**: chunking, reading and analysis.
 - **Kev-4B**: an open model that answers with calibrated probabilities instead of text.
-- **MLX and PyTorch**: Kev on a Mac and on a Kaggle T4 GPU.
+- **PyTorch**: Kev on a Kaggle T4 GPU.
 - **matplotlib**: the curves and the video, generated from the same readings.
 
 ## Architecture

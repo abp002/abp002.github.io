@@ -4,7 +4,7 @@ tagline: "La forma de una novela, al estilo de Vonnegut, leída pasaje a pasaje 
 anio: 2026
 orden: 5
 estado: funcionando
-stack: [Python, Kev-4B, MLX, PyTorch, matplotlib]
+stack: [Python, Kev-4B, PyTorch, matplotlib]
 metrica:
   valor: "90 %"
   que: de los pasajes donde tono y suerte no coinciden, bien leídos; VADER acierta el 18 %
@@ -32,7 +32,7 @@ su banda de incertidumbre.
 
 - **Python**: troceo, lectura y análisis.
 - **Kev-4B**: un modelo abierto que responde con probabilidades calibradas en vez de texto.
-- **MLX y PyTorch**: Kev en el Mac y en una GPU T4 de Kaggle.
+- **PyTorch**: Kev en una GPU T4 de Kaggle.
 - **matplotlib**: las curvas y el vídeo, generados con las mismas lecturas.
 
 ## Arquitectura
