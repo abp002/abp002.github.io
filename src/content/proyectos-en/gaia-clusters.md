@@ -3,6 +3,7 @@ tagline: "Star clusters recovered from 2.5 million Gaia stars with HDBSCAN, and 
 metrica:
   valor: "74%"
   que: of the 202 known clusters in Carina, recovered with the rule fixed before looking
+pieVideo: "A minute through Carina, rendered in Blender from the viewer's data. Stars drift at their measured motion; the depth within each cluster is modelled."
 fase: Finished · Oct 2026
 ---
 
