@@ -9,6 +9,8 @@ stack: [Python, HDBSCAN, ADQL (TAP), three.js, Blender]
 metrica:
   valor: "74 %"
   que: de los 202 cúmulos conocidos en Carina, recuperados con la regla fijada antes de mirar
+video: /proyectos/gaia-clusters/video.mp4
+pieVideo: "Un minuto por Carina, renderizado en Blender con los datos del visor. Las estrellas derivan a su movimiento medido; la profundidad dentro de cada cúmulo está modelada."
 portada:
   imagen: /proyectos/gaia-clusters/poster.webp
 visibilidad: publico
