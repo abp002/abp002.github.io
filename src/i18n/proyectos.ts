@@ -32,7 +32,7 @@ function comprobarPortada(id: string, portada?: { imagen: string; clip?: string 
 // Proyectos por `orden`, en el idioma pedido. Una ficha sin traducir no
 // cae al español en silencio: rompe el build y dice qué fichero falta.
 export async function cargarProyectos(lang: Idioma): Promise<ProyectoLocal[]> {
-  const es = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+  const es = (await getCollection('proyectos', ({ data }) => !data.oculto)).sort((a, b) => a.data.orden - b.data.orden);
   es.forEach((p) => comprobarPortada(p.id, p.data.portada));
   if (lang === 'es') return es.map((p, i) => ({ proyecto: p, datos: p.data, cuerpo: p, numero: i + 1 }));
 

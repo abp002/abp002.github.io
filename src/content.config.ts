@@ -57,6 +57,9 @@ const proyectos = defineCollection({
       .optional(),
     // Sin texto largo todavía: la portada la muestra igual, la ficha avisa.
     borrador: z.boolean().default(false),
+    // Fuera de la web entera (índice, ficha y «siguiente») hasta que el proyecto
+    // esté publicado: así un enlace roto no llega a nadie.
+    oculto: z.boolean().default(false),
   }),
 });
 

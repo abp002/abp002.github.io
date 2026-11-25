@@ -17,6 +17,7 @@ enlaces:
   repo: https://github.com/abp002/churnalismo
   demo: https://alejandroborrego.dev/churnalismo/
 borrador: false
+oculto: true
 ---
 
 ## Resumen
