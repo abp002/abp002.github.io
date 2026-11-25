@@ -60,8 +60,8 @@ const e = (slug: string, texto?: string): Elemento => {
 // orden. El rótulo de cada fila sale de textos.ts (`stack.filas`); la fila
 // de «IA aplicada», que son conceptos y no marcas, va en texto.
 export const filas = [
-  { clave: 'lenguajes', elementos: [e('typescript', 'TypeScript / JavaScript'), e('python'), e('php'), e('openjdk')] },
-  { clave: 'backend', elementos: [e('nodedotjs', 'Node.js (NestJS)'), e('symfony'), e('laravel'), e('fastapi'), e('springboot')] },
+  { clave: 'lenguajes', elementos: [e('typescript', 'TypeScript / JavaScript'), e('python'), e('php')] },
+  { clave: 'backend', elementos: [e('nodedotjs', 'Node.js (NestJS)'), e('symfony'), e('laravel'), e('fastapi')] },
   { clave: 'frontend', elementos: [e('react', 'React (Next.js)'), e('astro'), e('angular'), e('vuedotjs'), e('tailwindcss')] },
   { clave: 'datos', elementos: [e('postgresql', 'PostgreSQL (pgvector)'), e('mariadb', 'MariaDB / MySQL'), e('sqlite'), e('prisma')] },
   { clave: 'ml', elementos: [e('pytorch'), e('scikitlearn'), e('pandas'), e('polars'), e('numpy'), e('jupyter')] },
