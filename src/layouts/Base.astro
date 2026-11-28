@@ -77,6 +77,28 @@ const linkedin = 'https://www.linkedin.com/in/aborregop';
       </script>
     )}
     <ClientRouter />
+    <!-- Visitas con GoatCounter (sin cookies, sin banner). Con ClientRouter
+         las navegaciones no recargan la página, así que la cuenta automática
+         se apaga y se cuenta en cada astro:page-load (la primera incluida). -->
+    <script is:inline
+      data-goatcounter="https://alejandroborrego.goatcounter.com/count"
+      data-goatcounter-settings='{"no_onload": true}'
+      async src="https://gc.zgo.at/count.js"></script>
+    <script is:inline>
+      if (!window.__visitas) {
+        window.__visitas = true;
+        document.addEventListener('astro:page-load', function () {
+          var intentos = 0;
+          (function contar() {
+            if (window.goatcounter && window.goatcounter.count) {
+              window.goatcounter.count({ path: location.pathname + location.search });
+            } else if (intentos++ < 50) {
+              setTimeout(contar, 100);
+            }
+          })();
+        });
+      }
+    </script>
   </head>
 
   <body>
